@@ -70,6 +70,7 @@ Tag claims as:
 - unknown
 
 Do not finalize option comparison while the current system boundary is still unsupported by evidence.
+Require at least 3 concrete evidence anchors before writing the final option comparison.
 
 ## Stop Rules
 
