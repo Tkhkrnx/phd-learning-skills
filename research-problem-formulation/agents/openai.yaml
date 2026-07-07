@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Problem Formulation"
+  short_description: "Sharpen a fuzzy research problem."
+  default_prompt: "Use $research-problem-formulation to turn my vague research intuition into a defendable problem definition with evidence and failure hypotheses."

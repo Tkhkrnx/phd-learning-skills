@@ -1,0 +1,4 @@
+interface:
+  display_name: "Targeted Knowledge Closure"
+  short_description: "Repair one blocking knowledge gap fast."
+  default_prompt: "Use $targeted-knowledge-closure to close one specific knowledge gap that is blocking my current work while preserving independent recall and transfer."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Method Design"
+  short_description: "Turn a stable problem into a design."
+  default_prompt: "Use $research-method-design to turn my current research problem into mechanism candidates, failure modes, and a minimal validation plan."
