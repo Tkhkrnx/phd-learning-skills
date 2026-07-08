@@ -7,30 +7,24 @@ description: Turn an unclear engineering request into an evidence-grounded under
 
 Use this skill to ground an unclear engineering request in evidence before choosing a path.
 
-## Execution Mode
+## Execution Contract
 
-Use `light mode` for urgent triage.
-Use `standard mode` when the decision will drive implementation, coordination, or architecture.
+This skill uses one execution mode only.
 
-### `light mode` required user output
+The user should not need to choose a mode before starting.
 
-- the 3-bullet minimum seed
-- one compact working note containing:
-  - current boundary guess
-  - prioritized unknowns
-  - current evidence anchors
-  - `null or reuse-first` option
-  - first execution slice
-  - one user path choice
+Required progression:
 
-### `standard mode` required user output
-
-- `system-snapshot.md`
-- `unknowns-checklist.md`
-- `solution-options.md`
-- `execution-slice-plan.md`
-- `decision-record-engineering-path.md`
-- `evidence-acquisition-plan.md` when direct evidence is not yet reachable
+- start from the 3-bullet minimum seed
+- expand into only the next needed artifact step
+- collect real evidence before final option comparison
+- by skill completion, produce:
+  - `system-snapshot.md`
+  - `unknowns-checklist.md`
+  - `solution-options.md`
+  - `execution-slice-plan.md`
+  - `decision-record-engineering-path.md`
+  - `evidence-acquisition-plan.md` when direct evidence is not yet reachable
 
 ## Minimum Viable First Draft
 
@@ -56,6 +50,17 @@ If they are still unsure, offer this fallback:
 
 - "Give me one rough sentence for the requirement, one guess about the affected area, and one unknown."
 
+If they want to continue the same skill in a later turn, accept this short continuation phrase:
+
+- "继续按 `engineering-task-decomposition` 执行下一轮"
+
+At the start of every substantive response, echo a round lock:
+
+- `active skill: engineering-task-decomposition`
+- `round role: clarifier` or `system-mapper` or `design-reviewer`
+- `this round allows: ...`
+- `this round does not allow: ...`
+
 ## Agent Role Discipline
 
 Keep one role per round:
@@ -80,6 +85,13 @@ Do not jump from an unclear request to a polished final plan.
 6. Require the user to record the chosen path and rejected alternatives.
 7. End with one concrete execution or verification slice.
 
+Round-lock guidance:
+
+- in the handshake round, `this round allows` should be limited to collecting the 3-bullet seed
+- after the handshake, the first working round should allow only one compact working note, not the full artifact set
+- in `clarifier` rounds, allow scope normalization and unknown capture, but do not allow polished final planning
+- in `design-reviewer` rounds, allow bounded option comparison only if the evidence contract has been met
+
 ## Artifact Contract
 
 Create or update:
@@ -98,19 +110,15 @@ Artifact language rule:
 - in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
 - keep repository paths, function names, config keys, APIs, and other precise technical identifiers in English when that is clearer
 
-In `light mode`, the user may collapse:
+Round-1 minimum output after the handshake:
 
-- `system-snapshot.md`
-- `unknowns-checklist.md`
-- `execution-slice-plan.md`
-
-into one compact working note, but must still preserve:
-
-- current boundary guess
-- unknowns
-- evidence anchors
-- first execution slice
-- user decision
+- one compact working note that records:
+  - current boundary guess
+  - unknowns
+  - evidence anchors
+  - `null or reuse-first` option
+  - first execution slice
+  - user decision
 
 ## Evidence Contract
 

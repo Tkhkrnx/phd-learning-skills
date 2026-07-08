@@ -32,7 +32,6 @@
 - 要有明确 stop rule
 - 要做脱离 agent 的完成检查
 - 工程判断必须绑定真实证据
-- 高压场景使用 `light mode`
 - 为了防止“表演式走流程”，必须保留反证、替代方案和 fresh output
 
 完整总蓝图见：[AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md)
@@ -62,45 +61,53 @@
 
 调用之后，skill 应该先反过来引导你，只问启动所需的最小 3 条输入，而不是默认你已经知道要怎么写。
 
-## 执行模式
+## 执行约定
 
-### `light mode`
+这套仓库只保留一个 mode。
 
-适合：
+你不需要再在 `light mode` 和 `standard mode` 之间切换。
 
-- 时间压力大
-- 需要先保住最小护栏
-- 如果要求完整 artifact 会让你直接不用这套流程
+统一约定是：
 
-即使是 `light mode`，也不能省掉：
+- skill 从 3 条最小输入开始
+- 每一轮 agent 只扮演一个角色
+- 握手后的第一轮只扩展到“下一步需要的 artifact”，不允许直接跳成整套完整产物
+- 正常完成时，仍然要补齐该 skill 的完整 artifact 集，除非你明确要求提前停下
+- 每次完整 run 仍然必须有：用户决策、一个挑战/证伪点、一个脱离 agent 的检查
 
-- 用户先写初稿
-- 明确的用户决策或承诺
-- 一个挑战/证伪点
-- 一个 agent-off 检查
+## 跨轮继续怎么做
 
-你应该交付的形式：
+当前 Codex 里的 skill 触发并不是真正“跨后续多轮自动持续”的。
 
-- 一份紧凑工作笔记
-- 不要求完整 artifact 集，除非你明确要长期留档
+所以最实用的用法是：
 
-### `standard mode`
+- 第一轮显式调用 skill 名
+- 后续每轮只用一句很短的话续上
 
-适合：
+推荐续轮口令：
 
-- 这个结果会被复用、实现、发表或讲给别人
-- 你需要一个可复盘的长期记录，而不是临时推进
+- “继续按 `research-problem-formulation` 执行下一轮。”
+- “继续按 `research-method-design` 执行下一轮。”
+- “继续按 `engineering-task-decomposition` 执行下一轮。”
+- “继续按 `targeted-knowledge-closure` 执行下一轮。”
 
-要求：
+## 更强的续轮锁
 
-- 完整 artifact 集
-- 明确证据或对照
-- 完整的 finish criteria
+为了减少 skill 在多轮对话里的漂移，每一轮真正开始做事前，都应该先回显：
 
-你应该交付的形式：
+- `active skill`
+- `round role`
+- `this round allows`
+- `this round does not allow`
 
-- 对应 skill 的完整 artifact 集
-- 完整的 decision、evidence 和 completion 记录
+推荐续轮写法：
+
+```text
+继续按 `research-problem-formulation` 执行下一轮。
+Round role: critic。
+This round should only test the failure hypotheses and trim them.
+Do not expand into method design yet.
+```
 
 ## 四个 skill 的具体使用流程
 
@@ -121,11 +128,11 @@
 
 - 每一条先随便写一句猜测也可以
 
-`light mode` 你要交付：
+第一轮你要交付：
 
 - 一份紧凑笔记，里面至少有：纠正后的理解、保留的版本、立即应用场景、一个新例子
 
-`standard mode` 你要交付：
+完成整个 skill 时要交付：
 
 - `knowledge-closure-note.md`
 - `transfer-check.md`
@@ -177,11 +184,11 @@
 
 - 每一条先随便写一句粗糙判断也可以
 
-`light mode` 你要交付：
+第一轮你要交付：
 
 - 一份紧凑工作笔记，里面至少有：边界猜测、unknowns、证据锚点、`null or reuse-first` 选项、第一步切片、用户路径选择
 
-`standard mode` 你要交付：
+完成整个 skill 时要交付：
 
 - `system-snapshot.md`
 - `unknowns-checklist.md`
@@ -235,11 +242,11 @@
 
 - 每一条先写一个不完整判断也可以
 
-`light mode` 你要交付：
+第一轮你要交付：
 
 - 一份紧凑 framing 笔记，里面至少有：问题猜测、前 1 到 3 个失败假设、每个稳定 bucket 的 paper anchor、下一步证据、以及一个 scope decision
 
-`standard mode` 你要交付：
+完成整个 skill 时要交付：
 
 - `problem-card.md`
 - `failure-taxonomy.md`
@@ -292,11 +299,11 @@
 
 - 每一条先写一个粗糙想法也可以
 
-`light mode` 你要交付：
+第一轮你要交付：
 
 - 一份紧凑 design 笔记，里面至少有：候选机制、一个更简单对照机制、baseline/reference、kill criterion、第一步实验、一个 rejection reason
 
-`standard mode` 你要交付：
+完成整个 skill 时要交付：
 
 - `design-card.md`
 - `mechanism-comparison.md`

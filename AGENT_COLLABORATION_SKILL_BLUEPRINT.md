@@ -58,48 +58,69 @@ For this repository and its intended usage:
 - keep paper titles, system names, API names, and other proper technical identifiers in their original language when that is clearer
 - do not force English artifact headers unless the user explicitly asks for English deliverables
 
-## Shared Execution Modes
+## Shared Execution Contract
 
-Every skill should support two explicit execution modes.
+Every skill should use one execution mode only.
 
-### `light mode`
+The workflow should stay simple for the user:
 
-Use when:
+- one invocation
+- one minimum 3-bullet first draft
+- one role per round
+- progressive artifact building across rounds
 
-- time pressure is high
-- the main goal is to preserve the minimum safeguards
-- a full artifact set would reduce adoption
+Do not require the user to choose between multiple modes before work can start.
 
-Allowed behavior:
-
-- collapse multiple artifacts into one working note
-- keep only minimum required sections
-- defer secondary comparisons or extended examples
-
-Still required:
+Still required in every run:
 
 - user-first draft
 - explicit user decision or commitment
 - at least one falsification or challenge point
-- one agent-off check
+- one agent-off check before declaring completion
 
-### `standard mode`
+Progressive artifact rule:
 
-Use when:
+- do not jump from handshake directly to a full artifact set in the same response
+- after the user provides the minimum seed, expand only into the next needed artifact step
+- by skill completion, the full required artifact set should exist unless the user explicitly asks to stop early
 
-- the task is important enough to justify fuller documentation
-- the user is shaping a reusable decision, framing, or learning record
+## Continuation Boundary
 
-Required behavior:
+In current Codex and similar chat-agent surfaces, a skill cannot be assumed to stay active across future turns unless it is invoked again.
 
-- full artifact set
-- explicit evidence or contrast handling
-- full completion check
+Therefore each skill should make this boundary explicit:
 
-Rule:
+- the agent should not pretend the skill remains locked across turns by itself
+- if the user wants to continue in the same skill, the agent should accept a very short continuation phrase
+- preferred continuation phrase:
+  - "继续按 `skill-name` 执行下一轮"
 
-- default to `light mode` under time pressure
-- escalate to `standard mode` when the result will be reused, published, implemented, or taught
+The goal is not true persistent activation, but low-friction continuation.
+
+## Round Lock
+
+To reduce drift across turns, every skill should enforce a round lock at the start of each substantive response.
+
+The response should begin by explicitly echoing:
+
+- `active skill`
+- `round role`
+- `this round allows`
+- `this round does not allow`
+
+Round-lock rules:
+
+- do this both after the initial handshake and on every later continuation round
+- keep the round lock short and operational, not essay-like
+- if the user continues with a skill phrase, restore the last valid skill context before doing new work
+- if the user asks for something outside the current round lock, either finish the current round first or explicitly say the skill is switching
+
+Preferred shape:
+
+- `active skill: ...`
+- `round role: ...`
+- `this round allows: ...`
+- `this round does not allow: ...`
 
 ## Shared Anti-Theater Checks
 

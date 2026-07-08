@@ -7,29 +7,23 @@ description: Turn a vague or partly specified research intuition into a defendab
 
 Use this skill to sharpen a fuzzy research problem before designing a method.
 
-## Execution Mode
+## Execution Contract
 
-Use `light mode` when deciding whether a direction is even worth pursuing.
-Use `standard mode` when the framing may feed into a paper, proposal, or sustained project.
+This skill uses one execution mode only.
 
-### `light mode` required user output
+The user should not need to choose a mode before starting.
 
-- the 3-bullet minimum seed
-- one compact framing note containing:
-  - current problem guess
-  - why it may matter
-  - top 1 to 3 failure hypotheses
-  - one paper anchor per stable bucket
-  - one next evidence step
-  - one user scope decision: sharpen, park, or abandon
+Required progression:
 
-### `standard mode` required user output
-
-- `problem-card.md`
-- `failure-taxonomy.md`
-- `evidence-gap-list.md`
-- `decision-record-problem-scope.md`
-- one explicit contrast statement against an existing line of work
+- start from the 3-bullet minimum seed
+- expand into only the next needed artifact step
+- keep building evidence and decisions across rounds
+- by skill completion, produce:
+  - `problem-card.md`
+  - `failure-taxonomy.md`
+  - `evidence-gap-list.md`
+  - `decision-record-problem-scope.md`
+  - one explicit contrast statement against an existing line of work
 
 ## Minimum Viable First Draft
 
@@ -55,6 +49,17 @@ If they are still unsure, offer this fallback:
 
 - "Give me one rough problem guess, one reason it may matter, and one dissatisfaction with existing work."
 
+If they want to continue the same skill in a later turn, accept this short continuation phrase:
+
+- "继续按 `research-problem-formulation` 执行下一轮"
+
+At the start of every substantive response, echo a round lock:
+
+- `active skill: research-problem-formulation`
+- `round role: organizer` or `critic` or `evidence-planner`
+- `this round allows: ...`
+- `this round does not allow: ...`
+
 ## Agent Role Discipline
 
 Keep one role per round:
@@ -76,6 +81,13 @@ Do not jump straight to inventing a method.
 7. Test whether the direction should be sharpened, parked, or abandoned.
 8. End with the smallest next evidence plan that would narrow the framing.
 
+Round-lock guidance:
+
+- in the handshake round, `this round allows` should be limited to collecting the 3-bullet seed
+- after the handshake, the first working round should allow only one compact framing note, not the full artifact set
+- in `critic` rounds, allow hypothesis trimming and contrast testing, but do not allow unconstrained method invention
+- in `evidence-planner` rounds, allow only the next evidence actions and gap closure priorities
+
 ## Artifact Contract
 
 Create or update:
@@ -92,19 +104,14 @@ Artifact language rule:
 - in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
 - keep paper titles, system names, APIs, and other precise technical identifiers in English when that is clearer
 
-In `light mode`, the user may collapse:
+Round-1 minimum output after the handshake:
 
-- `problem-card.md`
-- `failure-taxonomy.md`
-- `evidence-gap-list.md`
-
-into one compact framing note, but must still preserve:
-
-- current framing
-- top failure hypotheses
-- one paper anchor per stable bucket
-- next evidence step
-- user scope decision
+- one compact framing note that records:
+  - current framing
+  - top failure hypotheses
+  - one paper anchor per stable bucket if already available
+  - next evidence step
+  - user scope decision
 
 ## Evidence Contract
 

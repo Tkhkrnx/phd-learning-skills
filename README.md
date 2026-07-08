@@ -32,7 +32,6 @@ All skills in this repository follow the same operating rules:
 - explicit stop rules
 - agent-off completion checks
 - evidence-grounded engineering claims
-- `light mode` for high-pressure use
 - anti-theater checks for unsupported claims, weak alternatives, and fake understanding
 
 See [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md) for the full design specification.
@@ -62,45 +61,53 @@ Short invocations are enough, for example:
 
 After invocation, the skill should guide you by asking only for the minimum 3-bullet input needed to start.
 
-## Execution Modes
+## Execution Contract
 
-### `light mode`
+This repository uses one mode only.
 
-Use when:
+You should not need to pick between `light mode` and `standard mode`.
 
-- time pressure is high
-- the main goal is to preserve the minimum safeguards
-- a full artifact set would reduce adoption
+The contract is:
 
-Still required:
+- the skill starts from a 3-bullet minimum seed
+- the agent stays in one role per round
+- the first response after the handshake should expand only into the next needed artifact step
+- the full artifact set should be completed by the end of the skill unless you explicitly stop early
+- every finished run still needs a user decision, a challenge point, and an agent-off check
 
-- user-first draft
-- explicit user decision or commitment
-- one challenge or falsification point
-- one agent-off check
+## Continuation Across Turns
 
-Expected output:
+Current Codex skill triggering is not truly persistent across future turns by default.
 
-- one compact working note
-- no full artifact set unless the user wants durable records
+So the practical workflow is:
 
-### `standard mode`
+- invoke once with the skill name
+- continue with a very short continuation phrase in later turns
 
-Use when:
+Recommended continuation phrase:
 
-- the result will be reused, implemented, published, or taught
-- the user wants durable records instead of fast triage
+- "Continue with `research-problem-formulation` for the next round."
+- "Continue with `research-method-design` for the next round."
+- "Continue with `engineering-task-decomposition` for the next round."
+- "Continue with `targeted-knowledge-closure` for the next round."
 
-Required:
+## Stronger Round Lock
 
-- full artifact set
-- explicit evidence or contrast handling
-- complete finish criteria
+To keep the skill from drifting mid-conversation, every substantive round should begin by echoing:
 
-Expected output:
+- `active skill`
+- `round role`
+- `this round allows`
+- `this round does not allow`
 
-- the full artifact set for the chosen skill
-- full decision, evidence, and completion records
+Recommended continuation style:
+
+```text
+Continue with `research-problem-formulation` for the next round.
+Round role: critic.
+This round should only test the failure hypotheses and trim them.
+Do not expand into method design yet.
+```
 
 ## Skill Flows
 
@@ -119,11 +126,11 @@ Expected output:
 
 If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
 
-`light mode` output:
+First-round output:
 
 - one compact note with corrected model, one retained formulation, one immediate use, and one fresh example
 
-`standard mode` output:
+By completion:
 
 - `knowledge-closure-note.md`
 - `transfer-check.md`
@@ -173,11 +180,11 @@ Complete only if the user can:
 
 If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
 
-`light mode` output:
+First-round output:
 
 - one compact working note with boundary guess, unknowns, evidence anchors, `null or reuse-first` option, first slice, and user path choice
 
-`standard mode` output:
+By completion:
 
 - `system-snapshot.md`
 - `unknowns-checklist.md`
@@ -229,11 +236,11 @@ Complete only if the user can:
 
 If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
 
-`light mode` output:
+First-round output:
 
 - one compact framing note with problem guess, top failure hypotheses, one paper anchor per stable bucket, next evidence step, and one scope decision
 
-`standard mode` output:
+By completion:
 
 - `problem-card.md`
 - `failure-taxonomy.md`
@@ -284,11 +291,11 @@ Complete only if the user can:
 
 If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
 
-`light mode` output:
+First-round output:
 
 - one compact design note with chosen mechanism guess, simpler comparison mechanism, baseline/reference, kill criterion, first experiment, and one rejection reason
 
-`standard mode` output:
+By completion:
 
 - `design-card.md`
 - `mechanism-comparison.md`

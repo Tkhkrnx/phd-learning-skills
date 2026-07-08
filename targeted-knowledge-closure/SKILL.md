@@ -7,29 +7,23 @@ description: Close one specific knowledge gap that is blocking current research 
 
 Use this skill to repair one blocking knowledge gap while preserving independent recall and transfer.
 
-## Execution Mode
+## Execution Contract
 
-Use `light mode` when the concept blocks an active task and speed matters.
-Use `standard mode` when the concept will be reused, taught, or built into a durable workflow.
+This skill uses one execution mode only.
 
-### `light mode` required user output
+The user should not need to choose a mode before starting.
 
-- the 3-bullet minimum seed
-- one compact note containing:
-  - current model
-  - corrected model
-  - one retained formulation
-  - one immediate application context
-  - one fresh example
-- one short agent-off restatement
+Required progression:
 
-### `standard mode` required user output
-
-- `knowledge-closure-note.md`
-- `transfer-check.md`
-- one retained corrected formulation
-- one near transfer result
-- one far transfer result or one explicit reason to defer it
+- start from the 3-bullet minimum seed
+- expand into only the next needed artifact step
+- keep the closure target narrow
+- by skill completion, produce:
+  - `knowledge-closure-note.md`
+  - `transfer-check.md`
+  - one retained corrected formulation
+  - one near transfer result
+  - one far transfer result or one explicit reason to defer it
 
 ## Minimum Viable First Draft
 
@@ -61,6 +55,17 @@ If they are still unsure, offer this fallback:
 
 - "Write one sentence for each of the three bullets, even if you are guessing."
 
+If they want to continue the same skill in a later turn, accept this short continuation phrase:
+
+- "继续按 `targeted-knowledge-closure` 执行下一轮"
+
+At the start of every substantive response, echo a round lock:
+
+- `active skill: targeted-knowledge-closure`
+- `round role: corrector` or `explainer` or `evaluator`
+- `this round allows: ...`
+- `this round does not allow: ...`
+
 ## Agent Role Discipline
 
 Keep one role per round:
@@ -84,6 +89,13 @@ Do not mix correction, long tutorial writing, and evaluation into one undifferen
 6. Ask for an independent user restatement or application.
 7. Evaluate only the remaining gaps.
 
+Round-lock guidance:
+
+- in the handshake round, `this round allows` should be limited to collecting the 3-bullet seed
+- after the handshake, the first working round should allow only one compact closure note, not the full artifact set
+- in `corrector` rounds, allow only correction of the user's current model, not broad tutorial expansion
+- in `evaluator` rounds, allow only gap checking and transfer checking, not a fresh long explanation
+
 ## Artifact Contract
 
 Create or update:
@@ -103,11 +115,14 @@ Artifact language rule:
 - in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
 - keep paper titles, system names, formulas, APIs, and other precise technical identifiers in English when that is clearer
 
-In `light mode`, both artifacts may be collapsed into one note, but the note must still include:
+Round-1 minimum output after the handshake:
 
-- the corrected formulation kept by the user
-- one immediate application context
-- one fresh user-generated example
+- one compact note that records:
+  - current model
+  - corrected model
+  - one retained formulation
+  - one immediate application context
+  - one fresh user-generated example
 
 ## Stop Rules
 

@@ -7,32 +7,26 @@ description: Turn a reasonably stable research problem into explicit mechanism c
 
 Use this skill to turn a stable research problem into a defensible design space and validation plan.
 
-## Execution Mode
+## Execution Contract
 
-Use `light mode` for early mechanism triage.
-Use `standard mode` when the design will influence experiments, implementation, or paper claims.
+This skill uses one execution mode only.
 
-### `light mode` required user output
+The user should not need to choose a mode before starting.
 
-- the 3-bullet minimum seed
-- one compact design note containing:
-  - chosen mechanism guess
-  - one simpler comparison mechanism
-  - one baseline or reference comparison
-  - one kill criterion
-  - one first validating experiment
-  - one user rejection reason for an alternative
+Required progression:
 
-### `standard mode` required user output
-
-- `design-card.md`
-- `mechanism-comparison.md`
-- `failure-mode-table.md`
-- `minimal-validation-plan.md`
-- `decision-record-method-choice.md`
-- one explicit simpler or standard comparison mechanism
-- one explicit baseline/reference comparison
-- one explicit kill criterion
+- start from the 3-bullet minimum seed
+- expand into only the next needed artifact step
+- keep reducing the live mechanism set across rounds
+- by skill completion, produce:
+  - `design-card.md`
+  - `mechanism-comparison.md`
+  - `failure-mode-table.md`
+  - `minimal-validation-plan.md`
+  - `decision-record-method-choice.md`
+  - one explicit simpler or standard comparison mechanism
+  - one explicit baseline/reference comparison
+  - one explicit kill criterion
 
 ## Minimum Viable First Draft
 
@@ -58,6 +52,17 @@ If they are still unsure, offer this fallback:
 
 - "Give me one sentence for the target problem, one rough mechanism guess, and one worry about it."
 
+If they want to continue the same skill in a later turn, accept this short continuation phrase:
+
+- "继续按 `research-method-design` 执行下一轮"
+
+At the start of every substantive response, echo a round lock:
+
+- `active skill: research-method-design`
+- `round role: mechanism-challenger` or `design-space-organizer` or `validation-planner`
+- `this round allows: ...`
+- `this round does not allow: ...`
+
 ## Agent Role Discipline
 
 Keep one role per round:
@@ -81,6 +86,13 @@ Do not let the agent declare the winner by itself.
 9. Produce the smallest experiment set that can separate the top candidates.
 10. End with one chosen mechanism, rejection reasons, and a minimal validation plan.
 
+Round-lock guidance:
+
+- in the handshake round, `this round allows` should be limited to collecting the 3-bullet seed
+- after the handshake, the first working round should allow only one compact design note, not the full artifact set
+- in `mechanism-challenger` rounds, allow attacks on assumptions and alternatives, but do not allow premature winner declaration
+- in `validation-planner` rounds, allow only validation structure, baselines, and kill criteria
+
 ## Artifact Contract
 
 Create or update:
@@ -103,20 +115,15 @@ Artifact language rule:
 - in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
 - keep paper titles, system names, formulas, APIs, and other precise technical identifiers in English when that is clearer
 
-In `light mode`, the user may collapse:
+Round-1 minimum output after the handshake:
 
-- `design-card.md`
-- `mechanism-comparison.md`
-- `minimal-validation-plan.md`
-
-into one compact design note, but must still preserve:
-
-- chosen mechanism
-- one simpler comparison mechanism
-- baseline/reference comparison
-- kill criterion
-- first validating experiment
-- user rejection reasons
+- one compact design note that records:
+  - chosen mechanism guess
+  - one simpler comparison mechanism
+  - baseline/reference comparison
+  - kill criterion
+  - first validating experiment
+  - user rejection reasons
 
 ## Stop Rules
 
