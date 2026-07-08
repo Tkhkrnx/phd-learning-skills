@@ -38,8 +38,20 @@ Score each dimension from 0 to 2.
 - 1: partial pass
 - 2: clear independent pass
 
+## Adoption cost
+
+- 0: the workflow is too heavy for realistic repeated use
+- 1: usable, but with noticeable friction
+- 2: sustainable under realistic task pressure
+
+## Anti-theater robustness
+
+- 0: the workflow can be completed with superficial artifact filling
+- 1: some real thinking is required, but imitation can still slip through
+- 2: the workflow forces fresh reasoning, alternatives, and falsification
+
 ## Acceptance rule
 
 - no dimension may score 0
-- total score should be at least 9/12 for provisional acceptance
-- total score should be at least 11/12 for promotion to review-driven use
+- total score should be at least 12/16 for provisional acceptance
+- total score should be at least 14/16 for promotion to review-driven use

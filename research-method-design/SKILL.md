@@ -7,6 +7,11 @@ description: Turn a reasonably stable research problem into explicit mechanism c
 
 Use this skill to turn a stable research problem into a defensible design space and validation plan.
 
+## Execution Mode
+
+Use `light mode` for early mechanism triage.
+Use `standard mode` when the design will influence experiments, implementation, or paper claims.
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -57,12 +62,28 @@ The validation plan must include:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+In `light mode`, the user may collapse:
+
+- `design-card.md`
+- `mechanism-comparison.md`
+- `minimal-validation-plan.md`
+
+into one compact design note, but must still preserve:
+
+- chosen mechanism
+- one simpler comparison mechanism
+- baseline/reference comparison
+- kill criterion
+- first validating experiment
+- user rejection reasons
+
 ## Stop Rules
 
 - Keep at most 3 live mechanisms after the critique phase.
 - If two rounds of critique do not reduce the mechanism set, force ranking by expected information gain.
 - Stop the skill when one chosen mechanism, one rejected alternative set, and one minimal validation plan are recorded.
 - If a core assumption collapses, return to `research-problem-formulation`.
+- Pause and mark the run incomplete if the user cannot name a simpler comparison mechanism or cannot state a kill criterion.
 
 ## Completion Test
 

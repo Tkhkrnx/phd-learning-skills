@@ -7,6 +7,18 @@ This repository-level blueprint defines the shared collaboration rules for all p
 - accelerate research, engineering, and learning work with an agent
 - keep first-pass modeling, decisions, and transfer with the user
 
+## Two System-Level Risks
+
+### Risk 1: artifact fatigue
+
+In high-pressure work, the user may avoid the workflow if it always requires full artifact production.
+
+### Risk 2: workflow theater
+
+The user may appear to follow the workflow while skipping real evidence judgment, real tradeoff thinking, or real independent recall.
+
+Both risks must be addressed structurally, not only by reminders.
+
 ## Shared Rules
 
 1. Require a user-first draft.
@@ -16,6 +28,85 @@ This repository-level blueprint defines the shared collaboration rules for all p
 5. Define stop rules for both round and skill completion.
 6. Require an agent-off completion check.
 7. Tie engineering claims to inspected evidence.
+
+## Shared Execution Modes
+
+Every skill should support two explicit execution modes.
+
+### `light mode`
+
+Use when:
+
+- time pressure is high
+- the main goal is to preserve the minimum safeguards
+- a full artifact set would reduce adoption
+
+Allowed behavior:
+
+- collapse multiple artifacts into one working note
+- keep only minimum required sections
+- defer secondary comparisons or extended examples
+
+Still required:
+
+- user-first draft
+- explicit user decision or commitment
+- at least one falsification or challenge point
+- one agent-off check
+
+### `standard mode`
+
+Use when:
+
+- the task is important enough to justify fuller documentation
+- the user is shaping a reusable decision, framing, or learning record
+
+Required behavior:
+
+- full artifact set
+- explicit evidence or contrast handling
+- full completion check
+
+Rule:
+
+- default to `light mode` under time pressure
+- escalate to `standard mode` when the result will be reused, published, implemented, or taught
+
+## Shared Anti-Theater Checks
+
+These checks exist to prevent the workflow from becoming ceremonial.
+
+### Check 1: unsupported-claim marking
+
+Any important statement must be marked as one of:
+
+- observed
+- inferred
+- unknown
+- hypothesis
+
+### Check 2: forced alternative
+
+At every major decision point, require at least one serious alternative, not a strawman.
+
+### Check 3: falsification prompt
+
+Require one answer to:
+
+- what would make this current belief or choice wrong?
+
+### Check 4: fresh output
+
+The user must produce something that cannot be copied from the agent wording:
+
+- a fresh example
+- a fresh explanation
+- a fresh decision rationale
+- a fresh testable contrast
+
+### Check 5: evidence anchor minimum
+
+For engineering and evidence-heavy research work, do not accept a polished choice without minimum anchors.
 
 ## Shared Minimum Templates
 

@@ -7,6 +7,11 @@ description: Turn a vague or partly specified research intuition into a defendab
 
 Use this skill to sharpen a fuzzy research problem before designing a method.
 
+## Execution Mode
+
+Use `light mode` when deciding whether a direction is even worth pursuing.
+Use `standard mode` when the framing may feed into a paper, proposal, or sustained project.
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -49,6 +54,20 @@ Create or update:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+In `light mode`, the user may collapse:
+
+- `problem-card.md`
+- `failure-taxonomy.md`
+- `evidence-gap-list.md`
+
+into one compact framing note, but must still preserve:
+
+- current framing
+- top failure hypotheses
+- one paper anchor per stable bucket
+- next evidence step
+- user scope decision
+
 ## Evidence Contract
 
 Every failure claim about current work must be tagged as one of:
@@ -69,6 +88,7 @@ Require at least one explicit contrast statement:
 - Stop the skill when the user can state the problem, why prior buckets fail, and what evidence would overturn the framing.
 - Stop the skill early and park the direction if no differentiated failure claim survives evidence review.
 - If two full reframing loops occur without narrowing the hypothesis set, force a scope cut.
+- Pause and mark the run incomplete if the user cannot give a concrete contrast statement against an existing line of work.
 
 ## Completion Test
 

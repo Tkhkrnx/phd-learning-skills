@@ -7,6 +7,11 @@ description: Turn an unclear engineering request into an evidence-grounded under
 
 Use this skill to ground an unclear engineering request in evidence before choosing a path.
 
+## Execution Mode
+
+Use `light mode` for urgent triage.
+Use `standard mode` when the decision will drive implementation, coordination, or architecture.
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -54,6 +59,20 @@ Create or update:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+In `light mode`, the user may collapse:
+
+- `system-snapshot.md`
+- `unknowns-checklist.md`
+- `execution-slice-plan.md`
+
+into one compact working note, but must still preserve:
+
+- current boundary guess
+- unknowns
+- evidence anchors
+- first execution slice
+- user decision
+
 ## Evidence Contract
 
 Every important system claim must cite at least one anchor:
@@ -81,6 +100,7 @@ If direct evidence is not yet reachable, stop solution discussion and produce `e
 - Stop round 2 when the task is partitioned into a stable boundary or lifecycle map.
 - Stop the skill when one execution slice can be implemented or verified next without further planning.
 - If two planning rounds occur without new evidence anchors, force evidence collection before more discussion.
+- Pause and mark the run incomplete if the user cannot name a `null or reuse-first` alternative or cannot state what would falsify the current path.
 
 ## Completion Test
 

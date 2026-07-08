@@ -7,6 +7,11 @@ description: Close one specific knowledge gap that is blocking current research 
 
 Use this skill to repair one blocking knowledge gap while preserving independent recall and transfer.
 
+## Execution Mode
+
+Use `light mode` when the concept blocks an active task and speed matters.
+Use `standard mode` when the concept will be reused, taught, or built into a durable workflow.
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -60,11 +65,18 @@ The final note must include:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+In `light mode`, both artifacts may be collapsed into one note, but the note must still include:
+
+- the corrected formulation kept by the user
+- one immediate application context
+- one fresh user-generated example
+
 ## Stop Rules
 
 - Stop the round when the repair set is small and explicit.
 - Stop the skill when the user passes one independent restatement and one near transfer check.
 - If multiple unrelated knowledge gaps appear, split them and keep only one closure target in the current run.
+- Pause and mark the run incomplete if the user can only paraphrase the agent wording without a fresh example.
 
 ## Completion Test
 
