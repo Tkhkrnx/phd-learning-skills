@@ -35,6 +35,7 @@ Do not jump from an unclear request to a polished final plan.
 4. Partition the task by system boundary, data flow, or lifecycle.
 5. Compare a small option set:
    - simplest
+   - null or reuse-first
    - balanced
    - higher-complexity
 6. Require the user to record the chosen path and rejected alternatives.
@@ -49,6 +50,7 @@ Create or update:
 - `solution-options.md`
 - `execution-slice-plan.md`
 - `decision-record-engineering-path.md`
+- `evidence-acquisition-plan.md` when direct evidence is not yet reachable
 
 Follow the schema in `references/artifact-schemas.md`.
 
@@ -71,6 +73,7 @@ Tag claims as:
 
 Do not finalize option comparison while the current system boundary is still unsupported by evidence.
 Require at least 3 concrete evidence anchors before writing the final option comparison.
+If direct evidence is not yet reachable, stop solution discussion and produce `evidence-acquisition-plan.md`.
 
 ## Stop Rules
 
@@ -91,6 +94,7 @@ The skill is complete only if the user can independently explain:
 ## Failure Patterns
 
 - treating the requirement text as sufficient truth
+- validating a favored architecture before checking whether reuse or no-change is enough
 - substituting the agent for repository inspection
 - producing one elegant plan with no explicit alternatives
 - making unsupported system claims

@@ -33,10 +33,12 @@ Do not let the agent declare the winner by itself.
 2. Rewrite vague ideas as explicit mechanisms and assumptions.
 3. List likely failure modes and confounders.
 4. Keep only a small live mechanism set.
-5. Ask the user to select or rank the surviving candidates.
-6. Define the baseline or reference comparison that the first validation must beat or explain against.
-7. Produce the smallest experiment set that can separate the top candidates.
-8. End with one chosen mechanism, rejection reasons, and a minimal validation plan.
+5. Require at least one simpler or more standard comparison mechanism.
+6. Ask the user to select or rank the surviving candidates.
+7. Define the baseline or reference comparison that the first validation must beat or explain against.
+8. Define one kill criterion that would make the chosen mechanism non-viable.
+9. Produce the smallest experiment set that can separate the top candidates.
+10. End with one chosen mechanism, rejection reasons, and a minimal validation plan.
 
 ## Artifact Contract
 
@@ -51,6 +53,7 @@ Create or update:
 The validation plan must include:
 
 - one explicit baseline or reference comparison
+- one explicit kill criterion for the chosen mechanism
 
 Follow the schema in `references/artifact-schemas.md`.
 
@@ -74,6 +77,7 @@ The skill is complete only if the user can independently explain:
 ## Failure Patterns
 
 - naming a method without mechanism clarity
+- using the skill to justify a favorite mechanism without a fair simpler comparison
 - novelty theater
 - weak or decorative ablations
 - failure to record why alternatives were dropped

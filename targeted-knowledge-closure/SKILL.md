@@ -16,6 +16,12 @@ Ask the user for this minimum seed if they have not already provided it:
 - what confuses me most
 
 Expand that seed into `knowledge-closure-note.md`.
+If the requested concept is too broad, force scope reduction to exactly one of:
+
+- one mechanism
+- one theorem or formula
+- one system component
+- one contrast pair between two concepts
 
 ## Agent Role Discipline
 
@@ -67,10 +73,12 @@ The skill is complete only if the user can, without looking at your explanation:
 - explain the concept in their own words
 - connect it to the current task
 - solve or analyze one transfer case
+- generate one fresh example or application that was not supplied by the agent
 
 ## Failure Patterns
 
 - explaining before recall
+- trying to close an entire field-sized topic in one run
 - giving a broad tutorial instead of a scoped repair
 - accepting recognition without transfer
 
