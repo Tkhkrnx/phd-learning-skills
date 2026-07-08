@@ -98,6 +98,11 @@ The final note must include:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+Artifact language rule:
+
+- in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
+- keep paper titles, system names, formulas, APIs, and other precise technical identifiers in English when that is clearer
+
 In `light mode`, both artifacts may be collapsed into one note, but the note must still include:
 
 - the corrected formulation kept by the user

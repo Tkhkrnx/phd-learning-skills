@@ -48,6 +48,16 @@ Instead, every skill should begin with an invocation handshake:
 
 The handshake should reduce startup friction, not add a new ritual.
 
+## Shared Artifact Language Policy
+
+Artifacts should default to the user's working language.
+
+For this repository and its intended usage:
+
+- when the user works in Chinese, artifact titles, section headers, and analysis text should default to Chinese
+- keep paper titles, system names, API names, and other proper technical identifiers in their original language when that is clearer
+- do not force English artifact headers unless the user explicitly asks for English deliverables
+
 ## Shared Execution Modes
 
 Every skill should support two explicit execution modes.

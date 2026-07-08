@@ -93,6 +93,11 @@ Create or update:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+Artifact language rule:
+
+- in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
+- keep repository paths, function names, config keys, APIs, and other precise technical identifiers in English when that is clearer
+
 In `light mode`, the user may collapse:
 
 - `system-snapshot.md`

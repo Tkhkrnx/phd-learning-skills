@@ -98,6 +98,11 @@ The validation plan must include:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+Artifact language rule:
+
+- in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
+- keep paper titles, system names, formulas, APIs, and other precise technical identifiers in English when that is clearer
+
 In `light mode`, the user may collapse:
 
 - `design-card.md`

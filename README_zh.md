@@ -28,6 +28,7 @@
 - 每一轮 agent 只扮演一个角色
 - 关键分叉处必须由用户写 decision 或 commitment
 - artifact 要有固定 schema
+- artifact 默认使用用户当前的工作语言，中文为主的运行默认产生中文标题、小节标题和分析文本
 - 要有明确 stop rule
 - 要做脱离 agent 的完成检查
 - 工程判断必须绑定真实证据

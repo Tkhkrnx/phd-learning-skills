@@ -87,6 +87,11 @@ Create or update:
 
 Follow the schema in `references/artifact-schemas.md`.
 
+Artifact language rule:
+
+- in Chinese-first usage, write artifact titles, section headers, and analysis in Chinese by default
+- keep paper titles, system names, APIs, and other precise technical identifiers in English when that is clearer
+
 In `light mode`, the user may collapse:
 
 - `problem-card.md`

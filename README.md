@@ -28,6 +28,7 @@ All skills in this repository follow the same operating rules:
 - one agent role per round
 - explicit user decision records
 - fixed artifact schemas
+- artifacts default to the user's working language, with Chinese-first runs producing Chinese headings and analysis by default
 - explicit stop rules
 - agent-off completion checks
 - evidence-grounded engineering claims
