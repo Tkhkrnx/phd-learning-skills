@@ -34,8 +34,9 @@ Do not let the agent declare the winner by itself.
 3. List likely failure modes and confounders.
 4. Keep only a small live mechanism set.
 5. Ask the user to select or rank the surviving candidates.
-6. Produce the smallest experiment set that can separate the top candidates.
-7. End with one chosen mechanism, rejection reasons, and a minimal validation plan.
+6. Define the baseline or reference comparison that the first validation must beat or explain against.
+7. Produce the smallest experiment set that can separate the top candidates.
+8. End with one chosen mechanism, rejection reasons, and a minimal validation plan.
 
 ## Artifact Contract
 
@@ -46,6 +47,10 @@ Create or update:
 - `failure-mode-table.md`
 - `minimal-validation-plan.md`
 - `decision-record-method-choice.md`
+
+The validation plan must include:
+
+- one explicit baseline or reference comparison
 
 Follow the schema in `references/artifact-schemas.md`.
 

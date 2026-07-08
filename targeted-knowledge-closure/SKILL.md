@@ -36,8 +36,9 @@ Do not mix correction, long tutorial writing, and evaluation into one undifferen
    - formal
    - task-local
 4. Give one near transfer case and one far transfer case.
-5. Ask for an independent user restatement or application.
-6. Evaluate only the remaining gaps.
+5. Ask the user to choose one corrected formulation to keep and one immediate context in which they will apply it.
+6. Ask for an independent user restatement or application.
+7. Evaluate only the remaining gaps.
 
 ## Artifact Contract
 
@@ -45,6 +46,11 @@ Create or update:
 
 - `knowledge-closure-note.md`
 - `transfer-check.md`
+
+The final note must include:
+
+- one corrected formulation the user explicitly keeps
+- one immediate application context chosen by the user
 
 Follow the schema in `references/artifact-schemas.md`.
 

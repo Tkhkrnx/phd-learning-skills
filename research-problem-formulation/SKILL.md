@@ -57,6 +57,7 @@ Every failure claim about current work must be tagged as one of:
 - hypothesis needing validation
 
 Do not promote unsupported claims into the final problem definition.
+Do not treat a related-work bucket as stable until it contains at least one concrete paper anchor.
 
 ## Stop Rules
 
