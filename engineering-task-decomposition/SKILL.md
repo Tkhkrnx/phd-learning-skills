@@ -12,6 +12,26 @@ Use this skill to ground an unclear engineering request in evidence before choos
 Use `light mode` for urgent triage.
 Use `standard mode` when the decision will drive implementation, coordination, or architecture.
 
+### `light mode` required user output
+
+- the 3-bullet minimum seed
+- one compact working note containing:
+  - current boundary guess
+  - prioritized unknowns
+  - current evidence anchors
+  - `null or reuse-first` option
+  - first execution slice
+  - one user path choice
+
+### `standard mode` required user output
+
+- `system-snapshot.md`
+- `unknowns-checklist.md`
+- `solution-options.md`
+- `execution-slice-plan.md`
+- `decision-record-engineering-path.md`
+- `evidence-acquisition-plan.md` when direct evidence is not yet reachable
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -21,6 +41,20 @@ Ask the user for this minimum seed if they have not already provided it:
 - what I do not understand yet
 
 Expand that seed into `system-snapshot.md`.
+
+## Invocation Handshake
+
+If the user only says something like "Use `engineering-task-decomposition` for this task", do not expect them to know the template.
+
+Reply by asking only for:
+
+- what they think the requirement is asking for
+- what system part may be affected
+- what they do not understand yet
+
+If they are still unsure, offer this fallback:
+
+- "Give me one rough sentence for the requirement, one guess about the affected area, and one unknown."
 
 ## Agent Role Discipline
 

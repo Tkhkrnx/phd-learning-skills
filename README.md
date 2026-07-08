@@ -48,6 +48,19 @@ Run every task through the same high-level loop:
 6. Insert `targeted-knowledge-closure` if a specific knowledge gap blocks progress.
 7. End with an agent-off check.
 
+## Invocation Style
+
+You do not need to remember each input template before calling a skill.
+
+Short invocations are enough, for example:
+
+- "Use `research-problem-formulation` and help me define the problem."
+- "Use `research-method-design` for this direction."
+- "Use `engineering-task-decomposition` for this requirement."
+- "Use `targeted-knowledge-closure` for this concept."
+
+After invocation, the skill should guide you by asking only for the minimum 3-bullet input needed to start.
+
 ## Execution Modes
 
 ### `light mode`
@@ -65,6 +78,11 @@ Still required:
 - one challenge or falsification point
 - one agent-off check
 
+Expected output:
+
+- one compact working note
+- no full artifact set unless the user wants durable records
+
 ### `standard mode`
 
 Use when:
@@ -77,6 +95,11 @@ Required:
 - full artifact set
 - explicit evidence or contrast handling
 - complete finish criteria
+
+Expected output:
+
+- the full artifact set for the chosen skill
+- full decision, evidence, and completion records
 
 ## Skill Flows
 
@@ -92,6 +115,17 @@ Required:
 - what I think this concept means
 - where it blocks me
 - what confuses me most
+
+If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
+
+`light mode` output:
+
+- one compact note with corrected model, one retained formulation, one immediate use, and one fresh example
+
+`standard mode` output:
+
+- `knowledge-closure-note.md`
+- `transfer-check.md`
 
 If the concept is too broad, reduce it to exactly one of:
 
@@ -136,6 +170,21 @@ Complete only if the user can:
 - what part of the system might be affected
 - what I do not understand yet
 
+If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
+
+`light mode` output:
+
+- one compact working note with boundary guess, unknowns, evidence anchors, `null or reuse-first` option, first slice, and user path choice
+
+`standard mode` output:
+
+- `system-snapshot.md`
+- `unknowns-checklist.md`
+- `solution-options.md`
+- `execution-slice-plan.md`
+- `decision-record-engineering-path.md`
+- `evidence-acquisition-plan.md` if needed
+
 ### Agent roles
 
 1. `clarifier`
@@ -177,6 +226,20 @@ Complete only if the user can:
 - why I think it matters
 - one thing I think current work gets wrong
 
+If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
+
+`light mode` output:
+
+- one compact framing note with problem guess, top failure hypotheses, one paper anchor per stable bucket, next evidence step, and one scope decision
+
+`standard mode` output:
+
+- `problem-card.md`
+- `failure-taxonomy.md`
+- `evidence-gap-list.md`
+- `decision-record-problem-scope.md`
+- one explicit contrast statement
+
 ### Agent roles
 
 1. `organizer`
@@ -217,6 +280,20 @@ Complete only if the user can:
 - problem I am trying to solve
 - one candidate mechanism
 - one reason I do not trust it yet
+
+If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
+
+`light mode` output:
+
+- one compact design note with chosen mechanism guess, simpler comparison mechanism, baseline/reference, kill criterion, first experiment, and one rejection reason
+
+`standard mode` output:
+
+- `design-card.md`
+- `mechanism-comparison.md`
+- `failure-mode-table.md`
+- `minimal-validation-plan.md`
+- `decision-record-method-choice.md`
 
 ### Agent roles
 

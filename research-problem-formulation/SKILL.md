@@ -12,6 +12,25 @@ Use this skill to sharpen a fuzzy research problem before designing a method.
 Use `light mode` when deciding whether a direction is even worth pursuing.
 Use `standard mode` when the framing may feed into a paper, proposal, or sustained project.
 
+### `light mode` required user output
+
+- the 3-bullet minimum seed
+- one compact framing note containing:
+  - current problem guess
+  - why it may matter
+  - top 1 to 3 failure hypotheses
+  - one paper anchor per stable bucket
+  - one next evidence step
+  - one user scope decision: sharpen, park, or abandon
+
+### `standard mode` required user output
+
+- `problem-card.md`
+- `failure-taxonomy.md`
+- `evidence-gap-list.md`
+- `decision-record-problem-scope.md`
+- one explicit contrast statement against an existing line of work
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -21,6 +40,20 @@ Ask the user for this minimum seed if they have not already provided it:
 - one thing I think current work gets wrong
 
 Expand that seed into `problem-card.md`.
+
+## Invocation Handshake
+
+If the user only says something like "Use `research-problem-formulation` and help me define the problem", do not expect them to know the template.
+
+Reply by asking only for:
+
+- the problem they currently suspect
+- why they think it matters
+- one thing they think current work gets wrong
+
+If they are still unsure, offer this fallback:
+
+- "Give me one rough problem guess, one reason it may matter, and one dissatisfaction with existing work."
 
 ## Agent Role Discipline
 

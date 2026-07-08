@@ -48,6 +48,19 @@
 6. 如果被具体知识点卡住，就嵌入 `targeted-knowledge-closure`。
 7. 最后做一次脱离 agent 的检查。
 
+## 调用方式
+
+你不需要在调用 skill 之前先记住模板。
+
+像下面这样一句话调用就够了：
+
+- “现在调用 `research-problem-formulation`，帮我做问题定义。”
+- “现在调用 `research-method-design`，帮我做方法设计。”
+- “现在调用 `engineering-task-decomposition`，帮我拆这个需求。”
+- “现在调用 `targeted-knowledge-closure`，帮我补这个知识点。”
+
+调用之后，skill 应该先反过来引导你，只问启动所需的最小 3 条输入，而不是默认你已经知道要怎么写。
+
 ## 执行模式
 
 ### `light mode`
@@ -65,6 +78,11 @@
 - 一个挑战/证伪点
 - 一个 agent-off 检查
 
+你应该交付的形式：
+
+- 一份紧凑工作笔记
+- 不要求完整 artifact 集，除非你明确要长期留档
+
 ### `standard mode`
 
 适合：
@@ -77,6 +95,11 @@
 - 完整 artifact 集
 - 明确证据或对照
 - 完整的 finish criteria
+
+你应该交付的形式：
+
+- 对应 skill 的完整 artifact 集
+- 完整的 decision、evidence 和 completion 记录
 
 ## 四个 skill 的具体使用流程
 
@@ -92,6 +115,19 @@
 - 我认为这个概念是：
 - 它卡住我的地方是：
 - 我最困惑的是：
+
+如果你一开始也不知道怎么写，skill 应该继续引导你：
+
+- 每一条先随便写一句猜测也可以
+
+`light mode` 你要交付：
+
+- 一份紧凑笔记，里面至少有：纠正后的理解、保留的版本、立即应用场景、一个新例子
+
+`standard mode` 你要交付：
+
+- `knowledge-closure-note.md`
+- `transfer-check.md`
 
 如果范围太大，必须收缩到下面四类之一：
 
@@ -136,6 +172,23 @@
 - 可能影响的系统部分是：
 - 我现在不知道的是：
 
+如果你一开始也不知道怎么写，skill 应该继续引导你：
+
+- 每一条先随便写一句粗糙判断也可以
+
+`light mode` 你要交付：
+
+- 一份紧凑工作笔记，里面至少有：边界猜测、unknowns、证据锚点、`null or reuse-first` 选项、第一步切片、用户路径选择
+
+`standard mode` 你要交付：
+
+- `system-snapshot.md`
+- `unknowns-checklist.md`
+- `solution-options.md`
+- `execution-slice-plan.md`
+- `decision-record-engineering-path.md`
+- 必要时加 `evidence-acquisition-plan.md`
+
 ### agent 怎么配合
 
 1. `clarifier`
@@ -177,6 +230,22 @@
 - 我觉得它重要是因为：
 - 我觉得现有工作有一个关键问题是：
 
+如果你一开始也不知道怎么写，skill 应该继续引导你：
+
+- 每一条先写一个不完整判断也可以
+
+`light mode` 你要交付：
+
+- 一份紧凑 framing 笔记，里面至少有：问题猜测、前 1 到 3 个失败假设、每个稳定 bucket 的 paper anchor、下一步证据、以及一个 scope decision
+
+`standard mode` 你要交付：
+
+- `problem-card.md`
+- `failure-taxonomy.md`
+- `evidence-gap-list.md`
+- `decision-record-problem-scope.md`
+- 一条显式对照句
+
 ### agent 怎么配合
 
 1. `organizer`
@@ -217,6 +286,22 @@
 - 我要解决的问题是：
 - 一个候选机制是：
 - 我不放心它的原因是：
+
+如果你一开始也不知道怎么写，skill 应该继续引导你：
+
+- 每一条先写一个粗糙想法也可以
+
+`light mode` 你要交付：
+
+- 一份紧凑 design 笔记，里面至少有：候选机制、一个更简单对照机制、baseline/reference、kill criterion、第一步实验、一个 rejection reason
+
+`standard mode` 你要交付：
+
+- `design-card.md`
+- `mechanism-comparison.md`
+- `failure-mode-table.md`
+- `minimal-validation-plan.md`
+- `decision-record-method-choice.md`
 
 ### agent 怎么配合
 

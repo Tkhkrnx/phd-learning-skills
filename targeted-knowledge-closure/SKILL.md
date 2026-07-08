@@ -12,6 +12,25 @@ Use this skill to repair one blocking knowledge gap while preserving independent
 Use `light mode` when the concept blocks an active task and speed matters.
 Use `standard mode` when the concept will be reused, taught, or built into a durable workflow.
 
+### `light mode` required user output
+
+- the 3-bullet minimum seed
+- one compact note containing:
+  - current model
+  - corrected model
+  - one retained formulation
+  - one immediate application context
+  - one fresh example
+- one short agent-off restatement
+
+### `standard mode` required user output
+
+- `knowledge-closure-note.md`
+- `transfer-check.md`
+- one retained corrected formulation
+- one near transfer result
+- one far transfer result or one explicit reason to defer it
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -27,6 +46,20 @@ If the requested concept is too broad, force scope reduction to exactly one of:
 - one theorem or formula
 - one system component
 - one contrast pair between two concepts
+
+## Invocation Handshake
+
+If the user only says something like "Use `targeted-knowledge-closure` for this concept", do not expect them to know the template.
+
+Reply by asking only for:
+
+- what they currently think the concept means
+- where it is blocking them
+- what is most confusing
+
+If they are still unsure, offer this fallback:
+
+- "Write one sentence for each of the three bullets, even if you are guessing."
 
 ## Agent Role Discipline
 

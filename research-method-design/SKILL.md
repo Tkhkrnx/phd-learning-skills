@@ -12,6 +12,28 @@ Use this skill to turn a stable research problem into a defensible design space 
 Use `light mode` for early mechanism triage.
 Use `standard mode` when the design will influence experiments, implementation, or paper claims.
 
+### `light mode` required user output
+
+- the 3-bullet minimum seed
+- one compact design note containing:
+  - chosen mechanism guess
+  - one simpler comparison mechanism
+  - one baseline or reference comparison
+  - one kill criterion
+  - one first validating experiment
+  - one user rejection reason for an alternative
+
+### `standard mode` required user output
+
+- `design-card.md`
+- `mechanism-comparison.md`
+- `failure-mode-table.md`
+- `minimal-validation-plan.md`
+- `decision-record-method-choice.md`
+- one explicit simpler or standard comparison mechanism
+- one explicit baseline/reference comparison
+- one explicit kill criterion
+
 ## Minimum Viable First Draft
 
 Ask the user for this minimum seed if they have not already provided it:
@@ -21,6 +43,20 @@ Ask the user for this minimum seed if they have not already provided it:
 - one reason I do not trust it yet
 
 Expand that seed into `design-card.md`.
+
+## Invocation Handshake
+
+If the user only says something like "Use `research-method-design` for this problem", do not expect them to know the template.
+
+Reply by asking only for:
+
+- the problem they are trying to solve
+- one candidate mechanism
+- one reason they do not trust it yet
+
+If they are still unsure, offer this fallback:
+
+- "Give me one sentence for the target problem, one rough mechanism guess, and one worry about it."
 
 ## Agent Role Discipline
 

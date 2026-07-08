@@ -29,6 +29,25 @@ Both risks must be addressed structurally, not only by reminders.
 6. Require an agent-off completion check.
 7. Tie engineering claims to inspected evidence.
 
+## Shared Invocation Guidance
+
+A user should be allowed to invoke a skill with a short request such as:
+
+- "Use `research-problem-formulation` and help me define the problem."
+- "Use `engineering-task-decomposition` for this requirement."
+- "Use `targeted-knowledge-closure` for this concept."
+
+The skill must not assume the user remembers the required template.
+
+Instead, every skill should begin with an invocation handshake:
+
+1. identify the skill and its immediate goal in one sentence
+2. ask for only the minimum viable first draft
+3. if the user is overwhelmed, offer a 2 to 3 bullet fallback version
+4. only after the user answers, expand into the first artifact
+
+The handshake should reduce startup friction, not add a new ritual.
+
 ## Shared Execution Modes
 
 Every skill should support two explicit execution modes.
