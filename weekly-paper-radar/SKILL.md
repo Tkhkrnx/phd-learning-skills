@@ -1,6 +1,6 @@
 ---
 name: weekly-paper-radar
-description: Weekly paper radar for State-Centric Runtime Design and Hardware-Conscious Execution. Use when Codex needs to search近3年的系统A会论文, fall back to high-quality AI A venues only when needed, and optionally download PDFs into PaperQuay data.
+description: Weekly paper radar for State-Centric Runtime Design and Hardware-Conscious Execution. Use when Codex needs to search近3年的系统A会论文, fall back to high-quality AI A venues only when needed, and optionally download PDFs into the local submission directory.
 ---
 
 Read `radar_config.yaml` and `scripts/weekly_radar.py`.
@@ -15,13 +15,13 @@ Workflow:
 - For each candidate paper, also search the vault first so repeated recommendations can be surfaced as possible duplicates.
 - Build a single total candidate pool of about 20 papers across the three directions.
 - After the script finishes, Codex should read the candidate pool and directly produce the weekly recommendation in the conversation, rather than expecting the script to write a final recommendation markdown.
-- If `--download-pdf` is enabled, save PDFs into the configured PaperQuay data directory.
+- If `--download-pdf` is enabled, save PDFs into the configured local submission directory.
 - Expect machine-readable outputs only:
   - `candidate_pool.json`
   - `manual_pdf_followup.json`
 - In the final user-facing answer, Codex should also directly summarize:
   - which PDFs were downloaded successfully
-  - the actual PaperQuay target directory
+  - the actual local submission directory
   - which papers still require manual follow-up
   - and should present that summary in the conversation itself rather than asking the user to inspect output files
 

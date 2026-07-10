@@ -17,18 +17,19 @@ SEMANTIC_SCHOLAR_API = "https://api.semanticscholar.org/graph/v1/paper/search"
 ARXIV_API = "https://export.arxiv.org/api/query"
 OPENALEX_API = "https://api.openalex.org/works"
 DBLP_API = "https://dblp.org/search/publ/api"
+DEFAULT_SUBMISSION_DIR = Path.home() / "Documents" / "PHR" / "Intellistream" / "papers" / "submission"
 
 def _paperquay_data_dir() -> Path:
     configured = os.environ.get("PAPERQUAY_DATA_DIR", "").strip()
     if configured:
         return Path(configured)
+    submission_dir = os.environ.get("PHD_PAPER_SUBMISSION_DIR", "").strip()
+    if submission_dir:
+        return Path(submission_dir)
     paperquay_root = os.environ.get("PAPERQUAY_ROOT", "").strip()
     if paperquay_root:
         return Path(paperquay_root) / "paperquay-data"
-    appdata = os.environ.get("APPDATA", "").strip()
-    if appdata:
-        return Path(appdata) / "PaperQuay" / "PaperQuay" / "paperquay-data"
-    return Path.home() / "AppData" / "Roaming" / "PaperQuay" / "PaperQuay" / "paperquay-data"
+    return DEFAULT_SUBMISSION_DIR
 
 
 PAPERQUAY_DATA_DIR = _paperquay_data_dir()
