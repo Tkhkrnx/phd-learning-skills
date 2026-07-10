@@ -1,0 +1,178 @@
+topics:
+  - id: state-aware-orchestration-resource-governance
+    name: State-Aware Orchestration and Resource Governance
+    aliases:
+      - state aware orchestration
+      - resource governance for llm serving
+      - orchestration for long context and moe
+      - serving orchestration and scheduling
+    preferred_venues: [SOSP, OSDI, NSDI, EuroSys, ASPLOS, USENIX ATC, FAST, SoCC, VLDB, SIGMOD, HPCA, MICRO, ISCA, PPoPP, SC]
+    fallback_venues: [MLSys, NSDI Workshop, EuroMLSys, NeurIPS, ICML, ICLR, WWW, KDD, IEEE TPDS]
+    subtopics:
+      - id: tail-latency-and-risk-modeling
+        name: Tail Latency and Risk Modeling for Long Contexts and MoE
+        aliases:
+          - tail latency serving
+          - long context latency
+          - moe tail latency
+          - latency risk modeling
+        keywords:
+          - tail latency
+          - long context serving
+          - MoE serving
+          - latency modeling
+          - latency risk
+          - SLO-aware scheduling
+      - id: load-aware-batching-and-joint-scheduling
+        name: Load-Aware Batching and Joint Scheduling
+        aliases:
+          - load aware batching
+          - joint scheduling
+          - prefill decode scheduling
+          - continuous batching
+        keywords:
+          - load aware batching
+          - continuous batching
+          - joint scheduling
+          - prefill decode scheduling
+          - request scheduling
+          - admission control
+      - id: topology-aware-isolation-and-mapping
+        name: Heterogeneous Topology-Aware Isolation and Resource Mapping
+        aliases:
+          - topology aware serving
+          - quota isolation
+          - resource mapping
+          - heterogenous topology scheduling
+        keywords:
+          - topology aware scheduling
+          - quota isolation
+          - resource mapping
+          - heterogenous resource allocation
+          - placement and mapping
+          - multi cluster serving
+
+  - id: hardware-aware-memory-management-semantic-consistency
+    name: Hardware-Aware Memory Management and Semantic Consistency
+    aliases:
+      - hardware aware memory management
+      - semantic consistency for llm memory
+      - hierarchical memory for inference
+      - multi level memory serving
+    preferred_venues: [SOSP, OSDI, NSDI, EuroSys, ASPLOS, USENIX ATC, FAST, SoCC, VLDB, SIGMOD, HPCA, MICRO, ISCA, PPoPP, SC]
+    fallback_venues: [MLSys, NeurIPS, ICML, ICLR, IEEE TPDS, IEEE TC, ACM TOS]
+    subtopics:
+      - id: kv-prefix-vector-hierarchy
+        name: Hierarchical Management of KV Prefix and Vector Memory
+        aliases:
+          - kv hierarchy
+          - prefix cache hierarchy
+          - vector memory hierarchy
+          - hierarchical memory serving
+        keywords:
+          - KV cache hierarchy
+          - prefix cache
+          - vector memory
+          - hierarchical memory
+          - cache tiering
+          - memory hierarchy for serving
+      - id: consistency-read-write-and-update
+        name: Consistency, Read-Write Semantics, and Fast Update
+        aliases:
+          - semantic consistency
+          - consistency read write
+          - fast memory update
+          - mutable memory serving
+        keywords:
+          - semantic consistency
+          - consistency control
+          - memory update
+          - mutable cache
+          - read write consistency
+          - state coherence
+      - id: robustness-and-inference-loop
+        name: Robust Inference Loop with Memory Feedback
+        aliases:
+          - robust inference loop
+          - memory feedback inference
+          - memory augmented robustness
+        keywords:
+          - robust inference
+          - memory augmented inference
+          - memory feedback
+          - retrieval robustness
+          - adaptive memory update
+      - id: hardware-placement-and-communication
+        name: Hardware Placement, NUMA, and Communication Path
+        aliases:
+          - numa aware memory
+          - communication path optimization
+          - hardware placement for memory
+        keywords:
+          - NUMA-aware memory
+          - memory placement
+          - communication path
+          - CPU-GPU coordination
+          - interconnect optimization
+
+  - id: state-reuse-inference-long-contexts-moe
+    name: State-Reuse Inference for Long Contexts and MoE
+    aliases:
+      - state reuse inference
+      - long context inference acceleration
+      - moe inference acceleration
+      - cache reuse for inference
+    preferred_venues: [SOSP, OSDI, NSDI, EuroSys, ASPLOS, USENIX ATC, FAST, SoCC, VLDB, SIGMOD, HPCA, MICRO, ISCA, PPoPP, SC]
+    fallback_venues: [MLSys, NeurIPS, ICML, ICLR, WWW, KDD, IEEE TPDS]
+    subtopics:
+      - id: kv-state-reuse-and-cache-optimization
+        name: KV State Reuse and Context Cache Optimization
+        aliases:
+          - kv state reuse
+          - context cache reuse
+          - prefix reuse
+          - reuse aware serving
+        keywords:
+          - KV reuse
+          - prefix reuse
+          - context caching
+          - cache reuse
+          - prefix caching
+          - reuse-aware scheduling
+      - id: moe-sparse-activation-and-routing
+        name: MoE Sparse Activation and Routing Efficiency
+        aliases:
+          - sparse activation serving
+          - moe routing optimization
+          - expert routing
+        keywords:
+          - MoE routing
+          - sparse activation
+          - expert scheduling
+          - expert parallel serving
+          - MoE inference
+      - id: domestic-interconnect-and-data-path
+        name: Domestic Interconnect and Data Path Optimization
+        aliases:
+          - domestic interconnect
+          - domestic accelerator interconnect
+          - data path optimization
+          - communication pipeline for serving
+        keywords:
+          - interconnect optimization
+          - data path optimization
+          - communication bottleneck
+          - domestic accelerator interconnect
+          - accelerator interconnect
+      - id: long-context-serving-acceleration
+        name: Long Context Serving Acceleration
+        aliases:
+          - long context acceleration
+          - streaming prefill
+          - long sequence inference
+        keywords:
+          - long context inference
+          - long sequence serving
+          - streaming prefill
+          - context window acceleration
+          - speculative long context serving

@@ -1,0 +1,213 @@
+sources:
+  - venue: SOSP
+    year: 2025
+    adapter: sigops_accepted_list
+    url: https://sigops.org/s/conferences/sosp/2025/accepted.html
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-state-reuse-and-cache-optimization
+      - long-context-serving-acceleration
+
+  - venue: OSDI
+    year: 2025
+    adapter: usenix_technical_sessions
+    url: https://www.usenix.org/conference/osdi25/technical-sessions
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+      - long-context-serving-acceleration
+
+  - venue: NSDI
+    year: 2026
+    adapter: usenix_accepted_papers
+    url: https://www.usenix.org/conference/nsdi26/spring-accepted-papers
+    topics:
+      - topology-aware-isolation-and-mapping
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+
+  - venue: NSDI
+    year: 2026
+    adapter: usenix_technical_sessions
+    url: https://www.usenix.org/conference/nsdi26/technical-sessions
+    topics:
+      - topology-aware-isolation-and-mapping
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+
+  - venue: USENIX ATC
+    year: 2025
+    adapter: usenix_technical_sessions
+    url: https://www.usenix.org/conference/atc25/technical-sessions
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+      - long-context-serving-acceleration
+
+  - venue: FAST
+    year: 2026
+    adapter: usenix_technical_sessions
+    url: https://www.usenix.org/conference/fast26/technical-sessions
+    topics:
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+
+  - venue: EuroSys
+    year: 2026
+    adapter: eurosys_papers
+    url: https://2026.eurosys.org/papers.html
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: PPoPP
+    year: 2026
+    adapter: researchr_track
+    url: https://ppopp26.sigplan.org/track/PPoPP-2026-papers
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+
+  - venue: HPCA
+    year: 2026
+    adapter: researchr_track
+    url: https://2026.hpca-conf.org/track/hpca-2026-main-conference
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: SoCC
+    year: 2025
+    adapter: socc_titles
+    url: https://acmsocc.org/2025/papers.html
+    topics:
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-state-reuse-and-cache-optimization
+
+  - venue: SC
+    year: 2025
+    adapter: sc_papers
+    url: https://sc25.supercomputing.org/program/papers/
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+
+  - venue: MLSys
+    year: 2026
+    adapter: mlsys_virtual
+    url: https://mlsys.org/virtual/2026/papers.html?filter=titles
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - kv-state-reuse-and-cache-optimization
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: ASPLOS
+    year: 2025
+    adapter: wordpress_program
+    url: https://www.asplos-conference.org/asplos2025/program.html
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: ASPLOS
+    year: 2026
+    adapter: wordpress_program
+    url: https://www.asplos-conference.org/asplos2026/program/index.html
+    topics:
+      - tail-latency-and-risk-modeling
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: ISCA
+    year: 2025
+    adapter: ieee_program
+    url: https://www.iscaconf.org/isca2025/program/
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: ISCA
+    year: 2026
+    adapter: ieee_program
+    url: https://iscaconf.org/isca2026/program/
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: MICRO
+    year: 2025
+    adapter: ieee_program
+    url: https://www.microarch.org/micro58/program/
+    topics:
+      - hardware-placement-and-communication
+      - domestic-interconnect-and-data-path
+      - moe-sparse-activation-and-routing
+      - long-context-serving-acceleration
+
+  - venue: SIGMOD
+    year: 2026
+    adapter: sigmod_accepted
+    url: https://2026.sigmod.org/sigmod_papers.shtml
+    topics:
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization
+
+  - venue: VLDB
+    year: 2026
+    adapter: vldb_titles
+    url: https://www.vldb.org/pvldb/vol19-volume-info
+    topics:
+      - load-aware-batching-and-joint-scheduling
+      - topology-aware-isolation-and-mapping
+      - kv-prefix-vector-hierarchy
+      - consistency-read-write-and-update
+      - hardware-placement-and-communication
+      - kv-state-reuse-and-cache-optimization

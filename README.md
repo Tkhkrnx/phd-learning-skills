@@ -1,372 +1,98 @@
 # PhD Learning Skills
 
-[中文说明 / Chinese README](./README_zh.md)
+这是一个面向个人博士学习工作流的 skill 仓库，聚焦 5 个长期保留的能力：
 
-Personal Codex skill repository for research, engineering, and learning workflows during PhD work.
+- `weekly-paper-radar`
+- `topic-paper-finder`
+- `vault-note-finder`
+- `reading-note-builder`
+- `review-note-builder`
 
-This repository is designed for personal long-term use rather than public marketplace polish. The core goal is:
+仓库目标不是重建旧的 PDF 入库流水线，而是把以下链路稳定下来：
 
-- improve task throughput with an agent
-- preserve and grow independent problem formulation, design judgment, and transfer ability
+1. 搜论文
+2. 下载能直接获取的 PDF 到 PaperQuay
+3. 在 PaperQuay 阅读、标注、写原始笔记
+4. 基于 PaperQuay 笔记和 MinerU 正文缓存，生成正式的 Obsidian 阅读/审稿笔记
 
-## Skill Set
+## Dependency
 
-- `targeted-knowledge-closure`
-  - close one blocking knowledge gap with recall, correction, transfer, and independent restatement
-- `engineering-task-decomposition`
-  - turn an unclear engineering request into evidence-grounded boundaries, options, decisions, and a first execution slice
-- `research-problem-formulation`
-  - turn a vague research intuition into a defendable problem definition with evidence and failure hypotheses
-- `research-method-design`
-  - turn a stable research problem into mechanism candidates, failure modes, and a minimal validation plan
+本仓库默认依赖 [PaperQuay](https://github.com/WangQrkkk/PaperQuay) 作为论文阅读、标注和正文缓存来源。
 
-## Shared Design Rules
+主要输入层包括：
 
-All skills in this repository follow the same operating rules:
+- `paperquay-notes.sqlite`
+- `paperquay-library.sqlite`
+- `.mineru-cache/document-*/full.md`
+- `.mineru-cache/document-*/content_list_v2.json`
 
-- user-first draft before agent expansion
-- one agent role per round
-- explicit user decision records
-- fixed artifact schemas
-- artifacts default to the user's working language, with Chinese-first runs producing Chinese headings and analysis by default
-- explicit stop rules
-- agent-off completion checks
-- evidence-grounded engineering claims
-- anti-theater checks for unsupported claims, weak alternatives, and fake understanding
+本仓库不再负责旧式 `paper-ingest` / `paper-translate` 资产流水线。
 
-See [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md) for the full design specification.
+## Skills
 
-## How To Use The Skill Family
+### `weekly-paper-radar`
 
-Run every task through the same high-level loop:
+- 面向近 3 年论文做每周雷达搜索
+- 覆盖 3 个固定研究方向：
+  - `State-Aware Orchestration and Resource Governance`
+  - `Hardware-Aware Memory Management and Semantic Consistency`
+  - `State-Reuse Inference for Long Contexts and MoE`
+- 先查官方会议页面，再走聚合源恢复链路
+- 产出机器可读候选池，最终推荐由调用 skill 的主模型在对话里直接给出
 
-1. Choose the primary skill.
-2. Write the minimum viable first draft yourself.
-3. Freeze the agent to one role for the current round.
-4. Produce or update the required artifact.
-5. Write the user decision or commitment at branch points.
-6. Insert `targeted-knowledge-closure` if a specific knowledge gap blocks progress.
-7. End with an agent-off check.
+### `topic-paper-finder`
 
-## Invocation Style
+- 把用户的模糊需求收敛成关键词、venue、年份窗口
+- 搜索目标论文并可选下载 PDF 到 PaperQuay
+- 自动结合 `vault-note-finder` 做重复抑制
+- 返回结构化 JSON，由主模型直接在对话里总结结果
 
-You do not need to remember each input template before calling a skill.
+### `vault-note-finder`
 
-Short invocations are enough, for example:
+- 在 Obsidian vault 内搜索已有阅读笔记、审稿笔记和相关草稿
+- 优先把正式 Reading / Review Notes 排到前面
+- 用于避免重复推荐、重复入库、重复增强
 
-- "Use `research-problem-formulation` and help me define the problem."
-- "Use `research-method-design` for this direction."
-- "Use `engineering-task-decomposition` for this requirement."
-- "Use `targeted-knowledge-closure` for this concept."
+### `reading-note-builder`
 
-After invocation, the skill should guide you by asking only for the minimum 3-bullet input needed to start.
+- 从 PaperQuay 阅读笔记出发，映射到对应论文和 MinerU 正文缓存
+- 导出 `original.md`、`evidence_bundle.json`、`paper_summary.json`、`mapping_report.json`、`writer_prompt.md`
+- 由当前执行 skill 的主模型完成正式 `enhanced.md`
+- 输出结构以导师七问为主，并显式补出“你当前笔记的遗漏与纠偏”
 
-## Execution Contract
+### `review-note-builder`
 
-This repository uses one mode only.
+- 从 PaperQuay 审稿笔记出发，先完成内部七问式增强理解，再转成正式 review 结构
+- 所有关键批评都必须可回指到正文 Markdown 证据
+- 默认站在系统顶会 reviewer 视角，严格、细致、证据优先
 
-You should not need to pick between `light mode` and `standard mode`.
+## Search Stack
 
-The contract is:
+搜索相关 skill 共用同一套 discovery / ranking / download 底座：
 
-- the skill starts from a 3-bullet minimum seed
-- the agent stays in one role per round
-- the first response after the handshake should expand only into the next needed artifact step
-- the full artifact set should be completed by the end of the skill unless you explicitly stop early
-- every finished run still needs a user decision, a challenge point, and an agent-off check
+- 优先官方会议或出版方页面
+- 官方源不足时，再回退到聚合源
+- 当前聚合恢复链路为：`Semantic Scholar -> arXiv -> DBLP -> OpenAlex`
+- 每个候选结果都结合 `vault-note-finder` 做重复检测
+- 下载结果、限流恢复、PDF 缺失原因都会结构化写进 JSON
 
-## Continuation Across Turns
+当前边界：
 
-Current Codex skill triggering is not truly persistent across future turns by default.
+- 某些 publisher / DOI 页面仍可能返回 `403` 或登录限制
+- 外部聚合源仍可能出现 `429`
+- skill 会尽量恢复，但不会把“凑够数量”和“结果质量足够好”混为一谈
 
-So the practical workflow is:
+## Output Contract
 
-- invoke once with the skill name
-- continue with a very short continuation phrase in later turns
+`weekly-paper-radar` 和 `topic-paper-finder` 都遵循同一个约定：
 
-Recommended continuation phrase:
+- 脚本只负责产出结构化 JSON
+- 最终推荐或搜索结论由 Codex/Claude 在对话里直接告诉用户
+- 回答时应显式总结：
+  - 成功下载了哪些 PDF
+  - 实际写入的 PaperQuay 目录是什么
+  - 哪些论文仍需用户手动补链
 
-- "Continue with `research-problem-formulation` for the next round."
-- "Continue with `research-method-design` for the next round."
-- "Continue with `engineering-task-decomposition` for the next round."
-- "Continue with `targeted-knowledge-closure` for the next round."
+## Quickstart
 
-## Stronger Round Lock
-
-To keep the skill from drifting mid-conversation, every substantive round should begin by echoing:
-
-- `active skill`
-- `round role`
-- `this round allows`
-- `this round does not allow`
-
-Recommended continuation style:
-
-```text
-Continue with `research-problem-formulation` for the next round.
-Round role: critic.
-This round should only test the failure hypotheses and trim them.
-Do not expand into method design yet.
-```
-
-## Skill Flows
-
-## 1. `targeted-knowledge-closure`
-
-### When to use it
-
-- a specific concept blocks current research or engineering work
-- you need a fast repair, not a broad tutorial
-
-### What the user provides first
-
-- what I think this concept means
-- where it blocks me
-- what confuses me most
-
-If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
-
-First-round output:
-
-- one compact note with corrected model, one retained formulation, one immediate use, and one fresh example
-
-By completion:
-
-- `knowledge-closure-note.md`
-- `transfer-check.md`
-
-If the concept is too broad, reduce it to exactly one of:
-
-- one mechanism
-- one theorem or formula
-- one system component
-- one contrast pair between two concepts
-
-### Agent roles
-
-1. `corrector`
-2. `explainer`
-3. `evaluator`
-
-### User responsibilities
-
-- explain from memory first
-- choose one corrected formulation to keep
-- choose one immediate application context
-- restate the concept independently
-- generate one fresh example or application
-
-### Completion
-
-Complete only if the user can:
-
-- restate the concept without looking
-- explain why it matters in the current task
-- pass one near transfer check
-- generate one fresh example not copied from the agent
-
-## 2. `engineering-task-decomposition`
-
-### When to use it
-
-- a requirement arrives but the current system state is unclear
-- you do not know whether to inspect code, APIs, config, logs, or runtime first
-
-### What the user provides first
-
-- what I think the requirement asks for
-- what part of the system might be affected
-- what I do not understand yet
-
-If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
-
-First-round output:
-
-- one compact working note with boundary guess, unknowns, evidence anchors, `null or reuse-first` option, first slice, and user path choice
-
-By completion:
-
-- `system-snapshot.md`
-- `unknowns-checklist.md`
-- `solution-options.md`
-- `execution-slice-plan.md`
-- `decision-record-engineering-path.md`
-- `evidence-acquisition-plan.md` if needed
-
-### Agent roles
-
-1. `clarifier`
-2. `system-mapper`
-3. `design-reviewer`
-
-### User responsibilities
-
-- inspect real evidence: code, interfaces, config, logs, runtime
-- tag claims as `observed`, `inferred`, or `unknown`
-- write the decision record
-- choose the first execution slice
-
-### Special rules
-
-- include a `null or reuse-first` option in comparison
-- do not write the final option comparison before at least 3 real evidence anchors exist
-- if direct evidence is not yet reachable, create `evidence-acquisition-plan.md`
-
-### Completion
-
-Complete only if the user can:
-
-- explain the system boundary independently
-- justify the chosen path
-- name the first minimal execution slice
-
-## 3. `research-problem-formulation`
-
-### When to use it
-
-- there is a research intuition, but the problem is still fuzzy
-- the importance claim is weak or too broad
-- related work exists, but its insufficiency is not yet structured
-
-### What the user provides first
-
-- suspected problem
-- why I think it matters
-- one thing I think current work gets wrong
-
-If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
-
-First-round output:
-
-- one compact framing note with problem guess, top failure hypotheses, one paper anchor per stable bucket, next evidence step, and one scope decision
-
-By completion:
-
-- `problem-card.md`
-- `failure-taxonomy.md`
-- `evidence-gap-list.md`
-- `decision-record-problem-scope.md`
-- one explicit contrast statement
-
-### Agent roles
-
-1. `organizer`
-2. `critic`
-3. `evidence-planner`
-
-### User responsibilities
-
-- narrow the scope
-- decide which failure hypotheses remain live
-- write the problem-scope decision record
-- state one explicit contrast against an existing line of work
-
-### Special rules
-
-- each related-work bucket needs at least one concrete paper anchor before it is stable
-- the direction may be sharpened, parked, or abandoned
-- if no differentiated failure claim survives review, stop and park the direction
-
-### Completion
-
-Complete only if the user can:
-
-- write a concise problem statement independently
-- name the top related-work buckets
-- explain why they are insufficient in the target setting
-- name the next evidence to collect
-
-## 4. `research-method-design`
-
-### When to use it
-
-- the research problem is already mostly clear
-- the bottleneck is mechanism design, option comparison, or validation planning
-
-### What the user provides first
-
-- problem I am trying to solve
-- one candidate mechanism
-- one reason I do not trust it yet
-
-If the user does not know how to begin, the skill should ask for one rough sentence per bullet.
-
-First-round output:
-
-- one compact design note with chosen mechanism guess, simpler comparison mechanism, baseline/reference, kill criterion, first experiment, and one rejection reason
-
-By completion:
-
-- `design-card.md`
-- `mechanism-comparison.md`
-- `failure-mode-table.md`
-- `minimal-validation-plan.md`
-- `decision-record-method-choice.md`
-
-### Agent roles
-
-1. `mechanism-challenger`
-2. `design-space-organizer`
-3. `validation-planner`
-
-### User responsibilities
-
-- choose the mechanism
-- write rejection reasons
-- decide what the first experiment must actually validate
-- define what result would kill the chosen mechanism
-
-### Special rules
-
-- keep at most 3 live mechanisms after critique
-- include at least one simpler or more standard comparison mechanism
-- the validation plan must include an explicit baseline or reference comparison
-- the validation plan must include a kill criterion
-
-### Completion
-
-Complete only if the user can:
-
-- explain the chosen mechanism independently
-- explain why it may work
-- name the main failure modes
-- name the first minimal validation experiment
-
-## Validation and Audit
-
-This repository treats skill quality as an engineering problem.
-
-Each skill is checked for:
-
-- low-friction entry
-- artifact completeness
-- evidence grounding
-- decision ownership
-- transfer
-- adoption cost
-- anti-theater robustness
-
-Shared tests live under `shared/tests/`, including smooth self-tests and stress-test audits.
-
-## Repository Layout
-
-```text
-phd-learning-skills/
-├── AGENT_COLLABORATION_SKILL_BLUEPRINT.md
-├── README.md
-├── README_zh.md
-├── shared/
-│   ├── references/
-│   ├── scripts/
-│   └── tests/
-├── targeted-knowledge-closure/
-├── engineering-task-decomposition/
-├── research-problem-formulation/
-└── research-method-design/
-```
-
-## Notes
-
-- This repo is meant to stay private unless intentionally cleaned for public release.
-- The defaults are optimized for repeated personal use in Codex rather than broad discoverability.
-- The shared references and tests are intentionally explicit so future revisions can be checked instead of guessed.
+具体命令见 [QUICKSTART.md](./QUICKSTART.md)。

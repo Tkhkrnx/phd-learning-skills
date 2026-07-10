@@ -1,4 +1,0 @@
-interface:
-  display_name: "Engineering Task Decomposition"
-  short_description: "Ground an unclear task in evidence."
-  default_prompt: "Use $engineering-task-decomposition to decompose an unclear engineering task into evidence-grounded unknowns, options, decisions, and a concrete first slice."
