@@ -1,6 +1,54 @@
 # PhD Learning Skills
 
-这是一个面向个人博士学习工作流的 skill 仓库，当前保留 5 个核心能力：
+This repository now contains two skill families:
+
+1. expert-facing PhD collaboration skills
+2. paper discovery and note-building workflow skills
+
+## Expert-Facing Collaboration Skills
+
+These four skills are designed to solve real work while improving the user's own research, engineering, and learning ability:
+
+- `research-problem-formulation`
+- `research-method-design`
+- `engineering-task-decomposition`
+- `targeted-knowledge-closure`
+
+They are intentionally expert-role skills, not generic templates:
+
+- `research-problem-formulation`
+  - acts like an LLM inference systems domain expert
+  - converges on:
+    - what the problem is
+    - why it matters
+    - why existing work still fails
+- `research-method-design`
+  - acts like a systems-method and experiment-design expert
+  - converges on:
+    - mechanism
+    - alternatives
+    - trade-offs
+    - kill criterion
+- `engineering-task-decomposition`
+  - acts like a senior engineer or architect
+  - converges on:
+    - real codebase understanding
+    - best current implementation path
+    - first execution slice
+- `targeted-knowledge-closure`
+  - acts like a subject-matter teacher with scaffolding discipline
+  - converges on:
+    - real concept understanding
+    - user restatement
+    - small transfer
+
+The design blueprint lives in [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md).
+
+The LLM inference layer framework used by the research skills lives in [shared/expert-skill-references/llm_inference_three_layer_framework.md](./shared/expert-skill-references/llm_inference_three_layer_framework.md).
+
+## Paper Workflow Skills
+
+The existing paper workflow family remains in the repository:
 
 - `weekly-paper-radar`
 - `topic-paper-finder`
@@ -8,12 +56,12 @@
 - `reading-note-builder`
 - `review-note-builder`
 
-仓库目标不是重建旧的 PDF 入库流水线，而是稳定这条链路：
+Its goal is to stabilize this chain:
 
-1. 搜索论文
-2. 把能直接获取的 PDF 下载到本地论文目录
-3. 在 PaperQuay 阅读、标注、写原始笔记
-4. 基于 PaperQuay 笔记和 MinerU 正文缓存，生成正式 Obsidian 阅读/审稿笔记
+1. search papers
+2. download PDFs into the local paper directory when possible
+3. read and annotate in PaperQuay
+4. turn PaperQuay notes plus MinerU cache into formal Obsidian reading or review notes
 
 ## Default PDF Directory
 
@@ -39,7 +87,7 @@
 
 本仓库不再负责旧式 `paper-ingest` / `paper-translate` 流水线。
 
-## Skills
+## Paper-Workflow Skill Details
 
 ### `weekly-paper-radar`
 
@@ -82,6 +130,12 @@
   - 实际写入的本地论文目录是什么
   - 哪些论文仍需用户手动补链
 
+## Validation
+
+The redesign validation checklist for the expert-facing skills lives in:
+
+- [shared/tests/expert_skill_validation.md](./shared/tests/expert_skill_validation.md)
+
 ## Quickstart
 
-具体命令见 [QUICKSTART.md](./QUICKSTART.md)。
+For commands and workflow examples, see [QUICKSTART.md](./QUICKSTART.md).
