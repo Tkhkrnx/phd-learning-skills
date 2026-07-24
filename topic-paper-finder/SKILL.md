@@ -1,6 +1,6 @@
 ---
 name: topic-paper-finder
-description: Search papers by topic, subtopic, venue, and recent years for the user's PhD study workflow. Use when Codex needs a targeted paper search with recent-year filtering, optional PDF download to the local submission directory, and alignment to the shared runtime/hardware taxonomy.
+description: Search papers by topic, subtopic, venue, and recent years for the user's PhD study workflow. Use when Codex needs a targeted paper search with recent-year filtering, optional PDF download to the local reading library, and alignment to the shared runtime/hardware taxonomy.
 ---
 
 Read `finder_config.yaml`, `weekly-paper-radar/radar_config.yaml`, and `scripts/topic_finder.py`.
@@ -14,10 +14,10 @@ Workflow:
 - After the script returns, Codex should read those results and directly answer the user with the search conclusion in the conversation, rather than expecting the script to write a final markdown report.
 - Report title, venue, year, authors, URL, PDF status, and vault de-duplication hints.
 - Return structured `manual_pdf_followup` items whenever the PDF cannot be downloaded automatically.
-- Optionally download the PDF to the local submission directory.
+- Optionally download the PDF to the local reading library.
 - In the final user-facing answer, Codex should directly summarize:
   - which PDFs were downloaded successfully
-  - the actual local submission directory
+  - the actual local reading-library directory
   - which papers still require manual follow-up
   - and should do so in the conversation itself, not by telling the user to open a JSON file
 
