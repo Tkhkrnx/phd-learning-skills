@@ -3,7 +3,7 @@
 This repository now contains three skill families:
 
 1. expert-facing PhD collaboration skills
-2. paper discovery and note-building workflow skills
+2. paper discovery, note-building, and validation workflow skills
 3. systems and HPC paper-writing skills
 
 ## Expert-Facing Collaboration Skills
@@ -63,6 +63,7 @@ The existing paper workflow family remains in the repository:
 - `vault-note-finder`
 - `reading-note-builder`
 - `review-note-builder`
+- `reference-validation-report`
 
 Its goal is to stabilize this chain:
 
@@ -70,12 +71,13 @@ Its goal is to stabilize this chain:
 2. download PDFs into the local paper directory when possible
 3. read and annotate in PaperQuay
 4. turn PaperQuay notes plus MinerU cache into formal Obsidian reading or review notes
+5. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
 
 ## Default PDF Directory
 
 默认 PDF 下载目录：
 
-- `~/Documents/PHR/Intellistream/papers/submission`
+- `~/Documents/PHR/Intellistream/papers/read`
 
 可用环境变量覆盖：
 
@@ -126,6 +128,12 @@ Its goal is to stabilize this chain:
 
 - 从 PaperQuay 审稿笔记出发，先完成内部七问式增强理解，再转成正式 review 结构
 - 所有关键批评都必须可回指到正文 Markdown 证据
+
+### `reference-validation-report`
+
+- verifies bibliography entries against DOI/Crossref, arXiv, and official publisher or venue sources
+- produces an evidence-backed Chinese PDF report and never marks unresolved items as confirmed
+- supports standard `.bib + .bbl + .tex`, Elsevier-style `.bbl`, and inline `thebibliography` inputs
 
 ## Output Contract
 

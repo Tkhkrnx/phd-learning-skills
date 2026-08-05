@@ -11,7 +11,7 @@
 ```powershell
 pip install -r requirements.txt
 $env:PYTHONPATH="."
-$env:PHD_PAPER_SUBMISSION_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\submission"
+$env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 ```
 
 ## Weekly Radar

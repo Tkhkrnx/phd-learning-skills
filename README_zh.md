@@ -3,7 +3,7 @@
 这个仓库现在包含三类 skill：
 
 1. 面向博士研究/工程/学习协作的 expert skill
-2. 面向论文发现与笔记增强的论文工作流 skill
+2. 面向论文发现、笔记增强与参考文献核验的论文工作流 skill
 3. 面向系统与高性能计算顶会写作的论文写作 skill
 
 ## 一、Expert Skill
@@ -68,6 +68,7 @@
 - `vault-note-finder`
 - `reading-note-builder`
 - `review-note-builder`
+- `reference-validation-report`
 
 它们服务于这条链路：
 
@@ -75,6 +76,13 @@
 2. 下载 PDF 到本地论文目录
 3. 在 PaperQuay 阅读、标注、写原始笔记
 4. 基于 PaperQuay 笔记和 MinerU 缓存生成正式 Obsidian 阅读/审稿笔记
+5. 核验 LaTeX 参考文献，并生成中文参考文献验证报告 PDF
+
+### `reference-validation-report`
+
+- 基于 DOI/Crossref、arXiv 及官方出版或会议页面核验参考文献
+- 生成带证据的中文 PDF 报告；未解决条目不会被标记为已确认
+- 支持标准 `.bib + .bbl + .tex`、Elsevier 风格 `.bbl` 和内联 `thebibliography`
 
 ## 验证
 
