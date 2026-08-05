@@ -211,7 +211,7 @@ HPC 论文的 Background 需覆盖两个方面：
 
 ```
 3.1 Optimization 1: Memory access pattern optimization
-3.2 Optimization 2: Communication-computation overlap  
+3.2 Optimization 2: Communication-computation overlap
 3.3 Optimization 3: Load balancing strategy
 3.4 Optimization 4: Vectorization and kernel fusion
 3.5 Putting it all together
