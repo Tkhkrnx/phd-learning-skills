@@ -94,4 +94,3 @@ Prefer local HTML plus Chrome headless printing:
 - `chrome.exe --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=... file:///...html`
 
 If Chrome is unavailable, stop and report the blocker instead of silently producing a lower-quality substitute.
-

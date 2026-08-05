@@ -165,7 +165,7 @@ def infer_unstructured_fields(raw: str, bibliography_text: str) -> tuple[str, di
         author_text = prefix.replace(" and et al.", "").replace(" et al.", "")
         author_text = re.sub(r"\band\s+et al\.?", "", author_text, flags=re.I)
         author_text = re.sub(r"\bet al\.?", "", author_text, flags=re.I)
-        author_parts = [a.strip(" ,.") for a in re.split(r",\s*", author_text) if a.strip(" ,.")] 
+        author_parts = [a.strip(" ,.") for a in re.split(r",\s*", author_text) if a.strip(" ,.")]
         if author_parts:
             fields["author"] = " and ".join(author_parts)
 
