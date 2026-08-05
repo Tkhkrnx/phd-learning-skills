@@ -1,9 +1,10 @@
 # PhD Learning Skills
 
-This repository now contains two skill families:
+This repository now contains three skill families:
 
 1. expert-facing PhD collaboration skills
 2. paper discovery and note-building workflow skills
+3. systems and HPC paper-writing skills
 
 ## Expert-Facing Collaboration Skills
 
@@ -45,6 +46,13 @@ They are intentionally expert-role skills, not generic templates:
 The design blueprint lives in [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md).
 
 The LLM inference layer framework used by the research skills lives in [shared/expert-skill-references/llm_inference_three_layer_framework.md](./shared/expert-skill-references/llm_inference_three_layer_framework.md).
+
+## Systems and HPC Paper-Writing Skills
+
+- `systems-paper-writing`: structure, draft, revise, and audit systems papers for venues such as OSDI, SOSP, EuroSys, ATC, and NSDI. It enforces a problem → mechanism → evidence argument chain.
+- `hpc-paper-writing`: structure, draft, revise, and audit HPC papers for venues such as SC, PPoPP, ICS, and HPDC. It enforces a profiling → optimization → hardware-limit evidence chain.
+
+Each skill includes the supplied source guide as a local reference so detailed writing and submission checks remain available without external access.
 
 ## Paper Workflow Skills
 

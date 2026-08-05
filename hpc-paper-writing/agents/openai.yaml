@@ -1,0 +1,4 @@
+interface:
+  display_name: "HPC Paper Writing"
+  short_description: "Write and revise top-tier HPC papers."
+  default_prompt: "Use $hpc-paper-writing to structure and audit my HPC conference paper."

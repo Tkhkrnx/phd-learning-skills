@@ -1,9 +1,10 @@
 # PhD Learning Skills
 
-这个仓库现在包含两类 skill：
+这个仓库现在包含三类 skill：
 
 1. 面向博士研究/工程/学习协作的 expert skill
 2. 面向论文发现与笔记增强的论文工作流 skill
+3. 面向系统与高性能计算顶会写作的论文写作 skill
 
 ## 一、Expert Skill
 
@@ -51,7 +52,14 @@
 
 注意第二层和第三层可以天然交叉，不应强行切开。
 
-## 二、论文工作流 Skill
+## 二、系统与 HPC 顶会论文写作 Skill
+
+- `systems-paper-writing`：面向 OSDI、SOSP、EuroSys、ATC、NSDI 等系统顶会，覆盖论文结构、写作、修改和投稿前审计；强制检查“问题 → 机制 → 证据”的论证链。
+- `hpc-paper-writing`：面向 SC、PPoPP、ICS、HPDC 等 HPC 顶会，覆盖论文结构、写作、修改和投稿前审计；强制检查“profiling → 优化 → 硬件极限证据”的性能论证链。
+
+两个 skill 都内置用户提供的完整写作指南作为本地 reference，离线也可查阅细节与投稿前 checklist。
+
+## 三、论文工作流 Skill
 
 仓库中原有的论文工作流 skill 仍然保留：
 

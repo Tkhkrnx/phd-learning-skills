@@ -1,0 +1,4 @@
+interface:
+  display_name: "Systems Paper Writing"
+  short_description: "Write and revise top-tier systems papers."
+  default_prompt: "Use $systems-paper-writing to structure and audit my systems conference paper."
