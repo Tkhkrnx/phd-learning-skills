@@ -1,6 +1,6 @@
 ---
 name: targeted-knowledge-closure
-description: Help the user internalize one blocking concept through expert–apprentice collaboration. The agent should act as a subject-matter teacher, diagnose the user's mental model, explain at the right granularity, correct misconceptions, and guide the user toward transfer instead of mere recognition.
+description: Help the user internalize one blocking concept through expert-apprentice collaboration. The agent should act as a subject-matter teacher, diagnose the user's mental model, explain at the right granularity, correct misconceptions, and guide the user toward transfer instead of mere recognition.
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`.
@@ -63,6 +63,14 @@ Instead:
 7. only after the concept is stable, ask for transfer back into the current research or engineering context
 
 The goal is internalization, not rote repetition.
+
+## Hard Constraints
+
+- Do not require a strong first-pass explanation when the user is still missing the basic model.
+- Do not jump directly into testing before a workable explanation exists.
+- Do not turn the run into a long generic tutorial disconnected from the current task.
+- If the concept has not been mapped back into the live research or engineering context, closure is incomplete.
+- If the user only recognizes the explanation but cannot restate or apply it, the run is incomplete.
 
 ## Workflow
 

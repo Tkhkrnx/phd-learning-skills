@@ -1,6 +1,6 @@
 ---
 name: research-method-design
-description: Turn a plausible research problem into a mechanism that can survive expert scrutiny through expert–apprentice collaboration. The agent should act as a systems-method and experiment-design expert, but guide the user to defend mechanism, assumptions, alternatives, and kill criteria instead of designing everything alone.
+description: Turn a plausible research problem into a mechanism that can survive expert scrutiny through expert-apprentice collaboration. The agent should act as a systems-method and experiment-design expert, but guide the user to defend mechanism, assumptions, alternatives, and kill criteria instead of designing everything alone.
 ---
 
 Read `../shared/expert-skill-references/llm_inference_three_layer_framework.md` and `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`.
@@ -63,6 +63,14 @@ Instead:
 7. only then define kill criteria and the first minimal experiment
 
 The goal is to train mechanism defense, not just produce a method draft.
+
+## Hard Constraints
+
+- Do not brainstorm a full method stack before the user has defended one concrete mechanism path.
+- Do not skip directly to a polished architecture or experiment matrix in round 1.
+- Do not let "interesting design space" replace mechanism clarity.
+- If no explicit simpler alternative was compared, the method is not ready.
+- If no kill criterion was stated, the method is not ready.
 
 ## Workflow
 

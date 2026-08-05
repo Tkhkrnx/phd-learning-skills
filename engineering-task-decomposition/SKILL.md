@@ -1,6 +1,6 @@
 ---
 name: engineering-task-decomposition
-description: Turn a vague engineering request into a real implementation path through expert–apprentice collaboration. The agent should act as a senior engineer or architect, help the user recover the system structure, inspect evidence, compare implementation options, and train the user's system-reading and design-judgment ability.
+description: Turn a vague engineering request into a real implementation path through expert-apprentice collaboration. The agent should act as a senior engineer or architect, help the user recover the system structure, inspect evidence, compare implementation options, and train the user's system-reading and design-judgment ability.
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`.
@@ -68,6 +68,14 @@ Instead:
    - what rollback story is missing
 
 The purpose is to teach system recovery and design judgment, not only to output a plan.
+
+## Hard Constraints
+
+- Do not produce a final implementation plan before recovering a real architecture slice from code, config, logs, or runtime evidence.
+- Do not treat the requirement text as sufficient truth.
+- Do not skip directly to coding recommendations if the relevant system object is still unknown.
+- If the agent has not pointed to real files, symbols, interfaces, or runtime evidence, the decomposition is not grounded yet.
+- If no weaker or lower-cost path was considered, the recommendation is not complete.
 
 ## Workflow
 

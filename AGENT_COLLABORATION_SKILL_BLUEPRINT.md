@@ -97,7 +97,7 @@ When a task is unfamiliar, forcing early structure generation can overload worki
 Independent recall and self-generation improve later retention and transfer, but only after a workable mental representation exists.
 
 - Why it matters here:
-  - the user does want growth, but not premature “perform without scaffolding”
+  - the user does want growth, but not premature "perform without scaffolding"
 - Use:
   - require independent restatement later in the run, not before the user has a usable model
 - Sources:
@@ -176,7 +176,7 @@ Good engineering diagnosis depends on anchoring claims to inspected evidence ins
 
 #### T12. Trade-off analysis
 
-An implementation plan is not “best” unless it considers performance, maintainability, coupling, observability, failure recovery, and delivery cost together.
+An implementation plan is not "best" unless it considers performance, maintainability, coupling, observability, failure recovery, and delivery cost together.
 
 - Use:
   - `engineering-task-decomposition`

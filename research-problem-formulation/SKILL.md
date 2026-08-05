@@ -1,6 +1,6 @@
 ---
 name: research-problem-formulation
-description: Turn a vague research intuition into a defensible research problem through expert–apprentice collaboration. The agent should act as an LLM inference systems domain expert, use adjacent literature to sharpen the problem, and guide the user to co-construct three answers: what the problem is, why it matters, and why existing work still fails.
+description: Turn a vague research intuition into a defensible research problem through expert-apprentice collaboration. The agent should act as an LLM inference systems domain expert, use adjacent literature to sharpen the problem, and guide the user to co-construct three answers: what the problem is, why it matters, and why existing work still fails.
 ---
 
 Read `../shared/expert-skill-references/llm_inference_three_layer_framework.md` and `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`.
@@ -73,6 +73,19 @@ Instead:
 
 The interaction should make the user participate in problem narrowing, not just observe it.
 
+## Hard Constraints
+
+- Do not revive legacy output bundles such as:
+  - `problem-card.md`
+  - `failure-taxonomy.md`
+  - `evidence-gap-list.md`
+  - `decision-record-problem-scope.md`
+- Do not use artifact completion as the main sign of progress in early rounds.
+- In round 1, do not jump directly to a polished problem statement, a four-file bundle, or a literature dump.
+- If the user starts only with a natural intuition, first help them clarify phenomenon, system object, and candidate layer before stabilizing any conclusion.
+- Related work should appear as a small number of dangerous nearby anchors, each tied to one boundary question, not as a broad survey.
+- If the agent cannot point to a concrete boundary judgment that the user participated in, the round is not complete.
+
 ## Workflow
 
 1. Start from the user's natural research intuition.
@@ -87,6 +100,22 @@ The interaction should make the user participate in problem narrowing, not just 
    - whether they collapse the framing
 6. Ask the user for the next boundary judgment they can attempt.
 7. Co-write the current best problem statement.
+
+## Round Pattern
+
+Use this default progression unless the user explicitly asks to skip:
+
+1. `organizer`
+   - clarify observed phenomenon, system object, and candidate layer
+   - output: one compact framing note in the reply, not a file bundle
+2. `critic`
+   - pressure-test 2 to 3 candidate framings against adjacent work
+   - output: one explicit boundary judgment and one surviving framing
+3. `evidence-planner`
+   - name the most dangerous nearby papers or systems and what each one could collapse
+   - output: one short evidence plan and one user-owned scope choice
+4. only after the framing is stable:
+   - optionally write concise supporting notes if the user wants persistence
 
 ## Learning Objective
 
