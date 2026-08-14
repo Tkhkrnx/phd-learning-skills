@@ -15,6 +15,20 @@ These four skills are designed to solve real work while improving the user's own
 - `engineering-task-decomposition`
 - `targeted-knowledge-closure`
 
+They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires a clear matching intent, but the user does not have to spell the skill name: asking to analyze a requirement, judge a research idea as an academic problem, design a method for an established problem, or learn one specific concept is sufficient. Topic similarity and task complexity are not sufficient. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
+
+Every substantive skill round advances one stage, provides a minimal expert scaffold, asks one open-ended question that exposes the user's reasoning, and stops. Yes/no answers, approval, and bare option selection do not count as collaboration. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently; normal execution must not emit `[skill-run]`, `[skill-run-result]`, or `status=suspended`.
+
+Trigger examples:
+
+| User intent | Behavior |
+|---|---|
+| "帮我分析一下这个需求，先别写代码" | `engineering-task-decomposition` |
+| "我有一个研究想法，帮我判断它是否构成学术问题" | `research-problem-formulation` |
+| "这个问题已经明确了，带我一起找一个可辩护的解决方法" | `research-method-design` |
+| "这个概率是什么意思？带我真正弄懂" | `targeted-knowledge-closure` |
+| "按已经确认的方案同步实验计划、论文和代码" | no expert collaboration skill; execute normally |
+
 They are intentionally expert-role skills, not generic templates:
 
 - `research-problem-formulation`
@@ -26,22 +40,28 @@ They are intentionally expert-role skills, not generic templates:
 - `research-method-design`
   - acts like a systems-method and experiment-design expert
   - converges on:
-    - mechanism
-    - alternatives
-    - trade-offs
+    - root challenge and boundary conditions
+    - causal mechanism and feasible system carrier
+    - transferable principles from relevant or cross-domain work
+    - alternatives, trade-offs, assumptions, and system costs
     - kill criterion
+    - first discriminating experiment
 - `engineering-task-decomposition`
   - acts like a senior engineer or architect
   - converges on:
-    - real codebase understanding
-    - best current implementation path
-    - first execution slice
+    - real requirement, non-goals, and acceptance evidence
+    - real codebase and runtime understanding
+    - best current implementation path and rejected alternatives
+    - first reversible execution slice
+    - validation, observability, and rollback
 - `targeted-knowledge-closure`
   - acts like a subject-matter teacher with scaffolding discipline
   - converges on:
-    - real concept understanding
-    - user restatement
-    - small transfer
+    - accurate mental model and repaired prerequisites
+    - user reconstruction in their own words
+    - discrimination from near-miss concepts
+    - small transfer into the live task
+    - reduced scaffolding on the next similar case
 
 The design blueprint lives in [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md).
 
@@ -148,9 +168,23 @@ Its goal is to stabilize this chain:
 
 ## Validation
 
-The redesign validation checklist for the expert-facing skills lives in:
+The redesign validation checklist and paired activation/bypass cases for the expert-facing skills live in:
 
 - [shared/tests/expert_skill_validation.md](./shared/tests/expert_skill_validation.md)
+
+Run the static contract and regression-case validator with:
+
+```powershell
+python shared\tests\validate_expert_skills.py
+```
+
+Synchronize the four skills and their shared dependency closure to global Codex, global Claude Code, and both Obsidian Claudian mirrors with:
+
+```powershell
+.\shared\scripts\sync_expert_skills.ps1
+```
+
+Codex and Claude discover the same narrow descriptions. Implicit discovery remains enabled so a clear natural-language collaboration intent can activate the right expert; the paired bypass cases prevent ordinary execution from becoming a skill run. Restart an already-open client or task after deployment if its skill catalog was loaded before the update.
 
 ## Quickstart
 

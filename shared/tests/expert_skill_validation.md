@@ -1,202 +1,118 @@
-# Expert Skill Validation
+# Expert Collaboration Skill Validation
 
-This file records practical validation cases for the four expert-facing skills.
+## Validation Target
 
-The redesign target is no longer just “better expert workflow”.
+The four skills succeed only when both outcomes occur:
 
-It is:
+1. the task becomes sharper or more executable;
+2. the user performs a meaningful expert judgment.
 
-- expert–apprentice collaboration
+Task progress without visible user reasoning is a failure, even when the answer is technically strong.
 
-So validation must test two things at once:
+Weak facilitation without expert contribution is also a failure. The agent must inspect, model, diagnose, recommend, and critique before asking the user to own the consequential judgment.
 
-1. did the task progress
-2. did the user participate in a meaningful piece of expert reasoning
+## Round-Level Hard Failures
 
-## What failure now means
+Fail a transcript immediately if a substantive skill response does any of the following:
 
-The redesign fails if the interaction still does any of the following:
+- completes a full problem, method, architecture, plan, or tutorial before the user judges the current stage;
+- advances more than one declared stage;
+- asks more than one substantive question;
+- uses a confirmation question such as "懂了吗" as the interaction gate;
+- asks the user to locate evidence the agent can inspect;
+- treats a later user correction as successful collaboration;
+- changes frozen decisions without a user choice;
+- continues implementation while the collaboration skill remains active;
+- claims completion without observable user explanation, construction, comparison, restatement, falsification, or transfer;
+- accepts yes/no, approval, or bare option selection as the user's reasoning contribution.
+- activates on ordinary writing, review, coding, synchronization, debugging, experiment execution, or execution of an already frozen plan.
+- emits a suspension or lifecycle marker after the user requests normal execution.
 
-- overloads the user with artifacts instead of guiding thinking
-- asks the user to pre-structure what they cannot yet understand
-- behaves like a generic assistant instead of the right expert
-- solves the problem for the user without transferring the reasoning
+## Activation Gate
 
-## Case 1: `research-problem-formulation`
+Activation requires either the skill name or a clear matching collaboration intent. Natural-language intent is valid; topic match is not.
 
-Input style:
+- Problem formulation: judge or formulate whether an idea, phenomenon, or claim is a defensible academic problem.
+- Method design: find, compare, or defend a solution for an already established research problem.
+- Engineering decomposition: analyze or clarify a requirement, inspect the system boundary, or choose a first slice before coding.
+- Knowledge closure: learn what one specific concept means well enough to restate and apply it.
 
-- a vague intuition about agent workloads and AI-native systems
+The structured trigger suite pairs these with non-triggering tasks from the same domains. A model that activates because a task is difficult, contains research vocabulary, or would benefit from internal decomposition fails the gate.
 
-Expected expert behavior:
+## Required Round Shape
 
-- identify candidate problem framings
-- classify the problem into the LLM inference layer framework
-- bring in only the most dangerous adjacent work
+Every substantive response must contain:
 
-Expected apprentice interaction:
+1. a parseable `[skill-run]` line;
+2. one declared stage;
+3. a compact expert scaffold;
+4. one parseable `reasoning-focus` and one open-ended question;
+5. a real stop before the next stage.
 
-- the user should be asked small boundary questions they can attempt
-- the user should participate in at least one layer judgment or boundary distinction
-- the agent should supplement, not fully replace, the user's problem-sharpening move
+## Skill-Specific Success Evidence
 
-Pass criteria:
+### `research-problem-formulation`
 
-- the skill no longer depends on front-stage artifact maintenance
-- the interaction centers on:
-  - problem definition
-  - importance
-  - failure gap
-- the user is visibly involved in narrowing the problem
+The user must explain the boundary reasoning, not merely approve agent wording. A complete run includes a user-constructed problem statement and a reasoned response to one dangerous counterexample.
 
-## Case 2: `research-method-design`
+The problem statement must be declarative. A formulation beginning with "how to" is an objective or design question, not the research problem. Do not require every problem to be a contradiction or known capability gap: a supported phenomenon or unresolved condition may be the problem. The run must still test reality, boundary, importance, prior resolution, non-trivial challenge, and researchability.
 
-Input style:
+### `research-method-design`
 
-- a research problem plus a rough method hunch
+Through open questions, the user must explain the root challenge, causal source of gain, any transferred design principle, the strongest simpler alternative, and a kill criterion. A complete architecture produced by the agent does not satisfy this.
 
-Expected expert behavior:
+### `engineering-task-decomposition`
 
-- compress the hunch into a mechanism hypothesis
-- force a simpler alternative
-- expose assumptions
-- require a systems cost view
-- require a kill criterion
+The agent must discover explicit and latent requirements and inspect the system. The user must explain requirement priorities, architecture boundary, trade-off, and first-slice proof. Asking the user to search the repo is not participation.
 
-Expected apprentice interaction:
+### `targeted-knowledge-closure`
 
-- the user should be asked to explain why the mechanism creates value
-- if the answer is vague, the agent should narrow the question rather than invent the whole mechanism immediately
-- the user should defend why the simpler alternative is insufficient
+The user must reconstruct and transfer one concept grain, then distinguish it from a near miss. Explanations must preserve actor, state, and ordering invariants and fade scaffolding after success.
 
-Pass criteria:
+## Real-Usage Regression Cases
 
-- the interaction does not collapse into agent-only brainstorming
-- the user participates in mechanism defense
-- the final output includes a kill criterion and a first validating experiment
+The structured cases live in `expert_skill_transcript_cases.yaml`.
 
-## Case 3: `engineering-task-decomposition`
+They cover these observed failures:
 
-Input style:
+1. NPU no-restart method design proposed a platform-misaligned path before a fact gate.
+2. One adapter failure over-invalidated an otherwise usable replay cohort.
+3. A problem/challenge/RQ revision changed frozen roles before user approval.
+4. A full acceptance matrix and a fast CI sentinel were initially conflated.
+5. A chunked-prefill explanation hid that decode and prefill belonged to different requests.
+6. Direct implementation and synchronization requests incorrectly activated or kept a collaboration skill active.
+7. A pipeline explanation used engineering decomposition instead of pausing for concept closure.
+8. A user correction occurred only after the agent had already completed the judgment.
 
-- a raw natural-language engineering requirement
+## Forward-Test Procedure
 
-Expected expert behavior:
+For each skill:
 
-- translate the requirement into system terms
-- generate a codebase familiarization plan
-- recover the relevant architecture slice
-- compare implementation paths with engineering trade-offs
+1. give a fresh agent only the skill and one raw case prompt;
+2. do not disclose the expected answer or suspected defect;
+3. inspect only the first substantive response;
+4. require the declared stage, minimal scaffold, one open-ended reasoning question, and stop;
+5. continue for at least one user reply when checking critique and transition behavior;
+6. fail if success depends on hidden context from the redesign discussion.
 
-Expected apprentice interaction:
+## Static Validation
 
-- the user should be asked small system-reading questions they can attempt
-- if the user does not know, the agent should point to likely files, modules, or symbols
-- the interaction should train architecture recovery before implementation design
+Run:
 
-Pass criteria:
-
-- the skill does not jump directly to a polished solution
-- the user participates in recovering the structure of the system
-- the final recommendation includes a first execution slice rather than only a big plan
-
-## Case 4: `targeted-knowledge-closure`
-
-Input style:
-
-- one blocking concept the user does not understand
-
-Expected expert behavior:
-
-- diagnose the user's current mental model
-- shrink concept grain if needed
-- explain first
-- translate terminology into system meaning
-- correct the key misconception
-
-Expected apprentice interaction:
-
-- the user should not be asked for a strong explanation before enough scaffold exists
-- after explanation, the user should restate a small part in their own words
-- then the user should place the concept back into the current research or engineering context
-
-Pass criteria:
-
-- the interaction follows:
-  - diagnosis
-  - explanation
-  - correction
-  - transfer
-- the user moves from recognition to at least one small transfer step
-
-## Residual risk check
-
-Even with the redesign, the active model may still:
-
-- overexplain instead of asking the next answerable question
-- skip the apprentice part and finish the reasoning alone
-- skip evidence gathering in engineering tasks
-- choose adjacent work too broadly in research framing
-
-Mitigations now present in the skill texts:
-
-- explicit expert profile
-- explicit core competencies
-- explicit guided interaction strategy
-- explicit learning objective
-- explicit completion tests requiring user-side reasoning
-
-## Real-user scenario spot checks
-
-### Spot check A: vague research intuition
-
-User-style input:
-
-- “我觉得 agent workload 和 AI-native system 这里有问题，但我说不清。”
-
-What should now happen:
-
-- the agent should help the user clarify the phenomenon
-- then ask whether the issue is closer to request, state, or execution
-- then use adjacent work to sharpen the boundary
-- then co-construct the problem statement
-
-### Spot check B: concept-only learning request
-
-User-style input:
-
-- “帮我学 unified memory，我不懂。”
-
-What should now happen:
-
-- the agent should first diagnose the likely concept grain
-- then explain
-- then translate the term into system meaning
-- then ask for one small restatement
-- then one transfer back into the current task
-
-### Spot check C: raw engineering requirement
-
-User-style input:
-
-- “要把这个服务加上请求级缓存，但我不知道项目该从哪看。”
-
-What should now happen:
-
-- the agent should first drive architecture recovery
-- ask small system-reading questions
-- point to files or symbols if needed
-- only then compare implementation paths
-
-### Spot check D: rough method hunch
-
-User-style input:
-
-- “问题我大概知道了，我想做一个 state-aware runtime 优化，但我不知道怎么变成方法。”
-
-What should now happen:
-
-- the agent should first ask where the gain comes from
-- then pressure the mechanism
-- then compare with a simpler alternative
-- then define a kill criterion and first validating experiment
+```powershell
+python shared\tests\validate_expert_skills.py
+```
+
+The static validator checks trigger boundaries, required protocol sections, stage names, line budgets, references, and structured regression-case coverage. Static success does not replace transcript forward-testing.
+
+## Acceptance Metrics
+
+- 100% of substantive rounds expose a parseable run state.
+- 100% ask exactly one open-ended question that elicits a reasoning chain.
+- 0% accept yes/no, approval, or bare option selection as collaboration evidence.
+- 0% produce a complete downstream deliverable before that judgment.
+- 0% use these skills as agent-only checklists.
+- 100% of direct-execution pivots exit the collaboration skill silently and preserve confirmed decisions.
+- 0% of ordinary execution requests activate an expert collaboration skill.
+- 100% of completion claims cite observable user evidence.
+- Next-turn corrections caused by scope drift, platform mismatch, or actor confusion trend downward across real usage.
