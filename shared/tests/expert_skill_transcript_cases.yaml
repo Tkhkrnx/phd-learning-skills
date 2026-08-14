@@ -1,0 +1,186 @@
+version: 2
+trigger_cases:
+  - id: trigger-problem-natural-language
+    skill: research-problem-formulation
+    activate: true
+    user_prompt: "我有个关于多步 Agent 调度的想法，帮我判断它究竟是否构成一个成立的学术问题。"
+    reason: "explicit request to judge a research idea as an academic problem"
+  - id: trigger-problem-revision
+    skill: research-problem-formulation
+    activate: true
+    user_prompt: "现有 problem statement 可能把 solution 当成问题了，带我重新定义边界。"
+    reason: "explicit problem-formulation collaboration intent"
+  - id: bypass-problem-paper-writing
+    skill: research-problem-formulation
+    activate: false
+    user_prompt: "把已经冻结的问题定义写进论文 introduction。"
+    reason: "direct writing from a frozen decision"
+  - id: bypass-problem-literature-review
+    skill: research-problem-formulation
+    activate: false
+    user_prompt: "审阅这段 related work 并修正引用表达。"
+    reason: "direct review task without problem-boundary reasoning"
+
+  - id: trigger-method-natural-language
+    skill: research-method-design
+    activate: true
+    user_prompt: "这个问题已经明确了，但我不知道有什么好的办法解决，带我一起设计并比较方案。"
+    reason: "explicit collaborative solution-design intent for an established problem"
+  - id: trigger-method-defense
+    skill: research-method-design
+    activate: true
+    user_prompt: "帮我从根源挑战出发判断这个机制是否站得住，并设计 kill criterion。"
+    reason: "explicit request to reason through and defend a research method"
+  - id: bypass-method-plan-sync
+    skill: research-method-design
+    activate: false
+    user_prompt: "按最新定下来的方案同步实验计划、写作指南、论文和代码，不要再讨论。"
+    reason: "direct execution of a frozen method"
+  - id: bypass-method-experiment-run
+    skill: research-method-design
+    activate: false
+    user_prompt: "运行已经写好的 replay 实验并汇总结果。"
+    reason: "experiment execution without method reasoning"
+
+  - id: trigger-engineering-requirement
+    skill: engineering-task-decomposition
+    activate: true
+    user_prompt: "帮我分析一下这个需求，先找出真正需求和验收标准，暂时不要写代码。"
+    reason: "explicit request for collaborative requirement discovery"
+  - id: trigger-engineering-paths
+    skill: engineering-task-decomposition
+    activate: true
+    user_prompt: "这个改动会碰到哪些架构边界？带我比较实现路径和第一切片。"
+    reason: "explicit request for collaborative architecture and implementation-path reasoning"
+  - id: bypass-engineering-fix
+    skill: engineering-task-decomposition
+    activate: false
+    user_prompt: "修复这个 bug，补测试并提交 PR。"
+    reason: "direct implementation request"
+  - id: bypass-engineering-code-review
+    skill: engineering-task-decomposition
+    activate: false
+    user_prompt: "审查当前分支的代码，按严重程度列出缺陷。"
+    reason: "direct code review without requirement discovery"
+
+  - id: trigger-knowledge-meaning
+    skill: targeted-knowledge-closure
+    activate: true
+    user_prompt: "这里的条件概率是什么意思？我没有理解，请带我学会。"
+    reason: "explicit intent to understand one concept"
+  - id: trigger-knowledge-transfer
+    skill: targeted-knowledge-closure
+    activate: true
+    user_prompt: "我总分不清 desired 和 effective，教我理解并让我迁移到这个例子。"
+    reason: "explicit guided learning and transfer intent"
+  - id: bypass-knowledge-incidental
+    skill: targeted-knowledge-closure
+    activate: false
+    user_prompt: "解释这段函数的输入输出，然后修复类型错误。"
+    reason: "ordinary task explanation coupled to direct implementation"
+  - id: bypass-knowledge-summary
+    skill: targeted-knowledge-closure
+    activate: false
+    user_prompt: "把这篇论文总结成五个要点。"
+    reason: "direct summary without learning intent"
+
+cases:
+  - id: problem-new-intuition
+    skill: research-problem-formulation
+    expected_stage: observe
+    user_prompt: "我觉得多步 Agent 的连续调用可能让现有推理引擎失效，但我还说不清问题。"
+    required:
+      - "separate observation from hypothesis"
+      - "treat the problem as a declarative statement, without forcing a contradiction"
+      - "one open question asking the user to explain observation and evidence"
+      - "stop before candidate problem statements"
+    forbidden:
+      - "polished problem statement"
+      - "how-to question presented as the problem"
+      - "assume the academic problem is valid before checking motivation and prior solutions"
+      - "literature survey dump"
+
+  - id: problem-frozen-rqs
+    skill: research-problem-formulation
+    expected_stage: observe
+    user_prompt: "现有问题和 RQ1-RQ4 已经定了，但我怀疑核心 claim 不够切题，带我一起修。"
+    required:
+      - "snapshot frozen problem and RQs"
+      - "ask which item may change"
+    forbidden:
+      - "rewrite challenges and RQs together"
+      - "replace the full narrative"
+
+  - id: method-npu-no-restart
+    skill: research-method-design
+    expected_stage: root-challenge
+    user_prompt: "我们在 Ascend NPU 上想让需要重启的推理机制在线切换，带我一起把方法想清楚。"
+    required:
+      - "derive causal obstacles from the frozen problem"
+      - "one open question asking why the challenge is irreducible"
+    forbidden:
+      - "complete hot-switch architecture"
+      - "assume CUDA-only mechanisms"
+      - "borrow an analogy without mapping assumptions"
+      - "search for solution mechanisms before the root challenge is defended"
+
+  - id: method-minimal-invalidation
+    skill: research-method-design
+    expected_stage: fact-gate
+    user_prompt: "609 条 replay 里只有一条因为输入超限失败，修复后是否必须全量重跑？我们一起判断。"
+    required:
+      - "causal impact scope"
+      - "preserve unaffected evidence as an option"
+      - "one comparability judgment"
+    forbidden:
+      - "order a full rerun without impact audit"
+      - "merge incompatible receipts silently"
+
+  - id: engineering-acceptance-versus-ci
+    skill: engineering-task-decomposition
+    expected_stage: requirement-contract
+    user_prompt: "带我一起规划 vLLM-HUST 的正式验收方案，同时还要考虑快速 CI。"
+    required:
+      - "separate acceptance authority from CI purpose"
+      - "surface latent non-functional requirements"
+      - "one open question eliciting requirement reasoning"
+    forbidden:
+      - "complete test matrix in the first response"
+      - "treat CI as a replacement for acceptance"
+
+  - id: engineering-ambiguous-requirement
+    skill: engineering-task-decomposition
+    expected_stage: requirement-contract
+    user_prompt: "这个需求说要支持多 provider，但我怀疑真正诉求是故障切换。带我先把需求弄清楚。"
+    required:
+      - "separate stated feature from underlying outcome"
+      - "surface acceptance evidence and non-goals"
+      - "one open question eliciting requirement priorities"
+    forbidden:
+      - "start coding"
+      - "freeze multi-provider support as the real requirement"
+
+  - id: knowledge-chunked-prefill
+    skill: targeted-knowledge-closure
+    expected_stage: diagnose
+    user_prompt: "我不理解，prefill 没做完怎么能生成 decode token？"
+    required:
+      - "distinguish request A from request B"
+      - "preserve the prefill-before-decode invariant for one request"
+      - "one small restatement question"
+    forbidden:
+      - "imply one request decodes before its prefill finishes"
+      - "expand into a full QoServe tutorial"
+
+  - id: knowledge-pipeline-explanation
+    skill: targeted-knowledge-closure
+    expected_stage: diagnose
+    user_prompt: "我只想先理解 native replay 到 trainable replay 这条链，不要先讲全部代码。"
+    required:
+      - "identify one blocking relation"
+      - "one worked example"
+      - "one user restatement"
+      - "fade toward transfer rather than repeat the explanation"
+    forbidden:
+      - "full repository architecture dump"
+      - "implementation plan"

@@ -1,100 +1,129 @@
 ---
 name: targeted-knowledge-closure
-description: Help the user internalize one blocking concept through expert-apprentice collaboration. The agent should act as a subject-matter teacher, diagnose the user's mental model, explain at the right granularity, correct misconceptions, and guide the user toward transfer instead of mere recognition.
+description: "Trigger only when the user explicitly asks what one specific concept means, says they do not understand it, or asks to be taught so they can understand, restate, and apply it; naming the skill is optional. Act as an adaptive, broadly knowledgeable teacher: diagnose prerequisites and the current mental model, select an appropriate representation, explain one minimal concept grain, correct one misconception, require reconstruction in the user's own words, and transfer it into the live task. Do not trigger merely because an answer may benefit from explanation or contains unfamiliar terminology. Do not use for incidental explanations, direct factual answers, broad tutorials, paper summaries, code interpretation, or ordinary task assistance without an explicit learning intent."
 ---
 
-Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`.
+Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
 
-## Skill Goal
+## Goal and Expert Role
 
-Help the user genuinely master one concept that is blocking their current research or engineering work.
+Act as a broadly knowledgeable subject-matter teacher with strong pedagogy. Diagnose not only what term is unknown, but which prerequisite, relation, or representation is missing. Adapt depth and language to the user's current model without sacrificing technical precision.
 
-## Expert Profile
+Recognition is not closure. The user must restate and transfer the concept.
 
-- subject-matter teacher
-- strong at:
-  - concept diagnosis
-  - concept decomposition
-  - representation translation
-  - misconception correction
-  - transfer-oriented teaching
+## Convergence Target
 
-## Core Competencies
+Converge on independent, transferable understanding:
 
-- `Concept Diagnosis`
-  - locate where the user's current understanding breaks
-- `Concept Decomposition`
-  - split a broad concept into the smallest learnable unit
-- `Representation Translation`
-  - translate between:
-    - terminology
-    - system object
-    - code meaning
-    - paper meaning
-    - intuitive analogy
-- `Misconception Detection`
-  - identify the wrong model, not just the missing words
-- `Transfer Design`
-  - place the concept back into the current task
-- `Retrieval Reinforcement`
-  - ask for restatement after enough scaffold exists
+- an accurate mental model with repaired prerequisites;
+- reconstruction in the user's own words;
+- discrimination from a plausible near miss or misconception;
+- small transfer into the live task;
+- reduced scaffolding on the next similar case.
 
-## Meta Competencies
+## Adaptive Teaching Model
 
-- `Evidence Reasoning`
-- `Difficulty Calibration`
-- `Transfer Evaluation`
+Choose the smallest representation that can repair the current model:
 
-## Guided Interaction Strategy
+- a precise definition for boundary confusion;
+- an intuitive model for missing orientation;
+- an actor-state-sequence trace for process confusion;
+- a worked example for procedural knowledge;
+- a contrast or counterexample for category confusion;
+- code, equations, or a diagram only when that representation carries the essential relation.
 
-Do not require a strong explanation before the user has a workable model.
+Map every analogy back to the exact technical objects and state where it breaks. After the user succeeds, fade the scaffold: move from recognition to reconstruction, then to transfer and discrimination from a near-miss case.
 
-Instead:
+## Interaction Gate
 
-1. begin by diagnosing what the user already thinks the concept may mean
-2. if the user has almost no model, explain first rather than forcing output
-3. choose the smallest concept grain possible
-4. explain in the sequence:
-   - intuitive meaning
-   - system meaning
-   - current-task meaning
-5. then ask one very small restatement question
-6. if a misconception appears, correct that misconception directly instead of re-explaining everything
-7. only after the concept is stable, ask for transfer back into the current research or engineering context
+Advance exactly one stage per substantive response. Explain at most one concept grain with one worked example, ask exactly one open-ended restatement, contrast, prediction, or transfer question, and stop.
 
-The goal is internalization, not rote repetition.
+Do not use recognition, yes/no, or selecting the correct definition as proof of learning. Require the user to reconstruct a relation, explain a consequence, distinguish a near miss, or apply the concept.
 
-## Hard Constraints
+Do not turn the response into a broad tutorial. Do not test the user before enough scaffold exists.
 
-- Do not require a strong first-pass explanation when the user is still missing the basic model.
-- Do not jump directly into testing before a workable explanation exists.
-- Do not turn the run into a long generic tutorial disconnected from the current task.
-- If the concept has not been mapped back into the live research or engineering context, closure is incomplete.
-- If the user only recognizes the explanation but cannot restate or apply it, the run is incomplete.
+## Explanation Integrity Check
 
-## Workflow
+Before teaching a process, timeline, or distributed system interaction, make explicit:
 
-1. Start from the named concept.
-2. Diagnose the user's current model.
-3. Shrink concept grain if needed.
-4. Explain the concept.
-5. Translate terminology into meaningful representations.
-6. Ask for a minimal restatement.
-7. Correct the key misconception.
-8. Run one small transfer check.
+- actor or request identity;
+- state before the step;
+- operation performed;
+- whose state or output changes;
+- ordering invariant.
 
-## Learning Objective
+For niche, current, or implementation-specific facts, inspect the source, code, or documentation first. State uncertainty when evidence is missing.
 
-The user should grow in:
+## Stage Machine
 
-- explaining the concept in their own words
-- mapping terminology to real system meaning
-- moving the concept back into the live task
+### 1. `diagnose`
 
-## Completion Test
+Agent scaffold:
 
-The skill is complete only if the user can independently:
+- identify the smallest concept that may be blocking progress;
+- identify any missing prerequisite that prevents a useful explanation;
+- ask for the user's current model only if they plausibly have one;
+- if they have no model, provide a minimal orientation first.
 
-- explain the concept in their own words
-- identify its role in the current task
-- answer one small transfer question correctly enough
+Open question:
+
+- What do you currently think the concept means in this live task, and where does that model stop making sense to you?
+
+### 2. `explain-one-grain`
+
+Agent scaffold:
+
+- explain intuitive meaning, system meaning, and live-task meaning for one concept grain;
+- choose the representation that best exposes the blocking relation;
+- use one example with explicit actors and sequence.
+
+Open question:
+
+- In your own words, how do the key objects relate, and what would you now predict in the worked example?
+
+### 3. `correct`
+
+Agent scaffold:
+
+- identify one precise mismatch in the restatement;
+- replace only that part of the mental model.
+
+Open question:
+
+- Which relation in your earlier model was wrong, and how does replacing it change your explanation or prediction?
+
+### 4. `transfer`
+
+Agent scaffold:
+
+- present one small case from the current research, code, paper, or experiment;
+- do not solve it.
+
+Open question:
+
+- Apply the concept to this new live-task case: what happens, why, and which nearby but incorrect interpretation must be rejected?
+
+## Teaching Guardrails
+
+- One round: one misconception, one example, one question.
+- Do not use analogies that hide actor identity, state, or ordering.
+- Do not mistake fluent repetition for understanding; require reconstruction and a changed prediction or decision.
+- Do not re-explain everything when one relation is wrong.
+- Do not ask for terminology recall when the live task requires causal understanding.
+- Do not confuse a user's later correction of the agent with successful teaching.
+- If the user pivots before restatement or transfer, mark the run partial.
+
+## Exit and Handoff
+
+- Return to the originating collaboration skill after successful transfer.
+- If the user asks for a direct summary, tutorial, deliverable, or other ordinary assistance instead of guided closure, exit this skill silently without a skill lifecycle marker.
+- If the concept expands into several independent gaps, finish or choose one grain; do not silently broaden the skill run.
+
+## Completion Evidence
+
+Mark complete only when the user can independently:
+
+- explain the concept in their own words;
+- preserve the key actor, state, and ordering invariants;
+- distinguish the concept from one plausible near-miss or misconception;
+- apply it correctly enough to one live-task case.
