@@ -42,6 +42,8 @@ $env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 
 若在协作过程中切换到直接执行，只需直接提出执行要求。skill 应静默退出，不输出暂停或运行结果标记。
 
+具体工作产物的说明不是教学流程。比如“说明一下 PR9 做了什么，我先了解后再审阅”应直接回答；只有用户要学习某个概念、原理、关系或机制，并明确希望自己复述或应用时，才进入 `targeted-knowledge-closure`。即使正确进入 skill，阶段名和运行状态也只在内部维护，不显示机器协议行。
+
 修改这四个 skill 后，同步并验证四处安装副本：
 
 ```powershell

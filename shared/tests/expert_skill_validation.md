@@ -27,6 +27,7 @@ Fail a transcript immediately if a substantive skill response does any of the fo
 - accepts yes/no, approval, or bare option selection as the user's reasoning contribution.
 - activates on ordinary writing, review, coding, synchronization, debugging, experiment execution, or execution of an already frozen plan.
 - emits a suspension or lifecycle marker after the user requests normal execution.
+- exposes a skill name, stage, status, reasoning-focus label, or lifecycle marker in normal user-facing conversation.
 
 ## Activation Gate
 
@@ -35,19 +36,19 @@ Activation requires either the skill name or a clear matching collaboration inte
 - Problem formulation: judge or formulate whether an idea, phenomenon, or claim is a defensible academic problem.
 - Method design: find, compare, or defend a solution for an already established research problem.
 - Engineering decomposition: analyze or clarify a requirement, inspect the system boundary, or choose a first slice before coding.
-- Knowledge closure: learn what one specific concept means well enough to restate and apply it.
+- Knowledge closure: learn a specific concept, principle, relation, or mechanism well enough to restate and apply it. Directly explaining a PR, commit, issue, paper, code change, log, result, or status is ordinary assistance.
 
 The structured trigger suite pairs these with non-triggering tasks from the same domains. A model that activates because a task is difficult, contains research vocabulary, or would benefit from internal decomposition fails the gate.
 
 ## Required Round Shape
 
-Every substantive response must contain:
+Every substantive response must contain, in natural language:
 
-1. a parseable `[skill-run]` line;
-2. one declared stage;
-3. a compact expert scaffold;
-4. one parseable `reasoning-focus` and one open-ended question;
-5. a real stop before the next stage.
+1. a compact expert scaffold for one internal stage;
+2. one open-ended question;
+3. a real stop before the next stage.
+
+The active skill, internal stage, status, and reasoning focus must not be shown unless the user explicitly requests diagnostic output.
 
 ## Skill-Specific Success Evidence
 
@@ -107,7 +108,7 @@ The static validator checks trigger boundaries, required protocol sections, stag
 
 ## Acceptance Metrics
 
-- 100% of substantive rounds expose a parseable run state.
+- 0% of normal user-facing rounds expose protocol syntax or internal state labels.
 - 100% ask exactly one open-ended question that elicits a reasoning chain.
 - 0% accept yes/no, approval, or bare option selection as collaboration evidence.
 - 0% produce a complete downstream deliverable before that judgment.

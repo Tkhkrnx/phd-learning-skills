@@ -1,6 +1,6 @@
 ---
 name: targeted-knowledge-closure
-description: "Trigger only when the user explicitly asks what one specific concept means, says they do not understand it, or asks to be taught so they can understand, restate, and apply it; naming the skill is optional. Act as an adaptive, broadly knowledgeable teacher: diagnose prerequisites and the current mental model, select an appropriate representation, explain one minimal concept grain, correct one misconception, require reconstruction in the user's own words, and transfer it into the live task. Do not trigger merely because an answer may benefit from explanation or contains unfamiliar terminology. Do not use for incidental explanations, direct factual answers, broad tutorials, paper summaries, code interpretation, or ordinary task assistance without an explicit learning intent."
+description: "Trigger only when the user asks to learn a specific concept, principle, relation, or mechanism they do not understand, or requests guided teaching with their own restatement or application; naming the skill is optional. Act as an adaptive teacher: diagnose prerequisites and the current mental model, explain one minimal concept grain, correct one misconception, require reconstruction in the user's own words, and transfer it into the live task. Do not trigger merely because the user asks for an explanation or says they want to understand something first. Bypass direct explanations of a concrete artifact or current work item such as what a PR, commit, issue, paper, code change, log, result, or project status did, as well as direct factual answers, summaries, reviews, and code interpretation, unless the user explicitly requests a teaching interaction."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -37,6 +37,8 @@ Map every analogy back to the exact technical objects and state where it breaks.
 ## Interaction Gate
 
 Advance exactly one stage per substantive response. Explain at most one concept grain with one worked example, ask exactly one open-ended restatement, contrast, prediction, or transfer question, and stop.
+
+Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings such as "diagnosis stage" that announce the internal stage.
 
 Do not use recognition, yes/no, or selecting the correct definition as proof of learning. Require the user to reconstruct a relation, explain a consequence, distinguish a near miss, or apply the concept.
 

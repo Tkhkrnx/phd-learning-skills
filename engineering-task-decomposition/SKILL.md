@@ -44,6 +44,8 @@ Inspect and preserve repository conventions, public interfaces, invariants, data
 
 Advance exactly one stage per substantive response. Inspect evidence, present a compact architecture or option scaffold, ask exactly one open-ended engineering question, and stop.
 
+Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
+
 Do not treat yes/no, approval, or selecting an agent-provided option as evidence of engineering understanding. Ask the user to explain the requirement, system boundary, trade-off, failure path, or proof in their own model.
 
 Do not ask the user to locate directories, symbols, or logs that the agent can inspect. Do not implement code while this collaboration skill is active.

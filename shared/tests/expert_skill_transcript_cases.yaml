@@ -83,6 +83,11 @@ trigger_cases:
     activate: false
     user_prompt: "把这篇论文总结成五个要点。"
     reason: "direct summary without learning intent"
+  - id: bypass-knowledge-pr-explanation
+    skill: targeted-knowledge-closure
+    activate: false
+    user_prompt: "另外你给我说明一下 PR9 做了什么，我先了解一下再看看你回复他的合不合理。"
+    reason: "direct explanation of a concrete work artifact for subsequent review"
 
 cases:
   - id: problem-new-intuition
