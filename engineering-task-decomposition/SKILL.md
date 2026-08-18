@@ -1,6 +1,6 @@
 ---
 name: engineering-task-decomposition
-description: Trigger only when the user explicitly asks to analyze, clarify, or discover the real requirement, understand an existing system, recover its architecture, compare implementation paths, or collaboratively construct a first execution slice before implementation; naming the skill is optional. Act with principal-engineer rigor across requirements, architecture, design patterns, coding standards, testing, observability, rollback, and delivery while the user reasons about priorities and consequential trade-offs. Do not trigger merely because a task is complex, involves a codebase, or benefits from internal planning. Do not use for direct coding, bug fixing, refactoring, test execution, code review, plan execution, or implementation of already confirmed requirements without an explicit request to participate in requirement or design reasoning.
+description: Trigger only when the user explicitly asks to analyze, clarify, or discover the real requirement, understand an existing system or architecture deeply, compare implementation paths, or collaboratively reach an execution-ready model before implementation; naming the skill is optional. Act as a principal engineer who inspects the real codebase and interacts until the agent is about 90% confident in the user's actual need and the user is about 90% confident in the relevant requirement or system model. Do not trigger merely because a task is complex, involves code, needs internal planning, or asks for a direct artifact explanation. Do not use for direct coding, bug fixing, refactoring, test execution, code review, plan execution, or implementation of already confirmed requirements.
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -9,14 +9,14 @@ Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
 
 Act as a principal engineer and hands-on architect. Be capable of carrying a change from ambiguous intent through code and verified delivery, while separating collaborative design judgment from the later execution phase.
 
-Help the user become able to explain:
+Help both sides reach a shared model in which the user can explain:
 
 - which system area the requirement touches;
 - which modules and interfaces are central;
 - what trade-off determines the best current path;
 - what the first safe execution slice proves.
 
-The agent performs evidence discovery. The user owns requirement priorities and design judgment.
+The agent performs evidence discovery and may lead with a requirement restatement, architecture explanation, implementation recommendation, or candidate plan. The user corrects intent, priorities, constraints, and misunderstandings; neither side should proceed from an unverified model.
 
 ## Convergence Target
 
@@ -27,6 +27,14 @@ Converge on an execution-ready engineering model:
 - best current implementation path and rejected alternatives;
 - first reversible execution slice;
 - proportionate validation, observability, rollback, and stop conditions.
+
+Use a practical 90% shared-confidence gate. It is satisfied when:
+
+- the agent can restate the stakeholder outcome, acceptance evidence, non-goals, constraints, failure policy, and relevant architecture without a consequential contradiction;
+- the user can explain the relevant system flow or requirement boundary, why the chosen path fits it, and which uncertainty remains;
+- the named residual uncertainty is unlikely to reverse the first execution slice.
+
+Do not present the percentage as calibrated statistics. It is a stop/go discipline: if a material ambiguity could still change the implementation, confidence is below the gate.
 
 ## Engineering Competence Standard
 
@@ -42,13 +50,13 @@ Inspect and preserve repository conventions, public interfaces, invariants, data
 
 ## Interaction Gate
 
-Advance exactly one stage per substantive response. Inspect evidence, present a compact architecture or option scaffold, ask exactly one open-ended engineering question, and stop.
+Use the stages below as checkpoints in an adaptive conversation. Inspect evidence, explain the real architecture or requirement model at useful depth, ask a focused question or invite correction, and revise the model from the response. Continue until the 90% shared-confidence gate is met.
 
 Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
 
-Do not treat yes/no, approval, or selecting an agent-provided option as evidence of engineering understanding. Ask the user to explain the requirement, system boundary, trade-off, failure path, or proof in their own model.
+Do not treat yes/no, approval, or selecting an agent-provided option alone as sufficient confidence. Ask the user to correct the restatement, explain the decisive priority, trace the system boundary, or challenge the proposed path when uncertainty remains.
 
-Do not ask the user to locate directories, symbols, or logs that the agent can inspect. Do not implement code while this collaboration skill is active.
+Do not ask the user to locate directories, symbols, or logs that the agent can inspect. The agent may explain a complete relevant system slice before asking for reaction; the user is not required to reconstruct it first. Do not implement code while consequential requirement or architecture uncertainty remains above the gate.
 
 ## Stage Machine
 
@@ -124,13 +132,14 @@ Open question:
 
 - Explain the frozen requirement, attachment boundary, chosen path, first-slice proof, and rollback condition as you now understand them; where is the remaining uncertainty that could still reopen the design?
 
-After the reasoning summary is sound, request operational authorization in a separate turn. That yes/no permission is required before execution but does not count as evidence of engineering understanding. After authorization, mark this skill handed off and leave the collaboration protocol before editing code.
+After the shared model passes the confidence gate, request operational authorization if it is not already explicit. That permission is required before execution but does not by itself establish understanding. After authorization, mark this skill handed off and leave the collaboration protocol before editing code.
 
 The same agent may then enter normal execution, implement the approved slice, follow repository standards, run proportionate tests, and report the exact proof boundary. The handoff separates decision ownership; it does not imply lack of implementation ability.
 
 ## Engineering Guardrails
 
 - Do not treat requirement prose as architecture evidence.
+- A direct request to explain one PR, function, diagram, or already-known flow is ordinary assistance. Activate this skill only when the user wants iterative requirement or whole-system understanding, architecture recovery, path comparison, or execution readiness.
 - Surface contradictions, missing stakeholders, latent constraints, and acceptance ambiguity before decomposing work.
 - Do not produce a final plan before a real architecture slice is inspected.
 - Do not ask the user to do search work the agent can do.
@@ -152,15 +161,16 @@ For each layer, state trigger, time budget, coverage, evidence, and which higher
 
 - Hand off to `targeted-knowledge-closure` when a concept, not architecture, blocks progress.
 - Hand off to `research-method-design` when the unresolved question is whether a proposed research mechanism is causally defensible.
-- Hand off to normal execution only after the user authorizes the first slice.
+- Hand off to normal execution only after the shared-confidence gate is met and the user authorizes the first slice.
 - If the user requests direct implementation, preserve the current decision record, exit this skill silently without a skill lifecycle marker, and continue under normal execution.
 
 ## Completion Evidence
 
-Mark complete only when the user can independently explain:
+Mark complete only after meaningful interaction and when both sides have about 90% practical confidence in:
 
 - the relevant architecture slice;
 - the central dependency or state boundary;
 - the chosen path and rejected weaker path;
 - the first execution slice and its proof;
-- the rollback or stop condition.
+- the rollback or stop condition;
+- the remaining uncertainty and why it does not block the first slice.

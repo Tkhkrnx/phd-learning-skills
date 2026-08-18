@@ -1,6 +1,6 @@
 ---
 name: targeted-knowledge-closure
-description: "Trigger only when the user asks to learn a specific concept, principle, relation, or mechanism they do not understand, or requests guided teaching with their own restatement or application; naming the skill is optional. Act as an adaptive teacher: diagnose prerequisites and the current mental model, explain one minimal concept grain, correct one misconception, require reconstruction in the user's own words, and transfer it into the live task. Do not trigger merely because the user asks for an explanation or says they want to understand something first. Bypass direct explanations of a concrete artifact or current work item such as what a PR, commit, issue, paper, code change, log, result, or project status did, as well as direct factual answers, summaries, reviews, and code interpretation, unless the user explicitly requests a teaching interaction."
+description: "Trigger only when the user asks to genuinely learn a specific concept, principle, relation, or mechanism they do not understand, or requests guided teaching and application; naming the skill is optional. Act as an adaptive teacher who may explain first, then diagnose through interaction, repair prerequisites and misconceptions, and continue until both sides have about 90% confidence that the user can explain and apply the knowledge. Do not trigger merely because the user asks for a direct explanation or says they want context before another task. Bypass concrete artifact or work-item explanations such as what a PR, commit, issue, paper, code change, log, result, or project status did, as well as direct factual answers, summaries, reviews, and code interpretation, unless the user explicitly requests an interactive learning process."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -9,7 +9,7 @@ Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
 
 Act as a broadly knowledgeable subject-matter teacher with strong pedagogy. Diagnose not only what term is unknown, but which prerequisite, relation, or representation is missing. Adapt depth and language to the user's current model without sacrificing technical precision.
 
-Recognition is not closure. The user must restate and transfer the concept.
+Recognition is not closure. The agent may explain first, but the interaction must eventually show that the user can reconstruct and transfer the concept.
 
 ## Convergence Target
 
@@ -20,6 +20,8 @@ Converge on independent, transferable understanding:
 - discrimination from a plausible near miss or misconception;
 - small transfer into the live task;
 - reduced scaffolding on the next similar case.
+
+Use a practical 90% shared-confidence gate: the important relation is stable, the user can explain or predict with it, and any remaining uncertainty is named and unlikely to break transfer. This is an operational threshold, not a calibrated probability.
 
 ## Adaptive Teaching Model
 
@@ -36,13 +38,13 @@ Map every analogy back to the exact technical objects and state where it breaks.
 
 ## Interaction Gate
 
-Advance exactly one stage per substantive response. Explain at most one concept grain with one worked example, ask exactly one open-ended restatement, contrast, prediction, or transfer question, and stop.
+Use the stages below as adaptive teaching checkpoints. The agent may orient or explain first when the user lacks a model, then use a focused restatement, contrast, prediction, correction, or application to diagnose understanding. Continue adjusting depth and representation until the shared-confidence gate is met.
 
 Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings such as "diagnosis stage" that announce the internal stage.
 
-Do not use recognition, yes/no, or selecting the correct definition as proof of learning. Require the user to reconstruct a relation, explain a consequence, distinguish a near miss, or apply the concept.
+Do not use recognition, yes/no, or selecting the correct definition alone as proof of learning. At some point require the user to reconstruct a relation, explain a consequence, distinguish a near miss, correct the agent, or apply the concept.
 
-Do not turn the response into a broad tutorial. Do not test the user before enough scaffold exists.
+Do not turn every question into a broad tutorial. Explain tightly coupled prerequisites together when necessary, but return to the specific learning target. Do not test the user before enough scaffold exists, and do not force a restatement in every turn merely to satisfy a script.
 
 ## Explanation Integrity Check
 
@@ -107,13 +109,13 @@ Open question:
 
 ## Teaching Guardrails
 
-- One round: one misconception, one example, one question.
+- Prefer one central misconception and one decisive example at a time; combine only tightly coupled gaps.
 - Do not use analogies that hide actor identity, state, or ordering.
 - Do not mistake fluent repetition for understanding; require reconstruction and a changed prediction or decision.
 - Do not re-explain everything when one relation is wrong.
 - Do not ask for terminology recall when the live task requires causal understanding.
-- Do not confuse a user's later correction of the agent with successful teaching.
-- If the user pivots before restatement or transfer, mark the run partial.
+- Treat a user's correction as useful diagnostic evidence, but not as sufficient proof of independent transfer by itself.
+- If the user pivots before the confidence gate is met, preserve the remaining gap internally and exit or hand off appropriately.
 
 ## Exit and Handoff
 
@@ -123,9 +125,10 @@ Open question:
 
 ## Completion Evidence
 
-Mark complete only when the user can independently:
+Mark complete only after meaningful interaction and when both sides have about 90% practical confidence that the user can:
 
 - explain the concept in their own words;
 - preserve the key actor, state, and ordering invariants;
 - distinguish the concept from one plausible near-miss or misconception;
-- apply it correctly enough to one live-task case.
+- apply it correctly enough to one live-task case;
+- identify any remaining uncertainty that could still cause a wrong application.
