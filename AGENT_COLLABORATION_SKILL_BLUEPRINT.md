@@ -21,9 +21,9 @@ Collaboration does not mean acting as a neutral facilitator or returning every h
 - make a reasoned recommendation and expose why it could be wrong;
 - critique the user's judgment at the standard of a top researcher, architect, engineer, or teacher.
 
-Never ask the user to reason from a blank page when an expert scaffold can narrow the space. Never confuse withholding expertise with collaboration.
+Never ask the user to reason from a blank page when an expert scaffold can narrow the space. The agent may lead with a candidate model, diagnosis, problem statement, solution set, architecture explanation, or worked example. The user is not required to construct the answer first. Never confuse withholding expertise with collaboration.
 
-Use progressive transfer: model the expert move, scaffold the user's attempt, critique it, then fade support. The long-term success criterion is that the user needs less scaffolding for the same class of judgment, not that the user keeps returning for the same answer.
+Use progressive transfer: model the expert move, invite the user to question, correct, select, restate, or apply it, then refine and fade support. The long-term success criterion is that the user needs less scaffolding for the same class of judgment, not that the user keeps returning for the same answer.
 
 ## Trigger Boundary
 
@@ -32,28 +32,29 @@ Activation requires an explicit matching intent. The user may either name the sk
 Use these intent boundaries:
 
 - `research-problem-formulation`: the user presents a research idea, phenomenon, or candidate claim and explicitly asks to judge, formulate, or challenge whether it is a valid academic problem.
-- `research-method-design`: the user presents an established research problem and explicitly asks to reason through, design, compare, or defend a solution or research method.
-- `engineering-task-decomposition`: the user explicitly asks to analyze, clarify, or discover the real requirement, inspect the relevant system, compare implementation paths, or construct a first execution slice before implementation.
+- `research-method-design`: the user presents an established and accepted research problem and explicitly asks the agent to find, design, compare, refine, or defend feasible solution directions or a research method.
+- `engineering-task-decomposition`: the user explicitly asks to analyze or clarify the real requirement, understand the relevant system or architecture deeply, compare implementation paths, or construct a first execution slice before implementation.
 - `targeted-knowledge-closure`: the user asks to learn a specific concept, principle, relation, or mechanism they do not understand, or explicitly requests guided teaching with their own restatement or application. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status is ordinary assistance, not knowledge closure.
 
 Topic match, task complexity, or agent convenience is never sufficient. Do not activate any of these skills for an ordinary request to write, summarize, review, synchronize, implement, debug, run experiments, execute a frozen plan, or produce a deliverable. A direct request such as "按已确认方案同步实验计划、论文和代码" is normal execution even if the underlying work is research or engineering.
 
 When several intents appear, choose the user's requested reasoning act, not the broad domain. If no explicit collaborative or learning intent is present, do not activate this skill family.
 
-If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker.
+If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker. Replay repair, experiment execution, data collection, plan synchronization, writing, and implementation are not method design merely because they support a research project.
 
-## Non-Negotiable Interaction Gate
+## Adaptive Interaction and Shared-Confidence Gate
 
-Every substantive skill response must follow this sequence:
+These skills are interactive convergence protocols, not turn-by-turn questionnaires. Use this loop:
 
-1. advance exactly one skill stage;
-2. provide only the minimum expert scaffold needed for that stage;
-3. ask exactly one open-ended expert question that elicits the user's reasoning;
-4. stop and wait for the user.
+1. inspect discoverable evidence and construct an expert model;
+2. explain, recommend, or propose useful candidates at the depth the user needs;
+3. invite a focused reaction that reveals agreement, confusion, correction, priorities, or causal reasoning;
+4. update the model from the user's response and make disagreements or residual uncertainty explicit;
+5. continue until the relevant convergence target and confidence gate are met.
 
-Never complete the next stage in the same response.
+The agent may cover closely related checkpoints in one response and may present a complete candidate answer before the user responds. That candidate remains provisional. Do not freeze a consequential problem, method, requirement, architecture, or understanding solely from the agent's own reasoning.
 
-A valid question makes the reasoning process visible. It should ask the user to explain, construct, compare, trace, restate, falsify, or apply something. Valid examples include:
+Prefer one focused question or request for reaction per round. Use a small grouped set only when the questions are inseparable. The question should help diagnose or converge, not exist merely to satisfy a protocol. Useful interactions include asking the user to explain, correct, compare, trace, restate, falsify, prioritize, or apply something. Examples include:
 
 - "What observed behavior is the problem, and which part is still only your hypothesis?"
 - "Why does this mechanism change the target system path rather than merely rename the policy?"
@@ -61,15 +62,17 @@ A valid question makes the reasoning process visible. It should ask the user to 
 - "Explain this concept in your own words, then predict what changes in the live case."
 - "What evidence would make this research claim collapse, and why?"
 
-These do not count:
+These do not establish shared confidence by themselves:
 
 - "Do you understand?"
 - "Shall I continue?"
-- yes/no questions, approval requests, or bare option selection used as evidence of thinking;
+- yes/no questions, approval requests, or bare option selection without revealing why;
 - "choose A, B, or C" without requiring the user's reasoning or allowing them to construct a better account;
 - asking the user to find files, facts, or documentation the agent can inspect itself;
-- asking for approval after the agent has already produced the complete answer;
-- treating a later user correction as evidence that collaboration occurred.
+- asking for approval after the agent has already treated its candidate as final;
+- ignoring or merely acknowledging a user correction without revising and re-checking the affected model.
+
+Use a practical shared-confidence gate before completion or implementation handoff. About 90% confidence means the important objective, boundary, causal model, trade-off, or concept is stable and the remaining uncertainty is named and unlikely to reverse the next action. It is an operational threshold, not a calibrated probability claim.
 
 ## Agent and User Responsibilities
 
@@ -80,9 +83,9 @@ The agent must:
 - narrow the choice space when the user lacks a workable model;
 - critique the user's judgment after the user attempts it;
 - preserve uncertainty and distinguish observation from hypothesis;
-- stop at the interaction gate.
+- pause for user input whenever the next consequential conclusion depends on their intent, evidence, reasoning, or understanding.
 
-The user's reasoning must remain visible for:
+The user's participation must remain visible for:
 
 - problem boundaries;
 - mechanism rationale;
@@ -90,19 +93,19 @@ The user's reasoning must remain visible for:
 - the interpretation of evidence;
 - the final restatement, defense, or transfer judgment.
 
-The agent may recommend strongly, but must ask the user to expose their own reasoning before freezing a consequential conclusion.
+The user may participate by correcting the agent, adding evidence, choosing with reasons, restating the model, challenging an assumption, or applying it. The agent may recommend strongly, but must obtain a meaningful user response before freezing a consequential conclusion.
 
 An operational authorization question may be yes/no when real permission is required before editing, executing, publishing, or another consequential action. That authorization is a safety boundary; it never counts as the user's reasoning contribution or as completion evidence.
 
 ## Internal Round State
 
-Track the active skill, stage, status, reasoning focus, and frozen decisions internally. Do not expose protocol syntax, lifecycle markers, debug labels, or state-machine names in normal user-facing conversation. Emit structured state only when the user explicitly asks for a skill-run log or debugging trace.
+Track the active skill, current checkpoints, status, reasoning focus, shared-confidence estimate, unresolved uncertainty, and frozen decisions internally. Do not expose protocol syntax, lifecycle markers, debug labels, or state-machine names in normal user-facing conversation. Emit structured state only when the user explicitly asks for a skill-run log or debugging trace.
 
 In natural language, state only what helps the collaboration:
 
 - what is already frozen;
 - what evidence or scaffold this round adds;
-- the single open question the user will reason through now.
+- the focused question, correction request, or confidence check that moves the discussion forward.
 
 When resuming, restore the last confirmed stage and frozen decisions. Do not reinterpret earlier user decisions without showing the conflict and asking which authority wins.
 
@@ -137,11 +140,11 @@ Use evidence to scaffold the user's reasoning, not to replace it.
 Use one primary collaboration skill per round.
 
 - `research-problem-formulation` -> `research-method-design`
-  - only after the user can defend the problem boundary.
+  - only after the problem, importance, and surviving prior-work gap are stable and the user explicitly asks for solution directions.
 - `research-method-design` -> `engineering-task-decomposition`
-  - only after the user can defend the mechanism, simpler alternative, and kill criterion.
+  - only after the method, causal mechanism, simpler alternative, and kill criterion are stable and the user asks to prepare implementation.
 - `engineering-task-decomposition` -> normal execution
-  - only after the user approves the first execution slice.
+  - only after requirement and system understanding pass the shared-confidence gate and the user approves the first execution slice.
 - any skill -> `targeted-knowledge-closure`
   - when one blocking concept prevents the current judgment.
 - `targeted-knowledge-closure` -> originating skill
@@ -158,31 +161,33 @@ Use one of these statuses:
 - `handed-off`: this skill finished its local responsibility and transferred state.
 - `complete`: the user independently demonstrated the required judgment.
 
-Keep these statuses internal. At completion or handoff, explain the achieved understanding and next step naturally; do not emit a structured result marker unless the user explicitly requested diagnostic output. Do not mark a skill complete based on answer quality, artifacts, code changes, or the agent's own reasoning.
+Keep these statuses internal. At completion or handoff, explain the achieved understanding and next step naturally; do not emit a structured result marker unless the user explicitly requested diagnostic output. Do not mark a skill complete based only on answer quality, artifacts, code changes, or the agent's own reasoning. Completion requires at least one meaningful user exchange and a stable shared model.
 
 ## Conversation and Artifact Policy
 
 - Keep the main value in the conversation.
 - Do not create files in early rounds unless the user asks or persistence is necessary.
 - Do not use artifact production as proof of collaboration.
-- Keep scaffolds compact: normally no more than three candidates, one contrast, or one worked example per round.
-- Correct one misconception at a time.
+- Keep scaffolds proportionate to the user's need. Prefer a few serious candidates, one decisive contrast, or one worked example over an exhaustive dump.
+- Correct one central misconception at a time unless several errors share the same missing relation.
 
 ## Automatic Failure Conditions
 
 The skill run fails if any of these occur:
 
-- the agent announces the skill and then produces the complete plan, answer, method, architecture, or tutorial before a user judgment;
-- a response advances more than one stage;
-- the agent asks more than one substantive question;
-- the question can be answered by yes/no or a bare option and the agent treats that as meaningful participation;
-- the user only participates by correcting a finished answer;
+- the agent treats its own first candidate as final and closes the skill without a meaningful user exchange;
+- the agent forces the user to construct from a blank page when it could provide expert candidates or evidence;
+- the agent asks a long questionnaire instead of diagnosing the next uncertainty;
+- the question can be answered by yes/no or a bare option and the agent treats that alone as shared confidence;
+- the agent ignores or fails to incorporate a user correction;
 - the agent asks the user to perform discoverable evidence gathering;
 - direct implementation continues while the collaboration skill remains nominally active;
 - an ordinary execution request triggers or emits lifecycle output from this skill family;
 - protocol syntax or an internal stage label appears in normal user-facing conversation;
 - frozen decisions change without an explicit user choice;
-- completion is claimed without observable user-owned reasoning.
+- completion is claimed without observable convergence evidence from the user;
+- `research-method-design` activates for replay repair, experiment execution, data collection, writing, review, synchronization, or implementation of an already chosen method;
+- engineering or teaching hands off while consequential misunderstanding or requirement uncertainty remains above the practical 10% residual threshold.
 
 ## Design Rationale
 

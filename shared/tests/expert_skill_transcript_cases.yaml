@@ -1,4 +1,4 @@
-version: 2
+version: 3
 trigger_cases:
   - id: trigger-problem-natural-language
     skill: research-problem-formulation
@@ -41,6 +41,16 @@ trigger_cases:
     activate: false
     user_prompt: "运行已经写好的 replay 实验并汇总结果。"
     reason: "experiment execution without method reasoning"
+  - id: bypass-method-replay-repair
+    skill: research-method-design
+    activate: false
+    user_prompt: "继续修复三个 benchmark 的 replay，直到只剩模型能力问题。"
+    reason: "replay repair is direct execution, not solution discovery"
+  - id: bypass-method-sample-selection
+    skill: research-method-design
+    activate: false
+    user_prompt: "按已经冻结的实验计划整理 action replay 正负例和训练样本。"
+    reason: "data selection under a frozen method is execution, not method design"
 
   - id: trigger-engineering-requirement
     skill: engineering-task-decomposition
@@ -52,6 +62,11 @@ trigger_cases:
     activate: true
     user_prompt: "这个改动会碰到哪些架构边界？带我比较实现路径和第一切片。"
     reason: "explicit request for collaborative architecture and implementation-path reasoning"
+  - id: trigger-engineering-system-understanding
+    skill: engineering-task-decomposition
+    activate: true
+    user_prompt: "带我把这套 replay 系统和需求完整理解清楚，反复核对到我们都基本没有关键误解，再决定怎么改。"
+    reason: "explicit request for iterative whole-system and requirement understanding"
   - id: bypass-engineering-fix
     skill: engineering-task-decomposition
     activate: false
@@ -62,6 +77,11 @@ trigger_cases:
     activate: false
     user_prompt: "审查当前分支的代码，按严重程度列出缺陷。"
     reason: "direct code review without requirement discovery"
+  - id: bypass-engineering-direct-flow-explanation
+    skill: engineering-task-decomposition
+    activate: false
+    user_prompt: "解释一下这张图里的 replay 流程，然后继续跑实验。"
+    reason: "direct artifact explanation coupled to execution, without iterative requirement or system discovery"
 
   - id: trigger-knowledge-meaning
     skill: targeted-knowledge-closure
@@ -97,13 +117,13 @@ cases:
     required:
       - "separate observation from hypothesis"
       - "treat the problem as a declarative statement, without forcing a contradiction"
-      - "one open question asking the user to explain observation and evidence"
-      - "stop before candidate problem statements"
+      - "offer a provisional expert framing or candidate statement when useful"
+      - "invite the user to correct the observation, boundary, or evidence"
     forbidden:
-      - "polished problem statement"
       - "how-to question presented as the problem"
       - "assume the academic problem is valid before checking motivation and prior solutions"
       - "literature survey dump"
+      - "freeze the first candidate without a meaningful user exchange"
 
   - id: problem-frozen-rqs
     skill: research-problem-formulation
@@ -111,7 +131,7 @@ cases:
     user_prompt: "现有问题和 RQ1-RQ4 已经定了，但我怀疑核心 claim 不够切题，带我一起修。"
     required:
       - "snapshot frozen problem and RQs"
-      - "ask which item may change"
+      - "propose the smallest plausible correction and ask the user to confirm or revise its scope"
     forbidden:
       - "rewrite challenges and RQs together"
       - "replace the full narrative"
@@ -122,24 +142,25 @@ cases:
     user_prompt: "我们在 Ascend NPU 上想让需要重启的推理机制在线切换，带我一起把方法想清楚。"
     required:
       - "derive causal obstacles from the frozen problem"
-      - "one open question asking why the challenge is irreducible"
+      - "propose several feasible mechanism directions with platform assumptions"
+      - "ask which causal path or constraint changes the candidate ranking"
     forbidden:
-      - "complete hot-switch architecture"
       - "assume CUDA-only mechanisms"
       - "borrow an analogy without mapping assumptions"
-      - "search for solution mechanisms before the root challenge is defended"
+      - "freeze a hot-switch architecture before user interaction and fact checking"
 
-  - id: method-minimal-invalidation
+  - id: method-state-reuse-solutions
     skill: research-method-design
-    expected_stage: fact-gate
-    user_prompt: "609 条 replay 里只有一条因为输入超限失败，修复后是否必须全量重跑？我们一起判断。"
+    expected_stage: mechanism-source
+    user_prompt: "问题已经定义清楚：Agent 状态复用在部分负载下节省计算，却在高压状态恶化尾延迟。帮我找几个可行方案，并和我一起比较。"
     required:
-      - "causal impact scope"
-      - "preserve unaffected evidence as an option"
-      - "one comparability judgment"
+      - "derive the root challenge from the frozen problem"
+      - "offer multiple serious candidate solutions"
+      - "map relevant or cross-domain principles and engineering carriers"
+      - "invite comparison using a decisive trade-off or failure case"
     forbidden:
-      - "order a full rerun without impact audit"
-      - "merge incompatible receipts silently"
+      - "start replay repair or implementation"
+      - "present one preferred mechanism as already final"
 
   - id: engineering-acceptance-versus-ci
     skill: engineering-task-decomposition
@@ -148,10 +169,11 @@ cases:
     required:
       - "separate acceptance authority from CI purpose"
       - "surface latent non-functional requirements"
-      - "one open question eliciting requirement reasoning"
+      - "provide a provisional requirement and test-layer model"
+      - "ask the user to correct the decisive priority or missing boundary"
     forbidden:
-      - "complete test matrix in the first response"
       - "treat CI as a replacement for acceptance"
+      - "freeze the test matrix before shared confidence is established"
 
   - id: engineering-ambiguous-requirement
     skill: engineering-task-decomposition
@@ -160,7 +182,8 @@ cases:
     required:
       - "separate stated feature from underlying outcome"
       - "surface acceptance evidence and non-goals"
-      - "one open question eliciting requirement priorities"
+      - "offer an expert requirement restatement for correction"
+      - "continue until material uncertainty is below the practical ten-percent threshold"
     forbidden:
       - "start coding"
       - "freeze multi-provider support as the real requirement"
@@ -172,7 +195,8 @@ cases:
     required:
       - "distinguish request A from request B"
       - "preserve the prefill-before-decode invariant for one request"
-      - "one small restatement question"
+      - "explain the missing relation before checking understanding"
+      - "use a focused prediction, correction, or restatement to estimate understanding"
     forbidden:
       - "imply one request decodes before its prefill finishes"
       - "expand into a full QoServe tutorial"
@@ -184,7 +208,7 @@ cases:
     required:
       - "identify one blocking relation"
       - "one worked example"
-      - "one user restatement"
+      - "adapt from the user's reaction rather than require a scripted restatement every round"
       - "fade toward transfer rather than repeat the explanation"
     forbidden:
       - "full repository architecture dump"

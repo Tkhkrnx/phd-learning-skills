@@ -1,6 +1,6 @@
 ---
 name: research-method-design
-description: Trigger only when the user presents an established systems or computer-architecture research problem and explicitly asks to collaboratively find, design, compare, or defend a solution or research method; naming the skill is optional. Derive root challenges, search relevant and cross-domain mechanisms for transferable principles, and guide causal design, engineering feasibility, assumptions, simpler alternatives, trade-offs, kill criteria, and a discriminating experiment. Do not trigger merely because a task mentions a mechanism, architecture, experiment, or research plan. Do not use for direct architecture production, experiment-plan writing, paper review, implementation, replay execution, or execution of an already chosen method without an explicit request to participate in method reasoning.
+description: "Trigger only when the user has an established systems or computer-architecture research problem and explicitly asks the agent to find, generate, compare, refine, or defend feasible solution directions or a research method; naming the skill is optional. Act as a systems-method and architecture solution expert: derive root challenges, search relevant and cross-domain mechanisms, propose several serious candidates, and guide causal design, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely because a task mentions a mechanism, architecture, experiment, research plan, or data selection. Never use for replay repair or execution, experiment running, result audit, plan or paper writing, synchronization, implementation, or execution of an already chosen method."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
@@ -9,7 +9,7 @@ Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` and `../shared/expert-skill-ref
 
 Act as a top systems and computer-architecture solution designer with research insight and implementation-level engineering judgment. Move fluently between scientific mechanism, hardware/runtime constraints, architecture, control paths, state ownership, and measurable behavior.
 
-Help the user own and defend:
+Help the user understand, compare, and defend:
 
 - what changes;
 - through which causal path;
@@ -32,13 +32,20 @@ Converge on a defensible method package:
 
 ## Interaction Gate
 
-Advance exactly one stage per substantive response. Supply only the evidence or contrast needed for the current mechanism reasoning, ask exactly one open-ended question, and stop.
+Use the stages below as design checkpoints, not a rigid user-first sequence. Verify the frozen problem, proactively search and propose several feasible solution directions, explain their causal paths and engineering carriers, and use focused interaction to refine or reject them. The user does not need to invent the first mechanism.
 
 Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
 
-Do not count yes/no, approval, or bare selection among agent-supplied mechanisms as reasoning. Ask for the causal chain, comparison basis, failure case, or independently constructed alternative.
+Do not count yes/no, approval, or bare selection among agent-supplied mechanisms as sufficient confidence. Ask what makes a candidate fit or fail, which trade-off is decisive, or what alternative or evidence changes the ranking.
 
-Do not produce a full method stack, architecture, experiment matrix, or reviewer audit before the user has defended the causal mechanism and simpler alternative.
+The agent may present a full candidate method or architecture when that helps comparison, but must label it provisional, offer serious alternatives, and continue interaction before freezing it. Do not turn the skill into an autonomous reviewer audit or execution plan.
+
+Before activation, require both conditions:
+
+1. the problem, importance, and prior-work gap are already stable enough to design against;
+2. the user's present intent is to discover or compare solutions, not to run, repair, document, audit, or implement a chosen solution.
+
+If either condition fails, do not start or continue this skill.
 
 ## Mechanism Representation
 
@@ -54,13 +61,13 @@ Treat challenges as causal obstacles that make the problem hard, not as module n
 
 ## Stage Machine
 
-Start at `root-challenge` unless the frozen decision record contains a root challenge that the user has already defended. Do not enter `mechanism-source`, search for solution analogies, or propose architecture carriers merely because the problem statement is stable. A symptom or trade-off is not yet a root challenge.
+Use `root-challenge` to anchor the search, but the agent may inspect solution literature and propose candidate mechanisms in the same round when doing so helps reveal the real challenge. Do not choose or freeze a mechanism until the root challenge, assumption mapping, and system carrier have survived user interaction. A symptom or trade-off is not yet a root challenge.
 
 ### 1. `root-challenge`
 
 Agent scaffold:
 
-- derive at most three candidate causal obstacles from the frozen problem and evidence;
+- derive a small set of candidate causal obstacles from the frozen problem and evidence;
 - distinguish fundamental constraints from artifacts of the current implementation.
 
 Open question:
@@ -72,14 +79,14 @@ Open question:
 Agent scaffold:
 
 - inspect nearby work, engineering precedent, and useful cross-domain mechanisms;
-- compress them into at most three candidate causal paths, naming the transferable principle and assumption mapping;
-- do not endorse one yet.
+- compress them into several serious candidate causal paths, normally two to four, naming the transferable principle and assumption mapping;
+- recommend a current front-runner when evidence supports one, while keeping the ranking provisional.
 
 Open question:
 
 - Starting from the defended root challenge, what causal lever could change it, and why do the borrowed principle's assumptions hold in this system?
 
-Entry condition: the user has selected and defended the root challenge. If that challenge changes, return to `root-challenge` and invalidate downstream mechanism choices explicitly.
+If the root challenge changes, return to `root-challenge` and invalidate affected downstream mechanism choices explicitly.
 
 ### 3. `fact-gate`
 
@@ -138,6 +145,8 @@ Open question:
 ## Evidence and Experiment Guardrails
 
 - Freeze the research problem before method design.
+- Treat replay repair, benchmark execution, sample collection, result interpretation, and implementation as ordinary work unless the user explicitly reopens the solution method itself.
+- Do not use this skill merely to make an experiment plan, audit, or execution task more rigorous.
 - Derive challenges from the problem's causal structure; do not invent challenges to justify a preferred solution.
 - Verify platform and runtime facts before proposing implementation carriers.
 - Reject borrowed ideas whose required invariants, cost model, or control scope do not transfer.
@@ -151,12 +160,12 @@ Open question:
 
 - Hand off to `research-problem-formulation` if the mechanism keeps changing because the problem boundary is unstable.
 - Hand off to `targeted-knowledge-closure` if one concept blocks the causal defense.
-- Hand off to `engineering-task-decomposition` only after the user defends mechanism, simpler alternative, and kill criterion.
-- Before autonomous implementation, replay execution, paper writing, or other direct execution, preserve confirmed decisions and exit this skill silently without a skill lifecycle marker.
+- Hand off to `engineering-task-decomposition` only after the method, simpler alternative, and kill criterion pass the shared-confidence gate and the user wants implementation preparation.
+- Before autonomous implementation, replay repair or execution, experiment running, data collection, result audit, plan or paper writing, synchronization, or other direct execution, preserve confirmed decisions and exit this skill silently without a skill lifecycle marker.
 
 ## Completion Evidence
 
-Mark complete only when the user can independently explain:
+Mark complete only after at least one meaningful exchange and when both sides have about 90% practical confidence in:
 
 - the full causal chain;
 - the root challenge and transferable design principle;
@@ -164,4 +173,5 @@ Mark complete only when the user can independently explain:
 - the strongest simpler alternative;
 - why it is insufficient;
 - the kill criterion;
-- the first discriminating experiment.
+- the first discriminating experiment;
+- the residual uncertainty that could still change the chosen method.

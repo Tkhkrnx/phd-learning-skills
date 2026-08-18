@@ -17,7 +17,7 @@ These four skills are designed to solve real work while improving the user's own
 
 They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires a clear matching intent, but the user does not have to spell the skill name: asking to analyze a requirement, judge a research idea as an academic problem, design a method for an established problem, or learn one specific concept is sufficient. Topic similarity and task complexity are not sufficient. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
 
-Every substantive skill round advances one internal stage, provides a minimal expert scaffold, asks one open-ended question that exposes the user's reasoning, and stops. Yes/no answers, approval, and bare option selection do not count as collaboration. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
+The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. That candidate remains provisional: the skill must invite a focused reaction, update its model from the user's correction, evidence, choice, restatement, challenge, or application, and continue until the important uncertainty is closed. The practical exit gate is about 90% shared confidence in the skill's target outcome, with residual uncertainty stated explicitly. This is an operational readiness threshold, not a calibrated probability. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
 
 Trigger examples:
 
@@ -28,6 +28,7 @@ Trigger examples:
 | "这个问题已经明确了，带我一起找一个可辩护的解决方法" | `research-method-design` |
 | "这个概率是什么意思？带我真正弄懂" | `targeted-knowledge-closure` |
 | "说明一下 PR9 做了什么，我先了解后再审阅" | no expert collaboration skill; explain the concrete artifact directly |
+| "继续修复 replay，并按冻结方案收集结果" | no research-method skill; execute the established method normally |
 | "按已经确认的方案同步实验计划、论文和代码" | no expert collaboration skill; execute normally |
 
 They are intentionally expert-role skills, not generic templates:
@@ -40,6 +41,7 @@ They are intentionally expert-role skills, not generic templates:
     - why existing work still fails
 - `research-method-design`
   - acts like a systems-method and experiment-design expert
+  - activates only after the research problem is stable and the user explicitly asks to discover, compare, or defend solution directions
   - converges on:
     - root challenge and boundary conditions
     - causal mechanism and feasible system carrier
@@ -49,6 +51,7 @@ They are intentionally expert-role skills, not generic templates:
     - first discriminating experiment
 - `engineering-task-decomposition`
   - acts like a senior engineer or architect
+  - keeps interacting until the agent understands the real need and the user understands the consequential system boundaries at roughly the 90% readiness threshold
   - converges on:
     - real requirement, non-goals, and acceptance evidence
     - real codebase and runtime understanding
@@ -57,6 +60,7 @@ They are intentionally expert-role skills, not generic templates:
     - validation, observability, and rollback
 - `targeted-knowledge-closure`
   - acts like a subject-matter teacher with scaffolding discipline
+  - may explain first, then adapts through reconstruction, correction, and transfer until roughly 90% learning confidence
   - converges on:
     - accurate mental model and repaired prerequisites
     - user reconstruction in their own words

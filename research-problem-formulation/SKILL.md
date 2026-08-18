@@ -16,7 +16,7 @@ Help the user own and defend:
 3. which nearby work comes closest;
 4. why the gap survives that comparison.
 
-Do not replace the user's boundary judgment with a polished statement.
+The agent may propose polished candidate statements and strong judgments. Label them as provisional until the user has questioned, corrected, refined, or accepted the underlying boundary with reasons.
 
 ## Convergence Target
 
@@ -64,13 +64,13 @@ Failure on any item is informative. Narrow, reclassify, or abandon the candidate
 
 ## Interaction Gate
 
-Advance exactly one stage per substantive response. Provide a compact scaffold, ask exactly one open-ended question that reveals the user's reasoning, and stop.
+Use the stages below as reasoning checkpoints, not a rigid one-stage-per-turn script. Inspect evidence, present the expert diagnosis or candidate formulation the user needs, then invite a focused correction, challenge, refinement, or confidence check. Continue interacting until the problem boundary is stable.
 
 Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
 
-Do not accept yes/no, approval, or bare option selection as participation. If the user answers tersely, ask them to expose the observation, causal link, comparison, or counterexample before advancing.
+Do not treat yes/no, approval, or bare option selection alone as sufficient convergence evidence. Ask for the observation, causal link, comparison, correction, or counterexample that supports the response when it matters.
 
-Do not finalize a problem statement before the user attempts one. Do not treat later user correction of an agent-written framing as collaboration.
+The user does not have to construct the first problem statement. The agent may lead with one or more candidate formulations after inspecting evidence. A later user correction is valuable collaboration: incorporate it, show what changed, and re-check affected motivation and prior-work claims. Do not freeze the candidate until at least one meaningful exchange has occurred and the remaining uncertainty is unlikely to reverse the framing.
 
 ## Modes
 
@@ -94,6 +94,8 @@ Before revision, snapshot:
 Never rewrite challenges and RQs together unless the user explicitly reopens both.
 
 ## Stage Machine
+
+Move among these checkpoints as the evidence and conversation require. A response may connect closely related checkpoints, but do not silently declare the whole problem settled from the agent's first answer.
 
 ### 1. `observe`
 
@@ -135,8 +137,9 @@ Open question:
 
 Agent scaffold:
 
-- provide a declarative one-sentence structure, not the completed sentence:
-  - under condition X, system object Y cannot preserve capability Z; existing approach A depends on assumption B.
+- provide one or more declarative candidate statements when useful;
+- explain which observations, assumptions, and prior-work comparisons each candidate depends on;
+- keep the candidate revisable until the shared-confidence gate is met.
 
 Open question:
 
@@ -170,12 +173,12 @@ Open question:
 ## Exit and Handoff
 
 - If one concept blocks a boundary judgment, hand off to `targeted-knowledge-closure`.
-- After the user survives the pressure test, hand off to `research-method-design` only if the user wants to design a mechanism.
+- After the problem, importance, and surviving prior-work gap are stable, hand off to `research-method-design` only if the user explicitly wants the agent to find or compare feasible solutions.
 - If the user requests a polished section, autonomous literature review, or other direct execution, preserve confirmed decisions, exit this skill silently, and enter the appropriate execution workflow without a skill lifecycle marker.
 
 ## Completion Evidence
 
-Mark complete only when the user can independently state:
+Mark complete only after at least one meaningful exchange and when both sides have about 90% practical confidence in:
 
 - the problem and primary system object;
 - why it matters;
@@ -183,4 +186,5 @@ Mark complete only when the user can independently state:
 - the surviving boundary;
 - why the motivation remains material;
 - why the problem is not already solved or merely an obvious implementation task;
-- one condition that would collapse the framing.
+- one condition that would collapse the framing;
+- which uncertainties remain and why they are unlikely to reverse the current problem definition.

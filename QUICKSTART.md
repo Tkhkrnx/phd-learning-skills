@@ -20,7 +20,7 @@ $env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 
 ```text
 用 research-problem-formulation 带我一起判断这个现象能否成为研究问题。
-用 research-method-design 带我一起 defend 这个机制，不要直接替我写完整方案。
+这个研究问题已经明确了，请用 research-method-design 先给我几个可行方案，再带我比较和 defend。
 用 engineering-task-decomposition 带我读懂相关架构并选择第一执行切片。
 用 targeted-knowledge-closure 帮我真正弄懂 chunked prefill，并让我做一次迁移判断。
 帮我分析一下这个需求，先澄清真实需求和验收标准，不要立即写代码。
@@ -29,12 +29,13 @@ $env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 这个概率是什么意思？请带我理解并让我用自己的话讲回来。
 ```
 
-每轮只推进一个阶段，AI 提出一个开放式问题并等待你展开推理；是/否和裸选项不算完成该轮。
+AI 可以先给完整候选问题、若干方案、系统模型或示范讲解，再通过聚焦的纠正、选择、复述、质疑或应用和你共同收敛。不是强迫用户从空白构造，也不是 AI 给完答案就自行宣布结束。进入执行、设计冻结或知识迁移前，双方应对关键结论达到约 90% 的把握，并明确仍未解决的不确定性。
 
 普通工作请求不会因为任务复杂或领域相关而触发这四个 skill。例如下面的请求应直接执行：
 
 ```text
 按已经确认的方案同步实验计划、写作指南、论文和代码。
+继续修复 action replay，并按冻结的实验方案收集结果。
 修复这个 bug 并跑测试。
 审阅这篇论文并给出修改意见。
 解释这段代码在做什么。

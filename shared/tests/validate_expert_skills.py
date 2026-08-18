@@ -27,7 +27,7 @@ SPECS = {
             "minimal-experiment",
         },
         "markers": {"root challenge and relevant boundary conditions", "causal mechanism and feasible system carrier", "kill criterion", "first discriminating experiment"},
-        "trigger_markers": {"established", "solution or research method", "experiment-plan writing"},
+        "trigger_markers": {"established", "solution directions", "replay repair or execution"},
     },
     "engineering-task-decomposition": {
         "stages": {
@@ -44,7 +44,7 @@ SPECS = {
     "targeted-knowledge-closure": {
         "stages": {"diagnose", "explain-one-grain", "correct", "transfer"},
         "markers": {"accurate mental model with repaired prerequisites", "discrimination from a plausible near miss", "reduced scaffolding"},
-        "trigger_markers": {"specific concept", "concrete artifact", "pr, commit, issue", "teaching interaction"},
+        "trigger_markers": {"specific concept", "concrete artifact", "pr, commit, issue", "interactive learning process"},
     },
 }
 
@@ -76,8 +76,10 @@ def main() -> int:
     blueprint = BLUEPRINT.read_text(encoding="utf-8")
     for marker in (
         "user-facing collaboration protocols",
-        "advance exactly one skill stage",
-        "ask exactly one open-ended expert question",
+        "Adaptive Interaction and Shared-Confidence Gate",
+        "The agent may lead with",
+        "90% confidence",
+        "meaningful user exchange",
         "Automatic Failure Conditions",
         "explicit matching intent",
         "Exit silently",
@@ -116,10 +118,10 @@ def main() -> int:
         missing_headings = REQUIRED_HEADINGS - headings
         if missing_headings:
             errors.append(f"{name}: missing headings {sorted(missing_headings)}")
-        if "Advance exactly one stage" not in body:
-            errors.append(f"{name}: missing one-stage interaction gate")
-        if "ask exactly one" not in body:
-            errors.append(f"{name}: missing one-question interaction gate")
+        if "90%" not in body:
+            errors.append(f"{name}: missing practical shared-confidence gate")
+        if "meaningful exchange" not in body and "meaningful interaction" not in body:
+            errors.append(f"{name}: missing iterative interaction evidence")
         if "Open question:" not in body:
             errors.append(f"{name}: missing open-question stage interface")
         if "Keep the skill name, stage name, status, and reasoning focus internal" not in body:
@@ -128,6 +130,8 @@ def main() -> int:
             errors.append(f"{name}: legacy judgment interface remains")
         if "yes/no" not in body:
             errors.append(f"{name}: missing yes/no anti-pattern")
+        if "Advance exactly one stage" in body or "ask exactly one" in body:
+            errors.append(f"{name}: legacy rigid turn gate remains")
         for stage in spec["stages"]:
             if f"`{stage}`" not in body:
                 errors.append(f"{name}: missing stage {stage!r}")
