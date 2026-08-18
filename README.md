@@ -17,7 +17,7 @@ These four skills are designed to solve real work while improving the user's own
 
 They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires a clear matching intent, but the user does not have to spell the skill name: asking to analyze a requirement, judge a research idea as an academic problem, design a method for an established problem, or learn one specific concept is sufficient. Topic similarity and task complexity are not sufficient. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
 
-Every substantive skill round advances one stage, provides a minimal expert scaffold, asks one open-ended question that exposes the user's reasoning, and stops. Yes/no answers, approval, and bare option selection do not count as collaboration. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently; normal execution must not emit `[skill-run]`, `[skill-run-result]`, or `status=suspended`.
+Every substantive skill round advances one internal stage, provides a minimal expert scaffold, asks one open-ended question that exposes the user's reasoning, and stops. Yes/no answers, approval, and bare option selection do not count as collaboration. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
 
 Trigger examples:
 
@@ -27,6 +27,7 @@ Trigger examples:
 | "我有一个研究想法，帮我判断它是否构成学术问题" | `research-problem-formulation` |
 | "这个问题已经明确了，带我一起找一个可辩护的解决方法" | `research-method-design` |
 | "这个概率是什么意思？带我真正弄懂" | `targeted-knowledge-closure` |
+| "说明一下 PR9 做了什么，我先了解后再审阅" | no expert collaboration skill; explain the concrete artifact directly |
 | "按已经确认的方案同步实验计划、论文和代码" | no expert collaboration skill; execute normally |
 
 They are intentionally expert-role skills, not generic templates:

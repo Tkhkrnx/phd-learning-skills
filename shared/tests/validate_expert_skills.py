@@ -44,7 +44,7 @@ SPECS = {
     "targeted-knowledge-closure": {
         "stages": {"diagnose", "explain-one-grain", "correct", "transfer"},
         "markers": {"accurate mental model with repaired prerequisites", "discrimination from a plausible near miss", "reduced scaffolding"},
-        "trigger_markers": {"what one specific concept means", "restate", "incidental explanations"},
+        "trigger_markers": {"specific concept", "concrete artifact", "pr, commit, issue", "teaching interaction"},
     },
 }
 
@@ -84,7 +84,8 @@ def main() -> int:
         "ordinary execution request triggers",
         "Expert Strength Without Takeover",
         "progressive transfer",
-        "reasoning-focus=<short-label>",
+        "Track the active skill",
+        "Do not expose protocol syntax",
         "yes/no questions",
     ):
         if marker not in blueprint:
@@ -121,6 +122,8 @@ def main() -> int:
             errors.append(f"{name}: missing one-question interaction gate")
         if "Open question:" not in body:
             errors.append(f"{name}: missing open-question stage interface")
+        if "Keep the skill name, stage name, status, and reasoning focus internal" not in body:
+            errors.append(f"{name}: missing user-facing internal-state boundary")
         if "User-owned judgment:" in body:
             errors.append(f"{name}: legacy judgment interface remains")
         if "yes/no" not in body:
@@ -137,6 +140,10 @@ def main() -> int:
             errors.append(f"{name}: forbidden agent-only execution mode found")
         if "Suspend this skill" in body or "Suspend immediately" in body:
             errors.append(f"{name}: visible suspension behavior remains")
+
+    for forbidden_marker in ("[skill-run] skill=", "[skill-run-result] skill="):
+        if forbidden_marker in blueprint:
+            errors.append(f"blueprint: visible lifecycle marker remains {forbidden_marker!r}")
 
     case_data = yaml.safe_load(CASES.read_text(encoding="utf-8"))
     trigger_cases = case_data.get("trigger_cases", []) if isinstance(case_data, dict) else []

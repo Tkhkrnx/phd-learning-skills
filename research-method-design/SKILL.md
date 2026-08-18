@@ -34,6 +34,8 @@ Converge on a defensible method package:
 
 Advance exactly one stage per substantive response. Supply only the evidence or contrast needed for the current mechanism reasoning, ask exactly one open-ended question, and stop.
 
+Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
+
 Do not count yes/no, approval, or bare selection among agent-supplied mechanisms as reasoning. Ask for the causal chain, comparison basis, failure case, or independently constructed alternative.
 
 Do not produce a full method stack, architecture, experiment matrix, or reviewer audit before the user has defended the causal mechanism and simpler alternative.

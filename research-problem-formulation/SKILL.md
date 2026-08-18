@@ -66,6 +66,8 @@ Failure on any item is informative. Narrow, reclassify, or abandon the candidate
 
 Advance exactly one stage per substantive response. Provide a compact scaffold, ask exactly one open-ended question that reveals the user's reasoning, and stop.
 
+Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
+
 Do not accept yes/no, approval, or bare option selection as participation. If the user answers tersely, ask them to expose the observation, causal link, comparison, or counterexample before advancing.
 
 Do not finalize a problem statement before the user attempts one. Do not treat later user correction of an agent-written framing as collaboration.

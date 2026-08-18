@@ -34,13 +34,13 @@ Use these intent boundaries:
 - `research-problem-formulation`: the user presents a research idea, phenomenon, or candidate claim and explicitly asks to judge, formulate, or challenge whether it is a valid academic problem.
 - `research-method-design`: the user presents an established research problem and explicitly asks to reason through, design, compare, or defend a solution or research method.
 - `engineering-task-decomposition`: the user explicitly asks to analyze, clarify, or discover the real requirement, inspect the relevant system, compare implementation paths, or construct a first execution slice before implementation.
-- `targeted-knowledge-closure`: the user explicitly asks what one specific concept means, says they do not understand it, or asks to be taught so they can restate and apply it.
+- `targeted-knowledge-closure`: the user asks to learn a specific concept, principle, relation, or mechanism they do not understand, or explicitly requests guided teaching with their own restatement or application. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status is ordinary assistance, not knowledge closure.
 
 Topic match, task complexity, or agent convenience is never sufficient. Do not activate any of these skills for an ordinary request to write, summarize, review, synchronize, implement, debug, run experiments, execute a frozen plan, or produce a deliverable. A direct request such as "按已确认方案同步实验计划、论文和代码" is normal execution even if the underlying work is research or engineering.
 
 When several intents appear, choose the user's requested reasoning act, not the broad domain. If no explicit collaborative or learning intent is present, do not activate this skill family.
 
-If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently: do not emit `[skill-run]`, `[skill-run-result]`, `status=suspended`, or another skill lifecycle marker unless the user explicitly asks for a skill-run log.
+If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker.
 
 ## Non-Negotiable Interaction Gate
 
@@ -94,15 +94,11 @@ The agent may recommend strongly, but must ask the user to expose their own reas
 
 An operational authorization question may be yes/no when real permission is required before editing, executing, publishing, or another consequential action. That authorization is a safety boundary; it never counts as the user's reasoning contribution or as completion evidence.
 
-## Round State
+## Internal Round State
 
-Begin every substantive response with one compact line:
+Track the active skill, stage, status, reasoning focus, and frozen decisions internally. Do not expose protocol syntax, lifecycle markers, debug labels, or state-machine names in normal user-facing conversation. Emit structured state only when the user explicitly asks for a skill-run log or debugging trace.
 
-```text
-[skill-run] skill=<name> stage=<stage> status=awaiting-user reasoning-focus=<short-label>
-```
-
-Then state, in natural language:
+In natural language, state only what helps the collaboration:
 
 - what is already frozen;
 - what evidence or scaffold this round adds;
@@ -162,13 +158,7 @@ Use one of these statuses:
 - `handed-off`: this skill finished its local responsibility and transferred state.
 - `complete`: the user independently demonstrated the required judgment.
 
-End a completed or handed-off run with:
-
-```text
-[skill-run-result] skill=<name> status=<status> evidence=<observable-user-evidence> next=<next-stage-or-workflow>
-```
-
-Do not mark a skill complete based on answer quality, artifacts, code changes, or the agent's own reasoning.
+Keep these statuses internal. At completion or handoff, explain the achieved understanding and next step naturally; do not emit a structured result marker unless the user explicitly requested diagnostic output. Do not mark a skill complete based on answer quality, artifacts, code changes, or the agent's own reasoning.
 
 ## Conversation and Artifact Policy
 
@@ -190,6 +180,7 @@ The skill run fails if any of these occur:
 - the agent asks the user to perform discoverable evidence gathering;
 - direct implementation continues while the collaboration skill remains nominally active;
 - an ordinary execution request triggers or emits lifecycle output from this skill family;
+- protocol syntax or an internal stage label appears in normal user-facing conversation;
 - frozen decisions change without an explicit user choice;
 - completion is claimed without observable user-owned reasoning.
 
