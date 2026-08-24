@@ -12,14 +12,15 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from shared.obsidian.vault_paths import DEFAULT_VAULT, formal_reading_path
+from shared.obsidian.vault_paths import DEFAULT_VAULT, formal_reading_path, paper_note_root
 from shared.paperquay.evidence_schema import build_paperquay_evidence_bundle
-from shared.paperquay.legacy_skill_bridge import build_manifest_like
+from shared.paperquay.legacy_skill_bridge import build_manifest_like, support_dir as workflow_support_dir
 from shared.paperquay.library_reader import LibraryReader
 from shared.paperquay.mineru_cache_locator import resolve_cache_bundle
 from shared.paperquay.note_matcher import NoteMatcher
 from shared.paperquay.note_to_markdown import tiptap_to_markdown
 from shared.paperquay.paper_matcher import PaperMatcher
+from shared.paperquay.source_validation import validate_source_alignment
 
 
 def resolve_paperquay_root() -> Path:
@@ -113,10 +114,12 @@ def parse_markdown_sections(text: str) -> dict[str, str]:
 
 def export_original_note(note: dict, title: str, vault: Path, paper_id: str | None) -> tuple[str, Path]:
     note_markdown = tiptap_to_markdown(note.get("content_json")) or (note.get("content_text") or "")
-    enhanced_path = formal_reading_path(title, vault, paper_id=paper_id, note_id=note.get("id"))
-    original_path = enhanced_path.with_name("original.md")
+    original_path = paper_note_root(title, vault, paper_id=paper_id, note_id=note.get("id")) / "Support" / "original.md"
     original_path.parent.mkdir(parents=True, exist_ok=True)
-    original_path.write_text(note_markdown, encoding="utf-8")
+    if original_path.is_file():
+        note_markdown = original_path.read_text(encoding="utf-8", errors="ignore")
+    else:
+        original_path.write_text(note_markdown, encoding="utf-8")
     return note_markdown, original_path
 
 
@@ -307,6 +310,7 @@ def build_reader_prompt(note: dict, paper: dict | None, manifest: dict, evidence
         "- 最终输出必须沿用旧 `paper-analyze` 的风格下限：不是摘要式 bullet，而是证据充足、机制完整、能回答问题链条的中文长段解释。",
         "- 原笔记不要整段照搬进正式笔记。正确流程是：先理解原笔记，再去正文证据里核对、纠偏、补全，最后填回正式结构。",
         "- 所有判断都必须能回指到 `full.md` / `content_list_v2.json` 对应证据；如果证据不足，要明确写“当前正文证据不足以支持更强结论”。",
+        "- PaperQuay 的 authors/year/venue 只可作为定位线索；写 frontmatter 前必须从 PDF 标题页或正文首页核对，冲突时以原文为准并标记不确定性。",
         "- `你当前笔记的遗漏与纠偏` 必须逐条指出原笔记里的遗漏、层级混淆、因果错置、术语不严谨、过强结论，并给出对应正文锚点。",
         "",
         "## 可用证据",
@@ -446,6 +450,7 @@ def build_paper_summary(note: dict, paper: dict | None, manifest: dict, evidence
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--note-id", required=True)
+    parser.add_argument("--paper-id", help="Explicit paper id required when PaperQuay metadata conflicts with anchors")
     parser.add_argument("--vault", default=str(DEFAULT_VAULT))
     args = parser.parse_args()
 
@@ -456,10 +461,16 @@ def main() -> int:
         raise SystemExit(f"Note not found: {args.note_id}")
 
     library = LibraryReader(PAPERQUAY_ROOT)
-    match = PaperMatcher(library).resolve_from_note_details(note)
+    match = PaperMatcher(library).resolve_from_note_details(note, explicit_paper_id=args.paper_id)
     paper = match.get("paper")
     resolution = match.get("resolution") or {}
+    if not paper:
+        raise SystemExit(json.dumps({"status": "mapping-failed", "resolution": resolution}, ensure_ascii=False, indent=2))
     cache = resolve_cache_bundle(paper) if paper else None
+    source_validation = validate_source_alignment(note, paper, cache)
+    resolution["source_validation"] = source_validation
+    if source_validation.get("status") != "passed":
+        raise SystemExit(json.dumps({"status": "source-validation-failed", "resolution": resolution}, ensure_ascii=False, indent=2))
 
     title = (paper or {}).get("title") or note.get("title") or "Untitled Paper"
     paper_id = (paper or {}).get("id") or note.get("paper_id")
@@ -467,7 +478,7 @@ def main() -> int:
     manifest = build_manifest_like(note, paper, cache, resolution, vault)
 
     enhanced_path = formal_reading_path(title, vault, paper_id=paper_id, note_id=note.get("id"))
-    support_dir = enhanced_path.parent
+    support_dir = workflow_support_dir(vault, title, paper_id, note.get("id")) / "reading"
     support_dir.mkdir(parents=True, exist_ok=True)
 
     mineru_md = manifest.get("mineru_md")
@@ -477,6 +488,7 @@ def main() -> int:
     mapping_path = support_dir / "mapping_report.json"
     summary_path = support_dir / "paper_summary.json"
     prompt_path = support_dir / "writer_prompt.md"
+    validation_path = support_dir / "source_validation.json"
 
     evidence_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
     mapping_path.write_text(
@@ -488,6 +500,7 @@ def main() -> int:
         encoding="utf-8",
     )
     prompt_path.write_text(build_reader_prompt(note, paper, manifest, evidence), encoding="utf-8")
+    validation_path.write_text(json.dumps(source_validation, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(
         json.dumps(
@@ -502,6 +515,7 @@ def main() -> int:
                 "mapping_report": str(mapping_path),
                 "paper_summary": str(summary_path),
                 "writer_prompt": str(prompt_path),
+                "source_validation": str(validation_path),
                 "target_output_path": str(enhanced_path),
             },
             ensure_ascii=False,

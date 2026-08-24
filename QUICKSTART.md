@@ -76,6 +76,13 @@ python reading-note-builder\scripts\build_reading_note.py --note-id <paperquay_n
 python review-note-builder\scripts\build_review_note.py --note-id <paperquay_note_id>
 ```
 
+修改 reading/review builder 或其共享依赖后，同步并验证四处安装副本：
+
+```powershell
+.\shared\scripts\sync_paper_note_skills.ps1
+python -m unittest discover -s tests -v
+```
+
 ## Vault Note Search
 
 ```powershell

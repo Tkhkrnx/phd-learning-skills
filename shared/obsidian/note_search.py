@@ -16,21 +16,19 @@ def normalize_title_for_match(text: str) -> str:
 def classify_note_path(path: Path) -> str:
     path_text = str(path)
     name = path.name.lower()
+    if name == "enhanced.md" and "\\Reading\\" in path_text:
+        return "reading_note_final"
+    if name == "enhanced.md" and "\\Review\\" in path_text:
+        return "review_note_final"
     if name == "enhanced.md":
         return "enhanced_support"
     if name == "original.md":
         return "original_support"
     if name == "writer_prompt.md":
         return "prompt_support"
-    if "_imports\\paperquay" in path_text:
-        return "paperquay_import"
-    if "\\Reading Notes\\" in path_text and "[" not in path.name:
-        return "reading_note_final"
-    if "\\Review Notes\\" in path_text and "[" not in path.name:
-        return "review_note_final"
-    if "\\Reading Notes\\" in path_text:
+    if "\\Reading\\" in path_text:
         return "reading_note_support"
-    if "\\Review Notes\\" in path_text:
+    if "\\Review\\" in path_text:
         return "review_note_support"
     return "other"
 

@@ -62,4 +62,4 @@
 
 `vault-note-finder` 是搜索流程的重复抑制层。
 
-它的目标不是简单全文检索，而是优先把正式阅读/审稿笔记排在 `enhanced.md`、`original.md`、`writer_prompt.md`、`_imports` 这些 support 文件前面，帮助后续 skill 避免重复建设。
+它的目标不是简单全文检索，而是优先返回 `Research/Papers/<short-name>/Reading/enhanced.md` 与 `Review/enhanced.md`，再返回需要保留的 `Support/original.md`。`writer_prompt.md`、evidence JSON 和日志位于 Vault 外的工作目录，不参与知识库搜索。

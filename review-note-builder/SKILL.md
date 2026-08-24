@@ -8,11 +8,15 @@ Read `scripts/build_review_note.py` and run it with a real `--note-id`.
 Workflow:
 - Resolve the note from `paperquay-notes.sqlite`.
 - Resolve the paper through anchors-first mapping.
+- Refuse generation when note metadata conflicts with anchors unless the operator supplies a verified explicit `--paper-id`.
 - Resolve `.mineru-cache` and bind the review to the正文 evidence source.
 - Export the raw import note.
 - Collect a structured evidence bundle for the current main model to read.
 - Use the current skill-running model to write the final formal review; the script itself must not call another model.
-- The final review should be written into `enhanced.md` by the current main model after it reads `original.md`, `paper_summary.json`, `evidence_bundle.json`, `mapping_report.json`, and `writer_prompt.md`.
+- Support both PaperQuay-note mode and paper-only/local-draft mode. Use `--paper-id` with optional `--source-note` when PaperQuay has no review note.
+- Keep a supplied local draft at `Research/Papers/<short-name>/Support/review_draft.md` and write the final review to `Research/Papers/<short-name>/Review/enhanced.md`.
+- Store evidence bundles outside the Vault under `%LOCALAPPDATA%/phd-learning-skills/work` (or `PHD_SKILL_WORK_ROOT`).
+- Run `shared/obsidian/note_quality.py` after writing. The task is incomplete until the validator passes.
 - The model should first build an internal seven-question understanding of the paper, then translate that understanding into the review submission structure.
 
 Rules:
@@ -21,6 +25,7 @@ Rules:
 - Keep filenames short and stable.
 - If正文 cache is unavailable, keep the output but mark it as note-only.
 - Every important criticism must be traceable back to正文 Markdown evidence.
+- Treat PaperQuay authors, year, and venue as locator metadata only. Verify frontmatter bibliography from the PDF title page or the first parsed page; never copy contradictory library metadata into the final review.
 - Focus on main-paper evidence first; Appendix is not the default battlefield.
 - The internal seven-question understanding used by review should match the reading-note workflow in depth, coverage, and rigor before it is translated into review structure.
 - Review should be written from a systems top-conference reviewer perspective: strict, skeptical, rigorous, detailed, and careful about evidence boundaries.
@@ -32,4 +37,16 @@ Default command:
 ```powershell
 $env:PYTHONPATH="."
 python review-note-builder\scripts\build_review_note.py --note-id <note_id>
+```
+
+Paper-only or local-draft mode:
+
+```powershell
+python review-note-builder\scripts\build_review_note.py --paper-id <paper_id> --source-note <draft.md>
+```
+
+After writing `enhanced.md`:
+
+```powershell
+python shared\obsidian\note_quality.py --kind review --path <enhanced.md> --expected-title <paper-title> --expected-paper-id <verified-paper-id> --original <Support/review_draft.md>
 ```

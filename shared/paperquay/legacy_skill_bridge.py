@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -87,8 +88,14 @@ def sanitize_line(text: str) -> str:
 
 
 def support_dir(vault: Path, title: str, paper_id: str | None, note_id: str | None) -> Path:
+    configured = os.environ.get("PHD_SKILL_WORK_ROOT", "").strip()
+    if configured:
+        base = Path(configured)
+    else:
+        local_appdata = os.environ.get("LOCALAPPDATA", "").strip()
+        base = (Path(local_appdata) if local_appdata else Path.home() / "AppData" / "Local") / "phd-learning-skills" / "work"
     stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
-    return vault / "20_Research" / "Papers" / "_imports" / "paperquay" / "_support" / stem
+    return base / stem
 
 
 def ensure_assets_index(

@@ -54,7 +54,7 @@ class PaperMatcher:
             values.append(single)
         return values
 
-    def resolve_from_note_details(self, note: dict) -> dict:
+    def resolve_from_note_details(self, note: dict, explicit_paper_id: str | None = None) -> dict:
         anchor_ids = self._anchor_paper_ids(note)
         linked_ids = self._linked_paper_ids(note)
         note_paper_id = normalize_note_paper_id(note.get("paper_id"))
@@ -82,12 +82,56 @@ class PaperMatcher:
             for paper_id, score in scores.most_common()
         ]
 
+        explicit_paper_id = normalize_note_paper_id(explicit_paper_id)
+        unique_anchor_ids = list(dict.fromkeys(anchor_ids))
+        conflicts: list[str] = []
+        if len(unique_anchor_ids) > 1:
+            conflicts.append("anchors reference multiple papers")
+        if note_paper_id and unique_anchor_ids and note_paper_id not in unique_anchor_ids:
+            conflicts.append("note.paper_id disagrees with anchors")
+
+        if explicit_paper_id:
+            paper = self.library_reader.get_paper(explicit_paper_id)
+            return {
+                "paper": paper,
+                "resolution": {
+                    "status": "explicit-override" if paper else "paper-not-found",
+                    "strategy": "explicit-paper-id",
+                    "selected_paper_id": explicit_paper_id if paper else None,
+                    "selected_reasons": ["explicit-paper-id"] if paper else [],
+                    "selected_score": None,
+                    "anchor_paper_ids": anchor_ids,
+                    "linked_paper_ids": linked_ids,
+                    "note_paper_id": note_paper_id,
+                    "conflicts": conflicts,
+                    "candidates": ranked_candidates,
+                },
+            }
+
+        if conflicts:
+            return {
+                "paper": None,
+                "resolution": {
+                    "status": "conflict",
+                    "strategy": "refuse-conflicted-mapping",
+                    "selected_paper_id": None,
+                    "selected_reasons": [],
+                    "selected_score": None,
+                    "anchor_paper_ids": anchor_ids,
+                    "linked_paper_ids": linked_ids,
+                    "note_paper_id": note_paper_id,
+                    "conflicts": conflicts,
+                    "candidates": ranked_candidates,
+                },
+            }
+
         for candidate in ranked_candidates:
             paper = self.library_reader.get_paper(candidate["paper_id"])
             if paper:
                 return {
                     "paper": paper,
                     "resolution": {
+                        "status": "resolved",
                         "strategy": "anchor-weighted-candidates",
                         "selected_paper_id": candidate["paper_id"],
                         "selected_reasons": candidate["reasons"],
@@ -95,6 +139,7 @@ class PaperMatcher:
                         "anchor_paper_ids": anchor_ids,
                         "linked_paper_ids": linked_ids,
                         "note_paper_id": note_paper_id,
+                        "conflicts": [],
                         "candidates": ranked_candidates,
                     },
                 }
@@ -102,6 +147,7 @@ class PaperMatcher:
         return {
             "paper": None,
             "resolution": {
+                "status": "paper-not-found",
                 "strategy": "anchor-weighted-candidates",
                 "selected_paper_id": None,
                 "selected_reasons": [],
@@ -109,6 +155,7 @@ class PaperMatcher:
                 "anchor_paper_ids": anchor_ids,
                 "linked_paper_ids": linked_ids,
                 "note_paper_id": note_paper_id,
+                "conflicts": [],
                 "candidates": ranked_candidates,
             },
         }

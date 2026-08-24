@@ -24,40 +24,34 @@ def _safe_title(title: str) -> str:
 
 
 def build_note_stem(title: str, paper_id: str | None = None, note_id: str | None = None) -> str:
-    cleaned = _safe_title(title)
-    if ":" in cleaned:
-        cleaned = cleaned.split(":", 1)[0].strip()
+    primary = str(title or "")
+    if ":" in primary:
+        primary = primary.split(":", 1)[0].strip()
+    cleaned = _safe_title(primary)
+    if "," in cleaned:
+        first_clause = cleaned.split(",", 1)[0].strip()
+        if len(first_clause) >= 4:
+            cleaned = first_clause
     cleaned = re.sub(r"\s+", " ", cleaned).strip(" .-_")
-    cleaned = cleaned[:64].rstrip(" .-_") or "Untitled"
+    return cleaned[:36].rstrip(" .-_") or "Untitled"
 
-    if paper_id:
-        normalized = re.sub(r"[^A-Za-z0-9._-]+", "-", paper_id).strip("-")
-        if normalized.startswith("paper_"):
-            normalized = normalized.removeprefix("paper_")
-        if normalized:
-            return f"{cleaned} [{normalized[:16]}]"
-    if note_id:
-        normalized = re.sub(r"[^A-Za-z0-9._-]+", "-", note_id).strip("-")
-        if normalized:
-            return f"{cleaned} [{normalized[:12]}]"
-    return cleaned
+
+def paper_note_root(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
+    stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
+    return vault / "Research" / "Papers" / stem
 
 
 def import_reading_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
-    stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
-    return vault / "20_Research" / "Papers" / "_imports" / "paperquay" / "reading" / f"{stem}.md"
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Reading" / "original.md"
 
 
 def import_review_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
-    stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
-    return vault / "20_Research" / "Papers" / "_imports" / "paperquay" / "review" / f"{stem}.md"
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Review" / "original.md"
 
 
 def formal_reading_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
-    stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
-    return vault / "20_Research" / "Papers" / "Reading Notes" / stem / "enhanced.md"
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Reading" / "enhanced.md"
 
 
 def formal_review_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
-    stem = build_note_stem(title, paper_id=paper_id, note_id=note_id)
-    return vault / "20_Research" / "Papers" / "Review Notes" / stem / "enhanced.md"
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Review" / "enhanced.md"
