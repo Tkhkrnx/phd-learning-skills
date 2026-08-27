@@ -9,6 +9,7 @@ $ErrorActionPreference = "Stop"
 if (-not $TargetRoots) {
     $TargetRoots = @(
         (Join-Path $env:USERPROFILE ".codex\skills"),
+        (Join-Path $env:USERPROFILE ".agents\skills"),
         (Join-Path $env:USERPROFILE ".claude\skills"),
         (Join-Path $VaultRoot ".codex\skills"),
         (Join-Path $VaultRoot ".claude\skills")
@@ -23,10 +24,21 @@ $skillNames = @(
 )
 
 $sourceRootPath = (Resolve-Path -LiteralPath $SourceRoot).Path
-$requiredPaths = @("AGENT_COLLABORATION_SKILL_BLUEPRINT.md")
+$requiredPaths = @(
+    "AGENT_COLLABORATION_SKILL_BLUEPRINT.md",
+    "shared\__init__.py",
+    "topic-paper-finder\SKILL.md",
+    "topic-paper-finder\finder_config.yaml",
+    "topic-paper-finder\scripts\topic_finder.py",
+    "weekly-paper-radar\radar_config.yaml"
+)
 $requiredPaths += $skillNames | ForEach-Object { "$_\SKILL.md" }
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\expert-skill-references") -File |
     ForEach-Object { "shared\expert-skill-references\$($_.Name)" }
+$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\search") -File |
+    ForEach-Object { "shared\search\$($_.Name)" }
+$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
+    ForEach-Object { "shared\obsidian\$($_.Name)" }
 
 foreach ($relativePath in $requiredPaths) {
     $sourcePath = Join-Path $sourceRootPath $relativePath

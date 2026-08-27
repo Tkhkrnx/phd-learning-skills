@@ -13,7 +13,15 @@ CASES = Path(__file__).with_name("expert_skill_transcript_cases.yaml")
 SPECS = {
     "research-problem-formulation": {
         "stages": {"observe", "localize", "contrast", "state", "pressure-test"},
-        "markers": {"Academic Problem Viability Audit", "what the problem is", "why it matters", "why existing work still fails"},
+        "markers": {
+            "Academic Problem Viability Audit",
+            "Evidence Acquisition Gate",
+            "query portfolio",
+            "evidence ledger",
+            "what the problem is",
+            "why it matters",
+            "why existing work still fails",
+        },
         "trigger_markers": {"research idea", "academic problem", "direct writing"},
     },
     "research-method-design": {
@@ -26,7 +34,16 @@ SPECS = {
             "kill-criterion",
             "minimal-experiment",
         },
-        "markers": {"root challenge and relevant boundary conditions", "causal mechanism and feasible system carrier", "kill criterion", "first discriminating experiment"},
+        "markers": {
+            "Mechanism Evidence Gate",
+            "structural signature",
+            "repositories",
+            "analogy-break condition",
+            "root challenge and relevant boundary conditions",
+            "causal mechanism and feasible system carrier",
+            "kill criterion",
+            "first discriminating experiment",
+        },
         "trigger_markers": {"established", "solution directions", "replay repair or execution"},
     },
     "engineering-task-decomposition": {
@@ -89,6 +106,8 @@ def main() -> int:
         "Track the active skill",
         "Do not expose protocol syntax",
         "yes/no questions",
+        "evidence acquisition is a hard gate",
+        "research_evidence_acquisition.md",
     ):
         if marker not in blueprint:
             errors.append(f"blueprint: missing marker {marker!r}")
@@ -197,6 +216,23 @@ def main() -> int:
     theory = ROOT / "shared" / "expert-skill-references" / "collaboration_theory.md"
     if not theory.is_file():
         errors.append("missing collaboration theory reference")
+
+    evidence_protocol = ROOT / "shared" / "expert-skill-references" / "research_evidence_acquisition.md"
+    if not evidence_protocol.is_file():
+        errors.append("missing research evidence acquisition reference")
+    else:
+        evidence_text = evidence_protocol.read_text(encoding="utf-8")
+        for marker in (
+            "Problem-boundary evidence",
+            "Mechanism-inspiration evidence",
+            "Query Portfolio",
+            "Evidence Ledger",
+            "Coverage and Stop Rule",
+            "Cross-domain observation is a hypothesis source, not design proof",
+            "internal evidence backend",
+        ):
+            if marker not in evidence_text:
+                errors.append(f"research evidence protocol: missing marker {marker!r}")
 
     if errors:
         print("Expert skill validation failed:")

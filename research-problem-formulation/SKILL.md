@@ -1,9 +1,9 @@
 ---
 name: research-problem-formulation
-description: Trigger only when the user explicitly presents a research idea, phenomenon, candidate claim, or existing framing and asks to collaboratively judge, formulate, revise, or challenge whether it is a valid academic problem; naming the skill is optional. Act as a systems and computer-architecture research expert, test whether the problem is real, important, unresolved, non-trivial, and researchable, and require the surviving problem to be a declarative statement rather than a how-to question or solution. Do not trigger merely because a task concerns research, a paper, a claim, or literature. Do not use for direct writing, polishing, reviewing, summarizing, surveying, experiment execution, implementation, or other deliverable production without an explicit request to participate in problem-boundary reasoning.
+description: "Trigger only when the user explicitly presents a research idea, phenomenon, candidate claim, or existing framing and asks to collaboratively judge, formulate, revise, or challenge whether it is a valid academic problem; naming the skill is optional. Act as a systems and computer-architecture research expert: search and inspect decisive literature before testing whether the problem is real, important, unresolved, non-trivial, and researchable, and require the surviving problem to be a declarative statement rather than a how-to question or solution. Do not trigger merely because a task concerns research, a paper, a claim, or literature. Do not use for direct writing, polishing, reviewing, summarizing, surveying, experiment execution, implementation, or other deliverable production without explicit problem-boundary reasoning intent."
 ---
 
-Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
+Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
 
 ## Goal and Expert Role
 
@@ -62,9 +62,21 @@ Preserve the existing stage flow while testing six independent questions:
 
 Failure on any item is informative. Narrow, reclassify, or abandon the candidate instead of manufacturing novelty. A useful expert must be willing to conclude that the proposed academic problem does not stand.
 
+## Evidence Acquisition Gate
+
+The first candidate statement is a search hypothesis, not a conclusion. Before freezing reality, importance, or unresolved status, follow `research_evidence_acquisition.md` in problem-boundary mode.
+
+- Build a query portfolio from the phenomenon, object, condition, consequence, metric, synonyms, closest techniques, and counterqueries.
+- Search beyond the repo's default taxonomy and recent-year window. Include seminal and current work, surveys for mapping, closest solution families, negative results, and citation-chain follow-ups when available.
+- Inspect the primary sources behind decisive claims; titles, snippets, citation counts, and broad literature volume are not enough.
+- Maintain an evidence ledger that separates observation, source-backed claim, inference, hypothesis, strongest counterevidence, and remaining source gaps.
+- Search broadly but present only the evidence that changes the judgment, normally the closest three to five works plus any decisive counterexample.
+
+Use `topic-paper-finder` in `problem-boundary` mode or equivalent literature tools for candidate discovery, then open decisive sources. If material coverage is blocked or unsaturated, state the provisional conclusion and the exact blind spot instead of declaring a novel unresolved problem.
+
 ## Interaction Gate
 
-Use the stages below as reasoning checkpoints, not a rigid one-stage-per-turn script. Inspect evidence, present the expert diagnosis or candidate formulation the user needs, then invite a focused correction, challenge, refinement, or confidence check. Continue interacting until the problem boundary is stable.
+Use the stages below as reasoning checkpoints, not a rigid one-stage-per-turn script. Form an initial search hypothesis, acquire evidence, present the expert diagnosis or candidate formulation the user needs, then invite a focused correction, challenge, refinement, or confidence check. Continue interacting until the evidence coverage and problem boundary are stable.
 
 Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
 
@@ -104,7 +116,7 @@ Agent scaffold:
 - separate observed phenomenon, reported evidence, objective, and hypothesis;
 - identify the stated condition and any supported limitation, invariant, or assumption mismatch without forcing one;
 - expose whether the motivation currently rests on a realistic consequence;
-- expose missing evidence without solving the problem.
+- derive the first query portfolio and expose missing evidence without solving the problem.
 
 Open question:
 
@@ -125,9 +137,9 @@ Open question:
 
 Agent scaffold:
 
-- bring in at most three dangerous adjacent works;
-- test whether each work solves the same problem under comparable object, condition, assumptions, and metric;
-- tie each work to one survival question, not a survey summary.
+- search broadly enough to cover the dangerous solution families, then surface only the decisive three to five works or counterexamples;
+- test whether each solves the same problem under comparable object, condition, assumptions, and metric;
+- tie each work to one survival question and disclose material coverage gaps, not a survey dump.
 
 Open question:
 
@@ -166,6 +178,7 @@ Open question:
 - Do not turn a proposed solution into the problem definition.
 - Do not infer a systems gap directly from an industry announcement.
 - Do not use broad literature volume as evidence of a gap.
+- Do not equate a few close-looking papers with evidence saturation.
 - Label claims as observed, inferred, or unverified.
 - Preserve frozen RQs and their evidence roles in revision mode.
 - Do not revive legacy artifact bundles such as `problem-card.md`, `failure-taxonomy.md`, `evidence-gap-list.md`, or `decision-record-problem-scope.md`.
@@ -174,7 +187,7 @@ Open question:
 
 - If one concept blocks a boundary judgment, hand off to `targeted-knowledge-closure`.
 - After the problem, importance, and surviving prior-work gap are stable, hand off to `research-method-design` only if the user explicitly wants the agent to find or compare feasible solutions.
-- If the user requests a polished section, autonomous literature review, or other direct execution, preserve confirmed decisions, exit this skill silently, and enter the appropriate execution workflow without a skill lifecycle marker.
+- Evidence acquisition needed to judge the problem stays inside this skill. A separate survey deliverable, polished section, or other direct execution exits the skill silently after preserving confirmed decisions.
 
 ## Completion Evidence
 
@@ -184,6 +197,8 @@ Mark complete only after at least one meaningful exchange and when both sides ha
 - why it matters;
 - the closest adjacent work;
 - the surviving boundary;
+- the query families, source roles, strongest counterevidence, and material blind spots;
+- why the current search round is saturated enough for this conclusion, or why the conclusion remains provisional;
 - why the motivation remains material;
 - why the problem is not already solved or merely an obvious implementation task;
 - one condition that would collapse the framing;

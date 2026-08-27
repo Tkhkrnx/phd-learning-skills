@@ -1,4 +1,4 @@
-version: 3
+version: 4
 trigger_cases:
   - id: trigger-problem-natural-language
     skill: research-problem-formulation
@@ -118,11 +118,15 @@ cases:
       - "separate observation from hypothesis"
       - "treat the problem as a declarative statement, without forcing a contradiction"
       - "offer a provisional expert framing or candidate statement when useful"
+      - "derive a multi-query evidence portfolio before judging unresolved status"
+      - "search broadly but compress the result into decisive evidence and counterevidence"
       - "invite the user to correct the observation, boundary, or evidence"
     forbidden:
       - "how-to question presented as the problem"
       - "assume the academic problem is valid before checking motivation and prior solutions"
       - "literature survey dump"
+      - "start a second topic-paper-finder lifecycle instead of continuing the active collaboration"
+      - "claim novelty or unresolved status from a few close-looking papers"
       - "freeze the first candidate without a meaningful user exchange"
 
   - id: problem-frozen-rqs
@@ -136,17 +140,32 @@ cases:
       - "rewrite challenges and RQs together"
       - "replace the full narrative"
 
+  - id: problem-search-blocked
+    skill: research-problem-formulation
+    expected_stage: contrast
+    user_prompt: "帮我判断这个问题是否还没被解决，但现在论文搜索和原文访问都失败了。"
+    required:
+      - "state which query families and primary-source checks remain blocked"
+      - "keep novelty and unresolved status provisional"
+      - "ask the user to reason about the boundary without pretending the missing evidence exists"
+    forbidden:
+      - "treat an empty search result as proof of novelty"
+      - "freeze the problem as unresolved"
+
   - id: method-npu-no-restart
     skill: research-method-design
     expected_stage: root-challenge
     user_prompt: "我们在 Ascend NPU 上想让需要重启的推理机制在线切换，带我一起把方法想清楚。"
     required:
       - "derive causal obstacles from the frozen problem"
+      - "translate the obstacle into a structural signature for search"
+      - "search same-field, adjacent-field, cross-domain, implementation, and negative-evidence lanes"
       - "propose several feasible mechanism directions with platform assumptions"
       - "ask which causal path or constraint changes the candidate ranking"
     forbidden:
       - "assume CUDA-only mechanisms"
       - "borrow an analogy without mapping assumptions"
+      - "recommend a mechanism from one attractive source"
       - "freeze a hot-switch architecture before user interaction and fact checking"
 
   - id: method-state-reuse-solutions
@@ -156,11 +175,25 @@ cases:
     required:
       - "derive the root challenge from the frozen problem"
       - "offer multiple serious candidate solutions"
-      - "map relevant or cross-domain principles and engineering carriers"
+      - "map source provenance, relevant or cross-domain principles, engineering carriers, and analogy-break conditions"
       - "invite comparison using a decisive trade-off or failure case"
     forbidden:
       - "start replay repair or implementation"
+      - "replace the active method-design interaction with a separate paper-search workflow"
       - "present one preferred mechanism as already final"
+
+  - id: method-distant-analogy
+    skill: research-method-design
+    expected_stage: mechanism-source
+    user_prompt: "问题已经稳定。不要只找推理系统论文，帮我从其他领域广泛找可能迁移的机制，再和我一起判断。"
+    required:
+      - "search by structural signature without requiring the target application name"
+      - "include papers and implementation-oriented sources with explicit source roles"
+      - "map original assumptions, target carrier, cost, and failure condition for each serious analogy"
+      - "keep the ranking provisional until evidence coverage and user interaction are sufficient"
+    forbidden:
+      - "surface-level analogy based only on similar words"
+      - "claim that a blog or repository alone proves academic novelty"
 
   - id: engineering-acceptance-versus-ci
     skill: engineering-task-decomposition

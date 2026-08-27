@@ -63,9 +63,11 @@ The agent may propose the first problem statement. A complete run includes meani
 
 The problem statement must be declarative. A formulation beginning with "how to" is an objective or design question, not the research problem. Do not require every problem to be a contradiction or known capability gap: a supported phenomenon or unresolved condition may be the problem. The run must still test reality, boundary, importance, prior resolution, non-trivial challenge, and researchability.
 
+Before claiming that the problem is unresolved, the agent must build a query portfolio, inspect decisive primary sources, cover closest solution families and counterevidence, and state why the search is saturated enough or remains blocked. A few related papers, snippets, or an empty failed search are not novelty evidence. Search broadly, but present only the evidence that changes the shared boundary judgment.
+
 ### `research-method-design`
 
-The problem must already be stable. The agent should proactively offer several feasible solution directions and relevant or cross-domain principles. Through interaction, the pair must converge on the root challenge, causal source of gain, engineering carrier, strongest simpler alternative, and kill criterion. Direct replay work and execution never satisfy this skill.
+The problem must already be stable. Before ranking candidates, the agent should express the root challenge as a structural signature and search same-field, adjacent-field, distant-analogy, implementation, and negative-evidence lanes. Papers, repositories, official docs, issues, benchmarks, engineering articles, and blogs have different evidence roles. Every borrowed principle needs provenance, assumption mapping, a target carrier, cost, and an analogy-break condition. Through interaction, the pair must converge on the root challenge, causal source of gain, engineering carrier, strongest simpler alternative, and kill criterion. Direct replay work and execution never satisfy this skill.
 
 ### `engineering-task-decomposition`
 

@@ -4,7 +4,7 @@ import re
 from typing import Any
 
 from shared.search.official_sources import search_official_sources_for_subtopic
-from shared.search.paper_search import rows_to_search_results, search_short_queries_for_subtopic
+from shared.search.paper_search import query_papers_ensemble, rows_to_search_results, search_short_queries_for_subtopic
 
 
 def discover_for_subtopic(
@@ -55,7 +55,7 @@ def discover_for_subtopic(
 
 def _normalize_text(text: str) -> str:
     lowered = (text or "").lower().replace("-", " ")
-    lowered = re.sub(r"[^a-z0-9\s]+", " ", lowered)
+    lowered = re.sub(r"[^\w\s]+", " ", lowered, flags=re.UNICODE)
     return re.sub(r"\s+", " ", lowered).strip()
 
 
@@ -173,3 +173,65 @@ def discover_for_query(
 
     results.sort(key=lambda item: (item.score, item.year or 0), reverse=True)
     return results[:limit], notes
+
+
+def discover_open_query(
+    *,
+    query: str,
+    min_year: int | None,
+    limit: int,
+    evidence_mode: str,
+) -> tuple[list, list[str]]:
+    """Search an arbitrary academic query without taxonomy or venue filtering."""
+    rows, source_notes = query_papers_ensemble(
+        query=query,
+        limit=max(limit * 2, 8),
+        min_year=min_year,
+    )
+    keywords = _keywords_from_query(query)
+    results = rows_to_search_results(
+        rows,
+        preferred_venues=[],
+        fallback_venues=[],
+        subtopic_id=evidence_mode,
+        keywords=keywords,
+        min_year=min_year,
+    )
+    normalized_query = _normalize_text(query)
+    meaningful_keywords = [
+        keyword
+        for keyword in keywords
+        if _normalize_text(keyword)
+        and _normalize_text(keyword) not in {"paper", "papers", "study", "result", "results", "system", "systems"}
+    ]
+    filtered_results: list[Any] = []
+    for result in results:
+        normalized_title = _normalize_text(result.title)
+        normalized_abstract = _normalize_text(result.abstract or "")
+        matched_title = [
+            keyword for keyword in meaningful_keywords if _normalize_text(keyword) in normalized_title
+        ]
+        matched_abstract = [
+            keyword for keyword in meaningful_keywords if _normalize_text(keyword) in normalized_abstract
+        ]
+        matched_terms = list(dict.fromkeys(matched_title + matched_abstract))
+        exact_match = bool(
+            normalized_query
+            and (normalized_query in normalized_title or normalized_query in normalized_abstract)
+        )
+        minimum_matches = 2 if len(meaningful_keywords) >= 4 else 1
+        if not exact_match and len(matched_terms) < minimum_matches:
+            continue
+        if exact_match:
+            result.score += 40
+        result.score += 18 * len(matched_title)
+        result.score += 6 * len([term for term in matched_abstract if term not in matched_title])
+        result.score += 8 * len(result.source.get("discoverySources") or [])
+        result.source["queryMatch"] = {
+            "matched_terms": matched_terms,
+            "required_matches": minimum_matches,
+            "exact_phrase": exact_match,
+        }
+        filtered_results.append(result)
+    filtered_results.sort(key=lambda item: (item.score, item.year or 0), reverse=True)
+    return filtered_results[:limit], source_notes

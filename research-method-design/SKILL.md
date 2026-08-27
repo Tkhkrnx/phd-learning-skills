@@ -1,9 +1,9 @@
 ---
 name: research-method-design
-description: "Trigger only when the user has an established systems or computer-architecture research problem and explicitly asks the agent to find, generate, compare, refine, or defend feasible solution directions or a research method; naming the skill is optional. Act as a systems-method and architecture solution expert: derive root challenges, search relevant and cross-domain mechanisms, propose several serious candidates, and guide causal design, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely because a task mentions a mechanism, architecture, experiment, research plan, or data selection. Never use for replay repair or execution, experiment running, result audit, plan or paper writing, synchronization, implementation, or execution of an already chosen method."
+description: "Trigger only when the user has an established systems or computer-architecture research problem and explicitly asks the agent to find, generate, compare, refine, or defend feasible solution directions or a research method; naming the skill is optional. Act as a systems-method and architecture solution expert: derive root challenges, search papers plus cross-domain mechanisms and implementation evidence, propose several serious candidates, and guide causal design, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely because a task mentions a mechanism, architecture, experiment, research plan, or data selection. Never use for replay repair or execution, experiment running, result audit, plan or paper writing, synchronization, implementation, or execution of an already chosen method."
 ---
 
-Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
+Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
 
 ## Goal and Expert Role
 
@@ -59,6 +59,18 @@ Keep desired, applied, effective, and measured behavior distinct.
 
 Treat challenges as causal obstacles that make the problem hard, not as module names, implementation tasks, or rewritten solution features. When using another paper or field for inspiration, extract the transferable principle and map its assumptions to the target system; superficial analogy is not design evidence.
 
+## Mechanism Evidence Gate
+
+Before ranking or recommending mechanisms, follow `research_evidence_acquisition.md` in mechanism-inspiration mode.
+
+- Translate the root challenge into a structural signature covering object, state or resource, constraint, observable signal, control lever, granularity, reversibility, cost, and failure mode.
+- Build a query portfolio spanning the same field, adjacent systems disciplines, structurally similar distant fields, and negative or failed approaches. Search without the target application name when that exposes reusable principles.
+- Use papers for scientific mechanisms and assumptions; use repositories, official docs, issues, pull requests, benchmarks, engineering articles, and technical blogs for real carriers, implementation facts, and leads.
+- Use `topic-paper-finder` in `mechanism-inspiration` mode or equivalent tools for the academic lane. Use available web, documentation, repository, and code search for non-paper evidence.
+- For every serious candidate, record provenance, transferable principle, original assumptions, target mapping, feasible carrier, cost model, and analogy-break condition.
+
+An outside observation may inspire a hypothesis, as falling objects inspired gravitational reasoning, but the analogy becomes useful only after causal mapping and falsifiable testing. Do not recommend from one attractive analogy or one source. If coverage is blocked or still producing new mechanism families, keep the ranking provisional and disclose the gap.
+
 ## Stage Machine
 
 Use `root-challenge` to anchor the search, but the agent may inspect solution literature and propose candidate mechanisms in the same round when doing so helps reveal the real challenge. Do not choose or freeze a mechanism until the root challenge, assumption mapping, and system carrier have survived user interaction. A symptom or trade-off is not yet a root challenge.
@@ -78,8 +90,8 @@ Open question:
 
 Agent scaffold:
 
-- inspect nearby work, engineering precedent, and useful cross-domain mechanisms;
-- compress them into several serious candidate causal paths, normally two to four, naming the transferable principle and assumption mapping;
+- search the academic, cross-domain, implementation, and negative-evidence lanes defined by the evidence gate;
+- compress the broad intake into several serious candidate causal paths, normally two to four, naming source provenance, transferable principle, assumption mapping, and analogy-break condition;
 - recommend a current front-runner when evidence supports one, while keeping the ranking provisional.
 
 Open question:
@@ -150,6 +162,8 @@ Open question:
 - Derive challenges from the problem's causal structure; do not invent challenges to justify a preferred solution.
 - Verify platform and runtime facts before proposing implementation carriers.
 - Reject borrowed ideas whose required invariants, cost model, or control scope do not transfer.
+- Do not confuse source diversity with evidence quality; verify decisive claims at the strongest available source.
+- Reopen search if the root challenge, target constraint, or candidate mechanism family changes.
 - Do not substitute an architecture diagram for a causal mechanism.
 - Do not use an experiment matrix to hide an unclear hypothesis.
 - Define the evidence unit and denominator before running experiments.
@@ -169,6 +183,8 @@ Mark complete only after at least one meaningful exchange and when both sides ha
 
 - the full causal chain;
 - the root challenge and transferable design principle;
+- the same-field, adjacent-field, distant-analogy, implementation, and negative-evidence coverage relevant to the chosen method;
+- why the search is saturated enough to rank candidates, or which gap keeps the ranking provisional;
 - the most fragile assumption;
 - the strongest simpler alternative;
 - why it is insufficient;
