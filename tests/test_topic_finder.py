@@ -6,7 +6,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from shared.search.discovery import discover_open_query
+from shared.search.discovery import _keywords_from_query, discover_open_query
 from shared.search.paper_search import query_papers_ensemble
 
 
@@ -19,6 +19,12 @@ SPEC.loader.exec_module(topic_finder)
 
 
 class TopicFinderPolicyTests(unittest.TestCase):
+    def test_query_keywords_keep_short_uppercase_domain_acronyms(self):
+        self.assertEqual(
+            _keywords_from_query("paged attention KV cache"),
+            ["paged", "attention", "KV", "cache"],
+        )
+
     def test_study_mode_keeps_recent_default_and_taxonomy(self):
         policy = topic_finder.resolve_search_policy(
             mode="study", recent_years=3, min_year=None, current_year=2026
@@ -127,6 +133,7 @@ class TopicFinderPolicyTests(unittest.TestCase):
         self.assertEqual(rows[0].year, 1985)
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0].subtopic_id, "mechanism-inspiration")
+        self.assertEqual(rows[0].source["queryMatch"]["required_matches"], 2)
         self.assertEqual(notes, ["semantic_scholar:ok:1", "openalex:ok:0"])
         self.assertIsNone(query_mock.call_args.kwargs["min_year"])
 
