@@ -31,6 +31,8 @@ $env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 
 AI 可以先给完整候选问题、若干方案、系统模型或示范讲解，再通过聚焦的纠正、选择、复述、质疑或应用和你共同收敛。不是强迫用户从空白构造，也不是 AI 给完答案就自行宣布结束。进入执行、设计冻结或知识迁移前，双方应对关键结论达到约 90% 的把握，并明确仍未解决的不确定性。
 
+问题定义和方法设计必须先获取证据。问题定义会先把候选表述当成检索假设，覆盖最接近工作和反证后再判断；方法设计会按根源挑战的结构特征同时搜索本领域、相邻领域、远距离类比和真实实现证据。搜索失败或覆盖不足时只能给临时判断，不能宣称“没人做过”或“这个方案最好”。
+
 普通工作请求不会因为任务复杂或领域相关而触发这四个 skill。例如下面的请求应直接执行：
 
 ```text
@@ -45,7 +47,7 @@ AI 可以先给完整候选问题、若干方案、系统模型或示范讲解�
 
 具体工作产物的说明不是教学流程。比如“说明一下 PR9 做了什么，我先了解后再审阅”应直接回答；只有用户要学习某个概念、原理、关系或机制，并明确希望自己复述或应用时，才进入 `targeted-knowledge-closure`。即使正确进入 skill，阶段名和运行状态也只在内部维护，不显示机器协议行。
 
-修改这四个 skill 后，同步并验证四处安装副本：
+修改这四个 skill 或其文献证据后端后，同步并验证五处安装副本：
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1
@@ -60,8 +62,22 @@ python weekly-paper-radar\scripts\weekly_radar.py --candidate-pool-total 20 --we
 
 ## Topic Search
 
+近三年 taxonomy-aligned 学习检索：
+
 ```powershell
-python topic-paper-finder\scripts\topic_finder.py --query "hardware aware llm serving" --limit 5 --download-pdf
+python topic-paper-finder\scripts\topic_finder.py --mode study --query "hardware aware llm serving" --limit 5 --download-pdf
+```
+
+问题边界检索默认不设年份、venue 和 taxonomy 限制，可重复给查询：
+
+```powershell
+python topic-paper-finder\scripts\topic_finder.py --mode problem-boundary --query "state reuse tail latency agent inference" --query "context reuse overhead negative results"
+```
+
+跨领域机制启发检索：
+
+```powershell
+python topic-paper-finder\scripts\topic_finder.py --mode mechanism-inspiration --query "reversible resource activation delayed feedback control" --query "adaptive caching pressure tail latency"
 ```
 
 ## Reading Note Builder

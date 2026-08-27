@@ -711,6 +711,68 @@ def query_papers_resilient(
                     raise
 
 
+def _paper_discovery_identity(row: dict[str, Any]) -> str:
+    title = re.sub(r"[^a-z0-9]+", " ", str(row.get("title") or "").lower()).strip()
+    if title:
+        return f"title:{title}"
+    external_ids = row.get("externalIds") or {}
+    for field in ("DOI", "ArXiv", "DBLP", "CorpusId"):
+        value = external_ids.get(field)
+        if value:
+            return f"{field.lower()}:{str(value).strip().lower()}"
+    return f"url:{str(row.get('url') or row.get('paperId') or '').strip().lower()}"
+
+
+def query_papers_ensemble(
+    query: str,
+    limit: int = 20,
+    min_year: int | None = None,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Query complementary academic indexes for evidence-oriented recall."""
+    sources = (
+        ("semantic_scholar", query_semantic_scholar),
+        ("openalex", query_openalex),
+        ("dblp", query_dblp),
+        ("arxiv", query_arxiv),
+    )
+    merged: dict[str, dict[str, Any]] = {}
+    notes: list[str] = []
+    successful_sources = 0
+    for source_name, source_query in sources:
+        try:
+            rows = source_query(query=query, limit=limit, min_year=min_year)
+            successful_sources += 1
+            notes.append(f"{source_name}:ok:{len(rows)}")
+        except Exception as exc:  # noqa: BLE001 - preserve partial multi-index coverage
+            notes.append(f"{source_name}:failed:{exc}")
+            continue
+        for raw_row in rows:
+            row = dict(raw_row)
+            key = _paper_discovery_identity(row)
+            existing = merged.get(key)
+            if existing is None:
+                row["discoverySources"] = [source_name]
+                merged[key] = row
+                continue
+            sources_seen = list(existing.get("discoverySources") or [])
+            if source_name not in sources_seen:
+                sources_seen.append(source_name)
+            existing["discoverySources"] = sources_seen
+            for field in ("abstract", "url", "publicationUrl", "paperId", "venue", "year"):
+                if not existing.get(field) and row.get(field):
+                    existing[field] = row[field]
+            if not existing.get("authors") and row.get("authors"):
+                existing["authors"] = row["authors"]
+            if not existing.get("openAccessPdf") and row.get("openAccessPdf"):
+                existing["openAccessPdf"] = row["openAccessPdf"]
+            existing_ids = dict(existing.get("externalIds") or {})
+            existing_ids.update({key: value for key, value in (row.get("externalIds") or {}).items() if value})
+            existing["externalIds"] = existing_ids
+    if successful_sources == 0:
+        raise RuntimeError("all academic discovery indexes failed: " + "; ".join(notes))
+    return list(merged.values()), notes
+
+
 def search_subtopic(
     topic_name: str,
     subtopic: dict[str, Any],
@@ -878,7 +940,7 @@ def rows_to_search_results(
     fallback_venues: list[str],
     subtopic_id: str,
     keywords: list[str],
-    min_year: int,
+    min_year: int | None,
 ) -> list[SearchResult]:
     results: list[SearchResult] = []
     seen_titles: set[str] = set()

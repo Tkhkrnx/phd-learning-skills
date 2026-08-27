@@ -12,6 +12,7 @@
 
 - `research-problem-formulation`
   - 扮演大模型推理系统领域专家
+  - 第一个问题表述只是检索假设；必须先覆盖奠基工作、最新工作、最接近方案、失败案例和反证，再判断问题是否真实、重要且尚未解决
   - 最终必须逼近三件事：
     - 问题定义是什么
     - 为什么重要
@@ -19,6 +20,7 @@
 - `research-method-design`
   - 扮演系统方法设计与实验设计专家
   - 只有在研究问题已经稳定、用户明确要求寻找、比较或论证解决方案时才触发
+  - 先把根源挑战表示为结构特征，再跨本领域、相邻系统领域、远距离类比、代码/文档/issue/benchmark/工程文章和负面证据寻找机制
   - 重点收敛到：
     - 根源挑战和适用边界
     - 因果机制及可落地的系统载体
@@ -49,6 +51,8 @@
 
 专家可以先给出完整的候选问题陈述、若干可行方案、系统模型或示范讲解，用户不必先从空白开始构造。但这些答案只能是待检验候选：skill 必须邀请用户做一次聚焦的纠正、补证、选择、复述、质疑或应用，并根据反馈更新判断，直到关键不确定性被消除。退出前应达到约 90% 的共同把握，并明确剩余不确定性；这里的 90% 是可执行/可迁移门槛，不是统计概率。阶段名、状态和生命周期标记只在内部维护，正常对话不得显示机器协议行。直接写作、审阅、同步、编码、调试、跑实验、修 replay 或执行已冻结方案必须走普通执行流程。若用户从协作切换到直接执行，skill 只保留已确认结论并静默退出。
 
+两个研究 skill 共享“证据先于结论”的硬门槛。模型负责扩展查询、检索、追踪引用和整理证据，不把可查事实反问给用户；但只能向用户压缩呈现真正改变边界或方案排序的证据，并通过用户对边界、因果、假设和 trade-off 的质疑或修正共同收敛。搜索失败、原文打不开或关键查询族未覆盖时，不得把空结果说成创新性，也不得冻结“尚未解决”或“方案最优”的判断。
+
 典型边界：
 
 | 用户意图 | 应有行为 |
@@ -68,6 +72,10 @@
 研究问题和方法设计会用到的大模型推理系统三层框架见：
 
 - [shared/expert-skill-references/llm_inference_three_layer_framework.md](./shared/expert-skill-references/llm_inference_three_layer_framework.md)
+
+两者共同遵循的证据获取协议见：
+
+- [shared/expert-skill-references/research_evidence_acquisition.md](./shared/expert-skill-references/research_evidence_acquisition.md)
 
 其中三层是：
 
@@ -95,6 +103,8 @@
 - `review-note-builder`
 - `reference-validation-report`
 
+其中 `topic-paper-finder` 有三种检索模式：`study` 保留近三年与固定 taxonomy；`problem-boundary` 和 `mechanism-inspiration` 默认不受年份、venue 或 taxonomy 限制，并支持多个 `--query` 组成证据组合。它只产生学术候选池，关键判断仍需检查原文；代码仓库、官方文档、issue、benchmark、工程文章和博客由方法设计流程使用相应工具另行检索。
+
 它们服务于这条链路：
 
 1. 搜索论文
@@ -121,7 +131,7 @@
 python shared\tests\validate_expert_skills.py
 ```
 
-将四个 skill 及其共享依赖闭包同步到全局 Codex、全局 Claude Code 和 Obsidian Claudian 的两套镜像：
+将四个 expert skill、证据检索后端及其共享依赖闭包同步到本机两套 Codex skill 根目录、全局 Claude Code 和 Obsidian Claudian 的两套镜像：
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1

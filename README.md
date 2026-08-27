@@ -19,6 +19,8 @@ They are user-facing collaboration protocols, not agent-only planning or executi
 
 The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. That candidate remains provisional: the skill must invite a focused reaction, update its model from the user's correction, evidence, choice, restatement, challenge, or application, and continue until the important uncertainty is closed. The practical exit gate is about 90% shared confidence in the skill's target outcome, with residual uncertainty stated explicitly. This is an operational readiness threshold, not a calibrated probability. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
 
+The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage, presents only decision-changing evidence, and still requires the user's reasoned challenge or correction before convergence.
+
 Trigger examples:
 
 | User intent | Behavior |
@@ -35,6 +37,7 @@ They are intentionally expert-role skills, not generic templates:
 
 - `research-problem-formulation`
   - acts like an LLM inference systems domain expert
+  - searches seminal/current literature, closest work, failure cases, and counterevidence before concluding
   - converges on:
     - what the problem is
     - why it matters
@@ -42,6 +45,7 @@ They are intentionally expert-role skills, not generic templates:
 - `research-method-design`
   - acts like a systems-method and experiment-design expert
   - activates only after the research problem is stable and the user explicitly asks to discover, compare, or defend solution directions
+  - searches papers, repositories, documentation, engineering evidence, and structurally analogous mechanisms beyond the target field
   - converges on:
     - root challenge and boundary conditions
     - causal mechanism and feasible system carrier
@@ -133,10 +137,14 @@ Its goal is to stabilize this chain:
 
 ### `topic-paper-finder`
 
-- 把模糊需求收敛成关键词、venue、年份窗口
+- 提供 `study`、`problem-boundary`、`mechanism-inspiration` 三种模式
+- `study` 保留近三年、固定 taxonomy 和 venue 策略；两个证据模式默认不限制年份、venue 或现有 taxonomy
+- 支持重复 `--query` 构造查询组合、跨查询去重并记录 `matched_queries`
+- 证据模式在可用时合并 Semantic Scholar、OpenAlex、DBLP 和 arXiv，并记录来源覆盖与失败
 - 搜索目标论文并可选下载 PDF
-- 自动结合 `vault-note-finder` 做重复抑制
+- 学习模式做 vault 重复抑制；证据模式保留已有笔记对应论文并标注，避免丢掉关键 prior work
 - 返回结构化 JSON，由主模型直接在对话里总结结果
+- 只负责学术候选发现；关键结论仍需打开原文，仓库、文档、issue、博客等由方法设计流程另行检索
 
 ### `vault-note-finder`
 
@@ -183,7 +191,7 @@ Run the static contract and regression-case validator with:
 python shared\tests\validate_expert_skills.py
 ```
 
-Synchronize the four skills and their shared dependency closure to global Codex, global Claude Code, and both Obsidian Claudian mirrors with:
+Synchronize the four expert skills, the evidence-oriented paper finder, and their shared dependency closure to both local Codex skill roots, global Claude Code, and both Obsidian Claudian mirrors with:
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1

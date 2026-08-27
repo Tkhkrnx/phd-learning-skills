@@ -135,6 +135,10 @@ Before presenting a judgment:
 
 Use evidence to scaffold the user's reasoning, not to replace it.
 
+For `research-problem-formulation` and `research-method-design`, evidence acquisition is a hard gate, not an optional supporting step. Read and follow `shared/expert-skill-references/research_evidence_acquisition.md` before freezing a problem or ranking a method. A provisional framing may organize search, but novelty, unresolved status, and mechanism superiority require a query portfolio, decisive primary-source inspection, counterevidence, material blind spots, and a saturation or blocked-coverage statement.
+
+Broad search and concise collaboration are compatible: the agent performs retrieval and triage, then presents only the evidence that changes the shared judgment. Literature volume, snippets, or a single attractive cross-domain analogy never satisfy this gate.
+
 ## Handoff Rules
 
 Use one primary collaboration skill per round.
