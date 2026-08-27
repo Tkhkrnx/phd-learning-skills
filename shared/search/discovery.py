@@ -61,7 +61,7 @@ def _normalize_text(text: str) -> str:
 
 def _keywords_from_query(query: str) -> list[str]:
     parts = [part.strip() for part in query.replace("/", " ").replace(",", " ").split()]
-    return [part for part in parts if len(part) >= 3]
+    return [part for part in parts if len(part) >= 3 or (len(part) >= 2 and part.isupper())]
 
 
 def _query_matches_subtopic(query: str, subtopic: dict[str, Any]) -> bool:
@@ -219,7 +219,7 @@ def discover_open_query(
             normalized_query
             and (normalized_query in normalized_title or normalized_query in normalized_abstract)
         )
-        minimum_matches = 2 if len(meaningful_keywords) >= 4 else 1
+        minimum_matches = 2 if len(meaningful_keywords) >= 3 else 1
         if not exact_match and len(matched_terms) < minimum_matches:
             continue
         if exact_match:
