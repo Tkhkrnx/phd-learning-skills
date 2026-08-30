@@ -1,6 +1,6 @@
 ---
 name: hpc-paper-writing
-description: Draft, restructure, revise, or pre-submit audit a top-tier high-performance-computing paper for SC, PPoPP, ICS, HPDC, or similar venues. Use for HPC performance narratives, profiling-driven motivation, hardware-aware optimization exposition, roofline or scaling analysis, benchmark and figure planning, abstract drafting, and reviewer-facing paper checks.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply an HPC-paper-writing, high-performance-computing-writing, HPC论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. Support SC, PPoPP, ICS, HPDC, or similar venues with performance narratives, profiling-driven motivation, hardware-aware optimization, roofline or scaling analysis, benchmarks, figures, abstracts, and reviewer-facing checks."
 ---
 
 # HPC 论文写作

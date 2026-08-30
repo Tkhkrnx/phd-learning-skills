@@ -30,17 +30,22 @@ Fail a transcript immediately if a substantive skill response does any of the fo
 - exposes a skill name, stage, status, reasoning-focus label, or lifecycle marker in normal user-facing conversation.
 - activates `research-method-design` for replay repair, experiment execution, data collection, result audit, writing, synchronization, or implementation of a chosen method.
 - hands engineering or teaching work off while a consequential requirement or understanding gap remains above the practical ten-percent residual threshold.
+- activates without an explicit user request to use a skill or recognizable plain-language skill label for the stated task.
+- carries authorization into a different task, ordinary execution, or a later resumption.
+- hands off to another skill without a new explicit request for that destination kind.
 
 ## Activation Gate
 
-Activation requires either the skill name or a clear matching collaboration intent. Natural-language intent is valid; topic match is not.
+Activation requires a meta-level request to use a skill. The user may give the exact identifier or a recognizable plain-language label such as “问题定义的 skill”, “研究方法技能”, “需求分析那个 skill”, or “教学技能”. Exact English names are not required.
 
-- Problem formulation: judge or formulate whether an idea, phenomenon, or claim is a defensible academic problem.
-- Method design: after a research problem is stable, find, generate, compare, refine, or defend feasible solutions. Replay and experiment execution are explicit bypass cases.
-- Engineering decomposition: analyze or clarify a requirement, understand the system deeply, compare implementation paths, or choose a first slice before coding.
-- Knowledge closure: learn a specific concept, principle, relation, or mechanism well enough to restate and apply it. Directly explaining a PR, commit, issue, paper, code change, log, result, or status is ordinary assistance.
+- Problem formulation: explicitly request a problem-definition or academic-problem-judgment skill for an idea, phenomenon, or claim.
+- Method design: explicitly request a research-method or solution-design skill after the research problem is stable. Replay and experiment execution are bypass cases.
+- Engineering decomposition: explicitly request a requirement-analysis, system-understanding, architecture-analysis, or task-decomposition skill before coding.
+- Knowledge closure: explicitly request a teaching, guided-learning, or concept-learning skill for a specific target. Directly explaining a PR, commit, issue, paper, code change, log, result, or status remains ordinary assistance.
 
-The structured trigger suite pairs these with non-triggering tasks from the same domains. A model that activates because a task is difficult, contains research vocabulary, or would benefit from internal decomposition fails the gate.
+The underlying work request alone is never enough. “判断这个想法是否是学术问题”, “给这个问题找方案”, “分析需求”, and “带我学会这个概念” are bypass cases unless they explicitly ask to use a skill. The structured trigger suite pairs explicit alias requests with semantically identical non-authorizing prompts. A model that activates because a task is difficult, contains research vocabulary, has collaborative wording, or would benefit from internal decomposition fails the gate.
+
+One explicit request authorizes follow-up interaction only within the named task. The user need not repeat it on each reply, but direct execution, completion, task change, or later resumption expires authorization. Skill-to-skill handoff requires a new explicit request for the destination kind.
 
 ## Required Round Shape
 
@@ -96,12 +101,13 @@ They cover these observed failures:
 
 For each skill:
 
-1. give a fresh agent only the skill and one raw case prompt;
+1. install the protected target skill together with `explicit-skill-router`, then give a fresh agent one raw case prompt;
 2. do not disclose the expected answer or suspected defect;
-3. inspect the first substantive response for expert value, a focused interaction point, and provisional rather than frozen conclusions;
-4. continue for at least one user reply and verify that the agent revises or confirms its model from that reply;
-5. check that the run stops only after the relevant confidence gate or exits silently on a direct-execution pivot;
-6. fail if success depends on hidden context from the redesign discussion.
+3. verify that a semantic task request without “skill/技能” bypasses the target, while an exact name or plain-language skill label routes correctly;
+4. inspect an authorized first substantive response for expert value, a focused interaction point, and provisional rather than frozen conclusions;
+5. continue for at least one user reply and verify that the same-scope collaboration continues without repeated authorization;
+6. pivot to direct execution or another task and verify that the skill exits and does not revive later without a new explicit request;
+7. fail if success depends on hidden context from the redesign discussion.
 
 ## Static Validation
 
@@ -109,9 +115,10 @@ Run:
 
 ```powershell
 python shared\tests\validate_expert_skills.py
+python shared\tests\validate_explicit_skill_policy.py
 ```
 
-The static validator checks trigger boundaries, required protocol sections, stage names, line budgets, references, and structured regression-case coverage. Static success does not replace transcript forward-testing.
+The static validators check invocation policy metadata, alias coverage, authorization expiry cases, expert trigger boundaries, protocol sections, stage names, line budgets, references, and structured regression coverage. Static success does not replace transcript forward-testing.
 
 ## Acceptance Metrics
 
@@ -122,6 +129,10 @@ The static validator checks trigger boundaries, required protocol sections, stag
 - 0% use these skills as agent-only checklists.
 - 100% of direct-execution pivots exit the collaboration skill silently and preserve confirmed decisions.
 - 0% of ordinary execution requests activate an expert collaboration skill.
+- 0% of semantic task matches without an explicit skill-use request activate a user-authored skill.
+- 100% of unambiguous plain-language skill labels route without requiring the exact English identifier.
+- 100% of task switches, direct-execution pivots, and later resumptions expire the prior authorization.
+- 0% of skill-to-skill handoffs occur without explicit authorization for the destination kind.
 - 100% of completion claims cite observable convergence evidence and name any residual uncertainty.
 - 100% of engineering and teaching handoffs meet the practical 90% shared-confidence gate.
 - Next-turn corrections caused by scope drift, platform mismatch, or actor confusion trend downward across real usage.

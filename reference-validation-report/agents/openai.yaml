@@ -2,3 +2,5 @@ interface:
   display_name: "参考文献验证报告"
   short_description: "为 LaTeX 论文生成中文参考文献真实性验证报告 PDF"
   default_prompt: "Use $reference-validation-report to generate a Chinese reference validation report PDF for this LaTeX paper."
+policy:
+  allow_implicit_invocation: false

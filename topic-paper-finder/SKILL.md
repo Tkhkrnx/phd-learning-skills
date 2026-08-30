@@ -1,6 +1,6 @@
 ---
 name: topic-paper-finder
-description: Search academic papers for the user's PhD workflow. Use for a recent taxonomy-aligned study search, an unrestricted problem-boundary evidence portfolio, or cross-domain mechanism-inspiration queries, with optional PDF download and local-vault matching. This skill discovers candidates; it does not by itself prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a paper-search, literature-search, topic-paper-finder, or equivalent skill to a stated search task; the exact identifier is optional. An ordinary request to find papers is not authorization. Search academic papers for a recent taxonomy-aligned study, a problem-boundary evidence portfolio, or cross-domain mechanism inspiration, with optional PDF download and local-vault matching. This skill discovers candidates; it does not prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs."
 ---
 
 Read `finder_config.yaml`, `weekly-paper-radar/radar_config.yaml`, `scripts/topic_finder.py`, and the required `shared/search` and `shared/obsidian` modules before running the script.

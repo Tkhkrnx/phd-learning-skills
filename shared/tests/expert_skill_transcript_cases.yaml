@@ -1,15 +1,20 @@
-version: 4
+version: 5
 trigger_cases:
   - id: trigger-problem-natural-language
     skill: research-problem-formulation
     activate: true
-    user_prompt: "我有个关于多步 Agent 调度的想法，帮我判断它究竟是否构成一个成立的学术问题。"
-    reason: "explicit request to judge a research idea as an academic problem"
+    user_prompt: "请用问题定义的 skill 处理这个想法：多步 Agent 调度究竟是否构成一个成立的学术问题？"
+    reason: "explicit skill-use request through a plain-language problem-formulation label"
   - id: trigger-problem-revision
     skill: research-problem-formulation
     activate: true
-    user_prompt: "现有 problem statement 可能把 solution 当成问题了，带我重新定义边界。"
-    reason: "explicit problem-formulation collaboration intent"
+    user_prompt: "调用研究问题定义那个技能，帮我检查现有 problem statement 是否把 solution 当成问题了。"
+    reason: "explicit skill-use request without requiring the exact identifier"
+  - id: bypass-problem-semantic-without-skill
+    skill: research-problem-formulation
+    activate: false
+    user_prompt: "我有个关于多步 Agent 调度的想法，帮我判断它究竟是否构成一个成立的学术问题。"
+    reason: "matching problem-formulation work without an explicit request to use a skill"
   - id: bypass-problem-paper-writing
     skill: research-problem-formulation
     activate: false
@@ -24,13 +29,18 @@ trigger_cases:
   - id: trigger-method-natural-language
     skill: research-method-design
     activate: true
-    user_prompt: "这个问题已经明确了，但我不知道有什么好的办法解决，带我一起设计并比较方案。"
-    reason: "explicit collaborative solution-design intent for an established problem"
+    user_prompt: "这个问题已经明确了，请用研究方法的 skill 带我设计并比较可行方案。"
+    reason: "explicit skill-use request through a plain-language research-method label"
   - id: trigger-method-defense
     skill: research-method-design
     activate: true
-    user_prompt: "帮我从根源挑战出发判断这个机制是否站得住，并设计 kill criterion。"
-    reason: "explicit request to reason through and defend a research method"
+    user_prompt: "调用方案设计 skill，从根源挑战出发判断这个机制是否站得住，并设计 kill criterion。"
+    reason: "explicit skill-use request through a solution-design alias"
+  - id: bypass-method-semantic-without-skill
+    skill: research-method-design
+    activate: false
+    user_prompt: "这个问题已经明确了，但我不知道有什么好的办法解决，带我一起设计并比较方案。"
+    reason: "matching method-design work without an explicit request to use a skill"
   - id: bypass-method-plan-sync
     skill: research-method-design
     activate: false
@@ -55,18 +65,23 @@ trigger_cases:
   - id: trigger-engineering-requirement
     skill: engineering-task-decomposition
     activate: true
-    user_prompt: "帮我分析一下这个需求，先找出真正需求和验收标准，暂时不要写代码。"
-    reason: "explicit request for collaborative requirement discovery"
+    user_prompt: "请用需求分析的 skill 处理这个改动，先找出真正需求和验收标准，暂时不要写代码。"
+    reason: "explicit skill-use request through a requirement-analysis label"
   - id: trigger-engineering-paths
     skill: engineering-task-decomposition
     activate: true
-    user_prompt: "这个改动会碰到哪些架构边界？带我比较实现路径和第一切片。"
-    reason: "explicit request for collaborative architecture and implementation-path reasoning"
+    user_prompt: "调用架构分析 skill，带我判断这个改动会碰到哪些架构边界，并比较实现路径和第一切片。"
+    reason: "explicit skill-use request through an architecture-analysis label"
   - id: trigger-engineering-system-understanding
     skill: engineering-task-decomposition
     activate: true
-    user_prompt: "带我把这套 replay 系统和需求完整理解清楚，反复核对到我们都基本没有关键误解，再决定怎么改。"
-    reason: "explicit request for iterative whole-system and requirement understanding"
+    user_prompt: "用系统理解那个 skill，带我把这套 replay 系统和需求完整理解清楚，再决定怎么改。"
+    reason: "explicit skill-use request through a system-understanding label"
+  - id: bypass-engineering-semantic-without-skill
+    skill: engineering-task-decomposition
+    activate: false
+    user_prompt: "帮我分析一下这个需求，先找出真正需求和验收标准，暂时不要写代码。"
+    reason: "matching requirement-analysis work without an explicit request to use a skill"
   - id: bypass-engineering-fix
     skill: engineering-task-decomposition
     activate: false
@@ -86,13 +101,18 @@ trigger_cases:
   - id: trigger-knowledge-meaning
     skill: targeted-knowledge-closure
     activate: true
-    user_prompt: "这里的条件概率是什么意思？我没有理解，请带我学会。"
-    reason: "explicit intent to understand one concept"
+    user_prompt: "请用教学 skill 带我学会这里的条件概率是什么意思。"
+    reason: "explicit skill-use request through a teaching label"
   - id: trigger-knowledge-transfer
     skill: targeted-knowledge-closure
     activate: true
-    user_prompt: "我总分不清 desired 和 effective，教我理解并让我迁移到这个例子。"
-    reason: "explicit guided learning and transfer intent"
+    user_prompt: "调用概念学习那个技能，教我区分 desired 和 effective，并让我迁移到这个例子。"
+    reason: "explicit skill-use request through a concept-learning label"
+  - id: bypass-knowledge-semantic-without-skill
+    skill: targeted-knowledge-closure
+    activate: false
+    user_prompt: "这里的条件概率是什么意思？我没有理解，请带我学会。"
+    reason: "matching learning intent without an explicit request to use a skill"
   - id: bypass-knowledge-incidental
     skill: targeted-knowledge-closure
     activate: false
@@ -113,7 +133,7 @@ cases:
   - id: problem-new-intuition
     skill: research-problem-formulation
     expected_stage: observe
-    user_prompt: "我觉得多步 Agent 的连续调用可能让现有推理引擎失效，但我还说不清问题。"
+    user_prompt: "请用问题定义的 skill 处理这个想法：多步 Agent 的连续调用可能让现有推理引擎失效，但我还说不清问题。"
     required:
       - "separate observation from hypothesis"
       - "treat the problem as a declarative statement, without forcing a contradiction"
@@ -132,7 +152,7 @@ cases:
   - id: problem-frozen-rqs
     skill: research-problem-formulation
     expected_stage: observe
-    user_prompt: "现有问题和 RQ1-RQ4 已经定了，但我怀疑核心 claim 不够切题，带我一起修。"
+    user_prompt: "调用研究问题定义技能：现有问题和 RQ1-RQ4 已经定了，但我怀疑核心 claim 不够切题，带我一起修。"
     required:
       - "snapshot frozen problem and RQs"
       - "propose the smallest plausible correction and ask the user to confirm or revise its scope"
@@ -143,7 +163,7 @@ cases:
   - id: problem-search-blocked
     skill: research-problem-formulation
     expected_stage: contrast
-    user_prompt: "帮我判断这个问题是否还没被解决，但现在论文搜索和原文访问都失败了。"
+    user_prompt: "用学术问题判断 skill 帮我判断这个问题是否还没被解决，但现在论文搜索和原文访问都失败了。"
     required:
       - "state which query families and primary-source checks remain blocked"
       - "keep novelty and unresolved status provisional"
@@ -155,7 +175,7 @@ cases:
   - id: method-npu-no-restart
     skill: research-method-design
     expected_stage: root-challenge
-    user_prompt: "我们在 Ascend NPU 上想让需要重启的推理机制在线切换，带我一起把方法想清楚。"
+    user_prompt: "请用研究方法的 skill 处理这个问题：我们在 Ascend NPU 上想让需要重启的推理机制在线切换。"
     required:
       - "derive causal obstacles from the frozen problem"
       - "translate the obstacle into a structural signature for search"
@@ -171,7 +191,7 @@ cases:
   - id: method-state-reuse-solutions
     skill: research-method-design
     expected_stage: mechanism-source
-    user_prompt: "问题已经定义清楚：Agent 状态复用在部分负载下节省计算，却在高压状态恶化尾延迟。帮我找几个可行方案，并和我一起比较。"
+    user_prompt: "问题已经定义清楚：Agent 状态复用在部分负载下节省计算，却在高压状态恶化尾延迟。调用方案设计 skill，帮我找几个可行方案并一起比较。"
     required:
       - "derive the root challenge from the frozen problem"
       - "offer multiple serious candidate solutions"
@@ -185,7 +205,7 @@ cases:
   - id: method-distant-analogy
     skill: research-method-design
     expected_stage: mechanism-source
-    user_prompt: "问题已经稳定。不要只找推理系统论文，帮我从其他领域广泛找可能迁移的机制，再和我一起判断。"
+    user_prompt: "问题已经稳定。请用研究方法的 skill 从其他领域广泛找可能迁移的机制，再和我一起判断。"
     required:
       - "search by structural signature without requiring the target application name"
       - "include papers and implementation-oriented sources with explicit source roles"
@@ -198,7 +218,7 @@ cases:
   - id: engineering-acceptance-versus-ci
     skill: engineering-task-decomposition
     expected_stage: requirement-contract
-    user_prompt: "带我一起规划 vLLM-HUST 的正式验收方案，同时还要考虑快速 CI。"
+    user_prompt: "请用需求分析的 skill 带我一起规划 vLLM-HUST 的正式验收方案，同时考虑快速 CI。"
     required:
       - "separate acceptance authority from CI purpose"
       - "surface latent non-functional requirements"
@@ -211,7 +231,7 @@ cases:
   - id: engineering-ambiguous-requirement
     skill: engineering-task-decomposition
     expected_stage: requirement-contract
-    user_prompt: "这个需求说要支持多 provider，但我怀疑真正诉求是故障切换。带我先把需求弄清楚。"
+    user_prompt: "调用需求澄清 skill：这个需求说要支持多 provider，但我怀疑真正诉求是故障切换。带我先把需求弄清楚。"
     required:
       - "separate stated feature from underlying outcome"
       - "surface acceptance evidence and non-goals"
@@ -224,7 +244,7 @@ cases:
   - id: knowledge-chunked-prefill
     skill: targeted-knowledge-closure
     expected_stage: diagnose
-    user_prompt: "我不理解，prefill 没做完怎么能生成 decode token？"
+    user_prompt: "请用教学 skill 帮我真正弄懂：prefill 没做完怎么能生成 decode token？"
     required:
       - "distinguish request A from request B"
       - "preserve the prefill-before-decode invariant for one request"
@@ -237,7 +257,7 @@ cases:
   - id: knowledge-pipeline-explanation
     skill: targeted-knowledge-closure
     expected_stage: diagnose
-    user_prompt: "我只想先理解 native replay 到 trainable replay 这条链，不要先讲全部代码。"
+    user_prompt: "调用概念学习技能，先带我理解 native replay 到 trainable replay 这条链，不要先讲全部代码。"
     required:
       - "identify one blocking relation"
       - "one worked example"

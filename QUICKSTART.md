@@ -16,13 +16,18 @@ $env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 
 ## Expert Collaboration Skills
 
-明确表达对应的协作意图时进入 skill；不必念出 skill 名称：
+必须明确说“使用某类 skill/技能处理某件事”才进入 skill；不必记住英文全名，自然语言类别即可：
 
 ```text
-用 research-problem-formulation 带我一起判断这个现象能否成为研究问题。
-这个研究问题已经明确了，请用 research-method-design 先给我几个可行方案，再带我比较和 defend。
-用 engineering-task-decomposition 带我读懂相关架构并选择第一执行切片。
-用 targeted-knowledge-closure 帮我真正弄懂 chunked prefill，并让我做一次迁移判断。
+用问题定义的 skill 带我判断这个现象能否成为研究问题。
+这个研究问题已经明确了，请用研究方法的 skill 先给我几个可行方案，再带我比较和 defend。
+调用需求分析那个技能，带我读懂相关架构并选择第一执行切片。
+用教学 skill 帮我真正弄懂 chunked prefill，并让我做一次迁移判断。
+```
+
+以下语义虽然分别对应四类能力，但没有明确要求“使用 skill”，因此必须按普通请求处理，不能触发：
+
+```text
 帮我分析一下这个需求，先澄清真实需求和验收标准，不要立即写代码。
 我有一个研究想法，帮我判断它究竟是否构成学术问题。
 这个研究问题已经明确了，但我不知道有什么好办法解决，带我一起设计。
@@ -43,7 +48,7 @@ AI 可以先给完整候选问题、若干方案、系统模型或示范讲解�
 解释这段代码在做什么。
 ```
 
-若在协作过程中切换到直接执行，只需直接提出执行要求。skill 应静默退出，不输出暂停或运行结果标记。
+一次显式授权可持续覆盖同一协作中的追问和回答，不必每轮重复。若切换到直接执行、换任务或协作已经完成，授权立即失效，skill 应静默退出且不能在以后自行恢复；切换到另一个 skill 也必须重新明确提出。
 
 具体工作产物的说明不是教学流程。比如“说明一下 PR9 做了什么，我先了解后再审阅”应直接回答；只有用户要学习某个概念、原理、关系或机制，并明确希望自己复述或应用时，才进入 `targeted-knowledge-closure`。即使正确进入 skill，阶段名和运行状态也只在内部维护，不显示机器协议行。
 
@@ -51,7 +56,9 @@ AI 可以先给完整候选问题、若干方案、系统模型或示范讲解�
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1
+.\shared\scripts\sync_explicit_skill_policy.ps1
 python shared\tests\validate_expert_skills.py
+python shared\tests\validate_explicit_skill_policy.py
 ```
 
 ## Weekly Radar
@@ -92,7 +99,7 @@ python reading-note-builder\scripts\build_reading_note.py --note-id <paperquay_n
 python review-note-builder\scripts\build_review_note.py --note-id <paperquay_note_id>
 ```
 
-修改 reading/review builder 或其共享依赖后，同步并验证四处安装副本：
+修改 reading/review builder 或其共享依赖后，同步并验证五处安装副本：
 
 ```powershell
 .\shared\scripts\sync_paper_note_skills.ps1

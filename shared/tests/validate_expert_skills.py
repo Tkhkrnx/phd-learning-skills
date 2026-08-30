@@ -22,7 +22,7 @@ SPECS = {
             "why it matters",
             "why existing work still fails",
         },
-        "trigger_markers": {"research idea", "academic problem", "direct writing"},
+        "trigger_markers": {"research idea", "academic problem", "not authorization"},
     },
     "research-method-design": {
         "stages": {
@@ -56,12 +56,12 @@ SPECS = {
             "execution-handoff",
         },
         "markers": {"real requirement, non-goals, and acceptance evidence", "real codebase and runtime understanding", "first reversible execution slice"},
-        "trigger_markers": {"analyze, clarify, or discover", "before implementation", "direct coding"},
+        "trigger_markers": {"requirement-analysis", "before implementation", "direct coding"},
     },
     "targeted-knowledge-closure": {
         "stages": {"diagnose", "explain-one-grain", "correct", "transfer"},
         "markers": {"accurate mental model with repaired prerequisites", "discrimination from a plausible near miss", "reduced scaffolding"},
-        "trigger_markers": {"specific concept", "concrete artifact", "pr, commit, issue", "interactive learning process"},
+        "trigger_markers": {"concept-learning", "concrete artifact", "not authorization"},
     },
 }
 
@@ -98,7 +98,10 @@ def main() -> int:
         "90% confidence",
         "meaningful user exchange",
         "Automatic Failure Conditions",
-        "explicit matching intent",
+        "explicit skill-use request",
+        "exact repository identifier is not required",
+        "Authorization expires",
+        "Authorization never transfers between skills",
         "Exit silently",
         "ordinary execution request triggers",
         "Expert Strength Without Takeover",
@@ -125,13 +128,29 @@ def main() -> int:
         if metadata.get("name") != name:
             errors.append(f"{name}: frontmatter name mismatch")
         description = str(metadata.get("description", "")).lower()
-        if "trigger only when" not in description or "do not trigger merely" not in description:
-            errors.append(f"{name}: description lacks positive-intent and negative-task trigger boundary")
+        for marker in (
+            "explicit skill-use request only",
+            "trigger only when",
+            "explicitly asks to use",
+            "exact identifier is optional",
+            "not authorization",
+            "do not trigger merely",
+        ):
+            if marker not in description:
+                errors.append(f"{name}: description lacks explicit-use boundary marker {marker!r}")
         for marker in spec["trigger_markers"]:
             if marker not in description:
                 errors.append(f"{name}: description lacks trigger marker {marker!r}")
         if len(description) > 900:
             errors.append(f"{name}: description is too long")
+
+        openai_metadata = ROOT / name / "agents" / "openai.yaml"
+        try:
+            openai_data = yaml.safe_load(openai_metadata.read_text(encoding="utf-8"))
+            if openai_data.get("policy", {}).get("allow_implicit_invocation") is not False:
+                errors.append(f"{name}: implicit invocation must be disabled")
+        except Exception as exc:  # noqa: BLE001 - aggregate validator errors
+            errors.append(f"{name}: invalid agents/openai.yaml: {exc}")
 
         headings = {line for line in body.splitlines() if line.startswith("## ")}
         missing_headings = REQUIRED_HEADINGS - headings
@@ -188,6 +207,9 @@ def main() -> int:
         trigger_coverage[skill][activate] += 1
         if not case.get("user_prompt") or not case.get("reason"):
             errors.append(f"{case_id}: user_prompt and reason are required")
+        prompt = str(case.get("user_prompt", "")).lower()
+        if activate and "skill" not in prompt and "技能" not in prompt:
+            errors.append(f"{case_id}: activating prompt lacks an explicit skill-use request")
     for skill, counts in trigger_coverage.items():
         if counts[True] < 2 or counts[False] < 2:
             errors.append(f"trigger_cases: {skill} needs at least two activate and two bypass cases")

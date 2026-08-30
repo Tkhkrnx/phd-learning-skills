@@ -6,6 +6,16 @@ This repository now contains three skill families:
 2. paper discovery, note-building, and validation workflow skills
 3. systems and HPC paper-writing skills
 
+## Explicit Invocation Policy
+
+Every task skill in this repository disables Codex implicit invocation through `agents/openai.yaml`. This uses the documented [`policy.allow_implicit_invocation`](https://developers.openai.com/codex/skills) control. The only implicitly discoverable component is `explicit-skill-router`, whose sole job is to recognize a meta-level request to use a skill and route a plain-language label to the protected target.
+
+The policy deployment also protects the installed `cs-paper-submission-check`, `planning-with-files`, and `scipilot-figure-skill` copies when present, plus the planning command aliases. Those optional skills retain their own source bodies; the deployment guard adds explicit-only metadata and, on non-Codex mirrors, an explicit-use-only description prefix.
+
+The user does not need to remember an exact identifier. “Use the research-method skill”, “调用问题定义那个技能”, “用需求分析 skill”, and “用教学技能” are valid when they also identify the task. By contrast, “find a method”, “judge whether this is an academic problem”, “analyze this requirement”, and “teach me this concept” are ordinary requests and must not activate a skill. A generic “use a suitable skill” is ambiguous and must not be resolved from task semantics.
+
+Authorization covers follow-up interaction within the stated task, so the user need not repeat it every round. It expires on completion, a task change, or a pivot to normal writing, coding, synchronization, debugging, review, experiment execution, or delivery. It never transfers automatically to another skill.
+
 ## Expert-Facing Collaboration Skills
 
 These four skills are designed to solve real work while improving the user's own research, engineering, and learning ability:
@@ -15,7 +25,7 @@ These four skills are designed to solve real work while improving the user's own
 - `engineering-task-decomposition`
 - `targeted-knowledge-closure`
 
-They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires a clear matching intent, but the user does not have to spell the skill name: asking to analyze a requirement, judge a research idea as an academic problem, design a method for an established problem, or learn one specific concept is sufficient. Topic similarity and task complexity are not sufficient. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
+They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires an explicit request to use a recognizable kind of skill for the stated task; exact identifiers are optional, but the underlying collaboration request alone is not authorization. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
 
 The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. That candidate remains provisional: the skill must invite a focused reaction, update its model from the user's correction, evidence, choice, restatement, challenge, or application, and continue until the important uncertainty is closed. The practical exit gate is about 90% shared confidence in the skill's target outcome, with residual uncertainty stated explicitly. This is an operational readiness threshold, not a calibrated probability. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
 
@@ -25,10 +35,12 @@ Trigger examples:
 
 | User intent | Behavior |
 |---|---|
-| "帮我分析一下这个需求，先别写代码" | `engineering-task-decomposition` |
-| "我有一个研究想法，帮我判断它是否构成学术问题" | `research-problem-formulation` |
-| "这个问题已经明确了，带我一起找一个可辩护的解决方法" | `research-method-design` |
-| "这个概率是什么意思？带我真正弄懂" | `targeted-knowledge-closure` |
+| "请用需求分析的 skill 把这个需求弄清楚，先别写代码" | `engineering-task-decomposition` |
+| "用问题定义那个技能判断这个研究想法是否构成学术问题" | `research-problem-formulation` |
+| "问题已经明确，请用研究方法的 skill 带我找一个可辩护的解决方法" | `research-method-design` |
+| "用教学 skill 带我真正弄懂这个概率" | `targeted-knowledge-closure` |
+| "帮我分析一下这个需求，先别写代码" | no skill; analyze normally |
+| "这个问题已经明确，带我找一个解决方法" | no skill; assist normally |
 | "说明一下 PR9 做了什么，我先了解后再审阅" | no expert collaboration skill; explain the concrete artifact directly |
 | "继续修复 replay，并按冻结方案收集结果" | no research-method skill; execute the established method normally |
 | "按已经确认的方案同步实验计划、论文和代码" | no expert collaboration skill; execute normally |
@@ -189,15 +201,17 @@ Run the static contract and regression-case validator with:
 
 ```powershell
 python shared\tests\validate_expert_skills.py
+python shared\tests\validate_explicit_skill_policy.py
 ```
 
 Synchronize the four expert skills, the evidence-oriented paper finder, and their shared dependency closure to both local Codex skill roots, global Claude Code, and both Obsidian Claudian mirrors with:
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1
+.\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
-Codex and Claude discover the same narrow descriptions. Implicit discovery remains enabled so a clear natural-language collaboration intent can activate the right expert; the paired bypass cases prevent ordinary execution from becoming a skill run. Restart an already-open client or task after deployment if its skill catalog was loaded before the update.
+Codex uses `allow_implicit_invocation: false` for every protected task skill. Codex and Claude receive the same explicit-use-only descriptions plus the narrow alias router. Restart an already-open client or start a new task after deployment if its skill catalog was loaded before the update.
 
 ## Quickstart
 

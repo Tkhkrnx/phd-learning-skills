@@ -1,6 +1,6 @@
 ---
 name: review-note-builder
-description: Build a strict Obsidian review note from a PaperQuay审稿笔记 and its mapped MinerU正文缓存. Use when Codex needs to convert a PaperQuay review draft into a更严苛、更完整的正式审稿笔记 with缺陷补抓、证据校验、rebuttal-sensitive points, and mapping diagnostics.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a review-note, PaperQuay-review-note, 审稿笔记, or equivalent skill to a stated note task; the exact identifier is optional. An ordinary request to review a paper or write a note is not authorization. Build a strict Obsidian review note from a PaperQuay审稿笔记 and mapped MinerU正文缓存 with缺陷补抓、证据校验、rebuttal-sensitive points, and mapping diagnostics."
 ---
 
 Read `scripts/build_review_note.py` and run it with a real `--note-id`.
