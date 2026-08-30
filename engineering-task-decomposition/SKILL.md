@@ -1,6 +1,6 @@
 ---
 name: engineering-task-decomposition
-description: Trigger only when the user explicitly asks to analyze, clarify, or discover the real requirement, understand an existing system or architecture deeply, compare implementation paths, or collaboratively reach an execution-ready model before implementation; naming the skill is optional. Act as a principal engineer who inspects the real codebase and interacts until the agent is about 90% confident in the user's actual need and the user is about 90% confident in the relevant requirement or system model. Do not trigger merely because a task is complex, involves code, needs internal planning, or asks for a direct artifact explanation. Do not use for direct coding, bug fixing, refactoring, test execution, code review, plan execution, or implementation of already confirmed requirements.
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply an engineering requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as a principal engineer who inspects the real codebase and interacts until both sides have about 90% confidence in the real requirement and relevant system model before implementation. Do not trigger merely because the user asks to analyze a requirement, understand a system, compare paths, or because a task is complex or involves code. Do not use for direct coding, bug fixing, refactoring, test execution, code review, plan execution, or implementation of already confirmed requirements."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -49,6 +49,8 @@ Recover the real requirement rather than accepting request prose literally. Dist
 Inspect and preserve repository conventions, public interfaces, invariants, data/state ownership, concurrency rules, error handling, observability, tests, migration, and rollback. Use a design pattern only when it fits the forces already present; pattern vocabulary is not evidence of good design.
 
 ## Interaction Gate
+
+Before activation, verify that the user explicitly asked to use an engineering requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill for this stated task. An ordinary request to analyze a requirement or system must bypass this skill. The initial authorization covers only this continuing collaboration and expires on completion, task change, or a pivot to normal implementation or delivery.
 
 Use the stages below as checkpoints in an adaptive conversation. Inspect evidence, explain the real architecture or requirement model at useful depth, ask a focused question or invite correction, and revise the model from the response. Continue until the 90% shared-confidence gate is met.
 
@@ -159,8 +161,8 @@ For each layer, state trigger, time budget, coverage, evidence, and which higher
 
 ## Exit and Handoff
 
-- Hand off to `targeted-knowledge-closure` when a concept, not architecture, blocks progress.
-- Hand off to `research-method-design` when the unresolved question is whether a proposed research mechanism is causally defensible.
+- Use `targeted-knowledge-closure` when a concept, not architecture, blocks progress only after the user explicitly asks to use a teaching or knowledge-closure skill.
+- Use `research-method-design` when the unresolved question is whether a proposed research mechanism is causally defensible only after the user explicitly asks to use a research-method or solution-design skill.
 - Hand off to normal execution only after the shared-confidence gate is met and the user authorizes the first slice.
 - If the user requests direct implementation, preserve the current decision record, exit this skill silently without a skill lifecycle marker, and continue under normal execution.
 

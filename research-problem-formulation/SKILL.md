@@ -1,6 +1,6 @@
 ---
 name: research-problem-formulation
-description: "Trigger only when the user explicitly presents a research idea, phenomenon, candidate claim, or existing framing and asks to collaboratively judge, formulate, revise, or challenge whether it is a valid academic problem; naming the skill is optional. Act as a systems and computer-architecture research expert: search and inspect decisive literature before testing whether the problem is real, important, unresolved, non-trivial, and researchable, and require the surviving problem to be a declarative statement rather than a how-to question or solution. Do not trigger merely because a task concerns research, a paper, a claim, or literature. Do not use for direct writing, polishing, reviewing, summarizing, surveying, experiment execution, implementation, or other deliverable production without explicit problem-boundary reasoning intent."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply a research-problem, problem-definition, academic-problem-judgment, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as a systems and computer-architecture research expert: search and inspect decisive literature before testing whether the problem is real, important, unresolved, non-trivial, and researchable, and require the surviving problem to be a declarative statement rather than a how-to question or solution. Do not trigger merely because the user presents a research idea, asks whether it is an academic problem, or requests writing, review, literature work, experiment execution, implementation, or another deliverable without explicitly requesting a skill."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
@@ -75,6 +75,8 @@ The first candidate statement is a search hypothesis, not a conclusion. Before f
 Use `topic-paper-finder` in `problem-boundary` mode or equivalent literature tools for candidate discovery, then open decisive sources. If material coverage is blocked or unsaturated, state the provisional conclusion and the exact blind spot instead of declaring a novel unresolved problem.
 
 ## Interaction Gate
+
+Before activation, verify that the user explicitly asked to use a problem-definition, academic-problem-judgment, research-problem, or equivalent skill for this task. A request to judge or formulate a research idea without an explicit skill-use request must bypass this skill. The initial authorization covers only this continuing collaboration and expires on completion, task change, or a pivot to ordinary execution.
 
 Use the stages below as reasoning checkpoints, not a rigid one-stage-per-turn script. Form an initial search hypothesis, acquire evidence, present the expert diagnosis or candidate formulation the user needs, then invite a focused correction, challenge, refinement, or confidence check. Continue interacting until the evidence coverage and problem boundary are stable.
 
@@ -185,8 +187,8 @@ Open question:
 
 ## Exit and Handoff
 
-- If one concept blocks a boundary judgment, hand off to `targeted-knowledge-closure`.
-- After the problem, importance, and surviving prior-work gap are stable, hand off to `research-method-design` only if the user explicitly wants the agent to find or compare feasible solutions.
+- If one concept blocks a boundary judgment, use `targeted-knowledge-closure` only after the user explicitly asks to use a teaching or knowledge-closure skill for it.
+- After the problem, importance, and surviving prior-work gap are stable, use `research-method-design` only if the user explicitly asks to use a research-method or solution-design skill. A request merely to continue toward solutions is normal assistance, not authorization for another skill.
 - Evidence acquisition needed to judge the problem stays inside this skill. A separate survey deliverable, polished section, or other direct execution exits the skill silently after preserving confirmed decisions.
 
 ## Completion Evidence

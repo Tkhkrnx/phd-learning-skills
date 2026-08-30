@@ -1,6 +1,6 @@
 ---
 name: weekly-paper-radar
-description: Weekly paper radar for State-Centric Runtime Design and Hardware-Conscious Execution. Use when Codex needs to search近3年的系统A会论文, fall back to high-quality AI A venues only when needed, and optionally download PDFs into the local submission directory.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a weekly-paper-radar, paper-radar, 每周论文雷达, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for recent papers is not authorization. Search recent systems-A papers for State-Centric Runtime Design and Hardware-Conscious Execution, use broader high-quality venues only when needed, and optionally download PDFs into the local submission directory."
 ---
 
 Read `radar_config.yaml` and `scripts/weekly_radar.py`.

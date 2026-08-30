@@ -1,0 +1,6 @@
+interface:
+  display_name: "Explicit Skill Router"
+  short_description: "Route only explicit user requests to use a personal skill"
+  default_prompt: "Use a research-method skill for the research problem I describe."
+policy:
+  allow_implicit_invocation: true

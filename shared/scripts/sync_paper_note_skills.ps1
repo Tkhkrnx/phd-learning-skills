@@ -9,6 +9,7 @@ $ErrorActionPreference = "Stop"
 if (-not $TargetRoots) {
     $TargetRoots = @(
         (Join-Path $env:USERPROFILE ".codex\skills"),
+        (Join-Path $env:USERPROFILE ".agents\skills"),
         (Join-Path $env:USERPROFILE ".claude\skills"),
         (Join-Path $VaultRoot ".codex\skills"),
         (Join-Path $VaultRoot ".claude\skills")
@@ -18,8 +19,10 @@ if (-not $TargetRoots) {
 $sourceRootPath = (Resolve-Path -LiteralPath $SourceRoot).Path
 $requiredPaths = @(
     "reading-note-builder\SKILL.md",
+    "reading-note-builder\agents\openai.yaml",
     "reading-note-builder\scripts\build_reading_note.py",
     "review-note-builder\SKILL.md",
+    "review-note-builder\agents\openai.yaml",
     "review-note-builder\scripts\build_review_note.py",
     "shared\__init__.py"
 )

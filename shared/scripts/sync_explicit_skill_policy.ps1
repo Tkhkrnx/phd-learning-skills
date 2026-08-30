@@ -16,39 +16,35 @@ if (-not $TargetRoots) {
     )
 }
 
-$skillNames = @(
+$protectedSkillNames = @(
     "research-problem-formulation",
     "research-method-design",
     "engineering-task-decomposition",
-    "targeted-knowledge-closure"
+    "targeted-knowledge-closure",
+    "topic-paper-finder",
+    "weekly-paper-radar",
+    "vault-note-finder",
+    "reading-note-builder",
+    "review-note-builder",
+    "systems-paper-writing",
+    "hpc-paper-writing",
+    "reference-validation-report"
 )
 
 $sourceRootPath = (Resolve-Path -LiteralPath $SourceRoot).Path
 $requiredPaths = @(
-    "AGENT_COLLABORATION_SKILL_BLUEPRINT.md",
     "explicit-skill-router\SKILL.md",
     "explicit-skill-router\aliases.yaml",
     "explicit-skill-router\agents\openai.yaml",
-    "shared\__init__.py",
-    "topic-paper-finder\SKILL.md",
-    "topic-paper-finder\finder_config.yaml",
-    "topic-paper-finder\scripts\topic_finder.py",
-    "weekly-paper-radar\radar_config.yaml"
+    "shared\scripts\enforce_explicit_skill_policy.py"
 )
-$requiredPaths += $skillNames | ForEach-Object { "$_\SKILL.md" }
-$requiredPaths += $skillNames | ForEach-Object { "$_\agents\openai.yaml" }
-$requiredPaths += "topic-paper-finder\agents\openai.yaml"
-$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\expert-skill-references") -File |
-    ForEach-Object { "shared\expert-skill-references\$($_.Name)" }
-$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\search") -File |
-    ForEach-Object { "shared\search\$($_.Name)" }
-$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
-    ForEach-Object { "shared\obsidian\$($_.Name)" }
+$requiredPaths += $protectedSkillNames | ForEach-Object { "$_\SKILL.md" }
+$requiredPaths += $protectedSkillNames | ForEach-Object { "$_\agents\openai.yaml" }
 
 foreach ($relativePath in $requiredPaths) {
     $sourcePath = Join-Path $sourceRootPath $relativePath
     if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
-        throw "Missing source dependency: $sourcePath"
+        throw "Missing explicit-skill policy dependency: $sourcePath"
     }
 }
 
@@ -59,20 +55,23 @@ foreach ($targetRoot in $TargetRoots) {
     foreach ($relativePath in $requiredPaths) {
         $sourcePath = Join-Path $sourceRootPath $relativePath
         $targetPath = Join-Path $targetRootPath $relativePath
-        $targetParent = Split-Path -Parent $targetPath
-        New-Item -ItemType Directory -Path $targetParent -Force | Out-Null
+        New-Item -ItemType Directory -Path (Split-Path -Parent $targetPath) -Force | Out-Null
         Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
     }
 
     foreach ($relativePath in $requiredPaths) {
         $sourcePath = Join-Path $sourceRootPath $relativePath
         $targetPath = Join-Path $targetRootPath $relativePath
-        $sourceHash = (Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash
-        $targetHash = (Get-FileHash -LiteralPath $targetPath -Algorithm SHA256).Hash
-        if ($sourceHash -ne $targetHash) {
-            throw "Hash mismatch after sync: $targetPath"
+        if ((Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash -ne
+            (Get-FileHash -LiteralPath $targetPath -Algorithm SHA256).Hash) {
+            throw "Hash mismatch after explicit-skill policy sync: $targetPath"
         }
     }
 
-    Write-Output "verified=$targetRootPath files=$($requiredPaths.Count)"
+    & python (Join-Path $sourceRootPath "shared\scripts\enforce_explicit_skill_policy.py") --root $targetRootPath
+    if ($LASTEXITCODE -ne 0) {
+        throw "Explicit-skill policy enforcement failed for $targetRootPath"
+    }
+
+    Write-Output "verified=$targetRootPath protected=$($protectedSkillNames.Count) router=1 files=$($requiredPaths.Count)"
 }

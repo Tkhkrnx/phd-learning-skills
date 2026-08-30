@@ -1,0 +1,67 @@
+version: 1
+cases:
+  - id: route-problem-alias
+    user_prompt: "请用问题定义的 skill 判断这个 Agent 调度想法是否构成学术问题。"
+    expected: research-problem-formulation
+  - id: route-method-alias
+    user_prompt: "问题已经明确，请用研究方法的 skill 帮我找可行方案。"
+    expected: research-method-design
+  - id: route-engineering-alias
+    user_prompt: "调用需求澄清那个技能，把这个 provider 切换需求弄清楚。"
+    expected: engineering-task-decomposition
+  - id: route-teaching-alias
+    user_prompt: "用教学 skill 带我学会条件概率。"
+    expected: targeted-knowledge-closure
+  - id: route-paper-search-alias
+    user_prompt: "请用文献搜索技能找最近三年的相关论文。"
+    expected: topic-paper-finder
+  - id: route-writing-alias
+    user_prompt: "请用系统论文写作 skill 审计这份 OSDI 稿件。"
+    expected: systems-paper-writing
+  - id: route-planning-alias
+    user_prompt: "请用文件规划的 skill 管理这项长期任务。"
+    expected: planning-with-files
+  - id: route-figure-alias
+    user_prompt: "调用科研绘图技能为这组数据选择合适的图。"
+    expected: scipilot-figure-skill
+  - id: bypass-problem-semantic
+    user_prompt: "判断这个 Agent 调度想法是否构成学术问题。"
+    expected: none
+  - id: bypass-method-semantic
+    user_prompt: "问题已经明确，帮我找几个可行方案。"
+    expected: none
+  - id: bypass-engineering-semantic
+    user_prompt: "分析这个 provider 切换需求并给出验收标准。"
+    expected: none
+  - id: bypass-teaching-semantic
+    user_prompt: "带我真正学会条件概率。"
+    expected: none
+  - id: bypass-paper-search-semantic
+    user_prompt: "找最近三年的相关论文。"
+    expected: none
+  - id: bypass-long-execution
+    user_prompt: "继续修复 replay，跑完实验并提交 PR。"
+    expected: none
+  - id: clarify-generic-skill
+    user_prompt: "用一个合适的 skill 帮我处理这件事。"
+    expected: clarify
+  - id: continue-authorized-collaboration
+    active_skill: research-method-design
+    active_scope: "为已定义的状态复用问题比较研究方法"
+    user_prompt: "我认为候选 B 的状态迁移代价会抵消收益，你再按这个约束比较。"
+    expected: research-method-design
+  - id: expire-on-direct-execution
+    active_skill: research-method-design
+    active_scope: "为已定义的状态复用问题比较研究方法"
+    user_prompt: "方案就定 B，现在直接改代码、跑实验并提交 PR。"
+    expected: none
+  - id: expire-on-task-switch
+    active_skill: targeted-knowledge-closure
+    active_scope: "学习条件概率"
+    user_prompt: "顺便帮我审查另一个仓库的代码。"
+    expected: none
+  - id: no-automatic-handoff
+    active_skill: research-problem-formulation
+    active_scope: "定义 Agent 调度的学术问题"
+    user_prompt: "问题定义先到这里，接下来你正常给我列几个可能方向。"
+    expected: none

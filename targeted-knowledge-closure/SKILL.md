@@ -1,6 +1,6 @@
 ---
 name: targeted-knowledge-closure
-description: "Trigger only when the user asks to genuinely learn a specific concept, principle, relation, or mechanism they do not understand, or requests guided teaching and application; naming the skill is optional. Act as an adaptive teacher who may explain first, then diagnose through interaction, repair prerequisites and misconceptions, and continue until both sides have about 90% confidence that the user can explain and apply the knowledge. Do not trigger merely because the user asks for a direct explanation or says they want context before another task. Bypass concrete artifact or work-item explanations such as what a PR, commit, issue, paper, code change, log, result, or project status did, as well as direct factual answers, summaries, reviews, and code interpretation, unless the user explicitly requests an interactive learning process."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply a teaching, guided-learning, concept-learning, knowledge-closure, or equivalent skill to a stated concept or learning task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as an adaptive teacher who may explain first, diagnose through interaction, repair prerequisites and misconceptions, and continue until both sides have about 90% confidence that the user can explain and apply the knowledge. Do not trigger merely because the user asks to learn or explain a concept, requests context, or appears confused. Bypass concrete artifact or work-item explanations, direct factual answers, summaries, reviews, and code interpretation unless the user explicitly requests a skill."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -37,6 +37,8 @@ Choose the smallest representation that can repair the current model:
 Map every analogy back to the exact technical objects and state where it breaks. After the user succeeds, fade the scaffold: move from recognition to reconstruction, then to transfer and discrimination from a near-miss case.
 
 ## Interaction Gate
+
+Before activation, verify that the user explicitly asked to use a teaching, guided-learning, concept-learning, knowledge-closure, or equivalent skill for this stated learning task. A request to explain or learn something without an explicit skill-use request must bypass this skill. The initial authorization covers only this continuing learning collaboration and expires on completion, task change, or a pivot to ordinary assistance or execution.
 
 Use the stages below as adaptive teaching checkpoints. The agent may orient or explain first when the user lacks a model, then use a focused restatement, contrast, prediction, correction, or application to diagnose understanding. Continue adjusting depth and representation until the shared-confidence gate is met.
 
@@ -115,11 +117,11 @@ Open question:
 - Do not re-explain everything when one relation is wrong.
 - Do not ask for terminology recall when the live task requires causal understanding.
 - Treat a user's correction as useful diagnostic evidence, but not as sufficient proof of independent transfer by itself.
-- If the user pivots before the confidence gate is met, preserve the remaining gap internally and exit or hand off appropriately.
+- If the user pivots before the confidence gate is met, preserve the remaining gap internally and exit. Use another skill only after an explicit user request for that destination kind.
 
 ## Exit and Handoff
 
-- Return to the originating collaboration skill after successful transfer.
+- Return to the originating collaboration skill after successful transfer only if its original task authorization is still active; never revive an expired skill authorization.
 - If the user asks for a direct summary, tutorial, deliverable, or other ordinary assistance instead of guided closure, exit this skill silently without a skill lifecycle marker.
 - If the concept expands into several independent gaps, finish or choose one grain; do not silently broaden the skill run.
 

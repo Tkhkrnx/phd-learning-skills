@@ -1,6 +1,6 @@
 ---
 name: reference-validation-report
-description: Verify LaTeX bibliography entries against authoritative online sources and generate a Chinese PDF reference validation report with evidence-backed statuses and conclusions. Use when Codex needs to audit whether cited papers are real, detect possible hallucinated references or metadata mismatches, and package the results into the accepted “参考文献验证报告” format.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a reference-validation, bibliography-validation, 参考文献验证, or equivalent skill to a stated paper task; the exact identifier is optional. An ordinary request to check citations is not authorization. Verify LaTeX bibliography entries against authoritative sources and generate the accepted Chinese PDF 参考文献验证报告 with evidence-backed statuses and conclusions."
 ---
 
 # Reference Validation Report

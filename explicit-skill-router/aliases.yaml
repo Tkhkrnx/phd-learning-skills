@@ -1,0 +1,135 @@
+version: 1
+skills:
+  research-problem-formulation:
+    labels:
+      - research problem formulation
+      - research problem definition
+      - problem formulation
+      - 问题定义
+      - 研究问题定义
+      - 学术问题判断
+      - 研究想法判断
+  research-method-design:
+    labels:
+      - research method design
+      - research method
+      - method design
+      - solution design
+      - 研究方法
+      - 方法设计
+      - 研究方案设计
+      - 解决方案设计
+  engineering-task-decomposition:
+    labels:
+      - engineering task decomposition
+      - requirement analysis
+      - system understanding
+      - architecture clarification
+      - 工程任务拆解
+      - 需求分析
+      - 需求澄清
+      - 系统理解
+      - 架构分析
+  targeted-knowledge-closure:
+    labels:
+      - targeted knowledge closure
+      - teaching
+      - guided learning
+      - concept learning
+      - 教学
+      - 知识学习
+      - 概念学习
+      - 带我学会
+  topic-paper-finder:
+    labels:
+      - topic paper finder
+      - paper search
+      - literature search
+      - 论文搜索
+      - 文献搜索
+      - 查论文
+  weekly-paper-radar:
+    labels:
+      - weekly paper radar
+      - paper radar
+      - 每周论文雷达
+      - 论文雷达
+  vault-note-finder:
+    labels:
+      - vault note finder
+      - obsidian note search
+      - 笔记搜索
+      - 查库内笔记
+      - 查 obsidian 笔记
+  reading-note-builder:
+    labels:
+      - reading note builder
+      - paper reading note
+      - 阅读笔记
+      - 论文阅读笔记
+      - paperquay 阅读笔记
+  review-note-builder:
+    labels:
+      - review note builder
+      - paper review note
+      - 审稿笔记
+      - 论文审稿笔记
+      - paperquay 审稿笔记
+  systems-paper-writing:
+    labels:
+      - systems paper writing
+      - systems writing
+      - 系统论文写作
+      - 系统顶会写作
+  hpc-paper-writing:
+    labels:
+      - hpc paper writing
+      - high performance computing paper writing
+      - hpc 论文写作
+      - 高性能计算论文写作
+  reference-validation-report:
+    labels:
+      - reference validation report
+      - bibliography validation
+      - citation verification
+      - 参考文献验证
+      - 引用真实性核验
+external_skills:
+  cs-paper-submission-check:
+    labels:
+      - cs paper submission check
+      - paper submission audit
+      - pre-submission check
+      - 论文投稿检查
+      - 投稿前审查
+  planning-with-files:
+    labels:
+      - planning with files
+      - persistent planning
+      - file planning
+      - 文件规划
+      - 持久化规划
+      - 任务计划 skill
+  scipilot-figure-skill:
+    labels:
+      - scipilot figure
+      - scientific figure
+      - data visualization
+      - 科研绘图
+      - 科学可视化
+      - 数据可视化
+explicit_only_commands:
+  - start-complex-task
+  - source-command-plan
+  - source-command-plan-ar
+  - source-command-plan-attest
+  - source-command-plan-de
+  - source-command-plan-doctor
+  - source-command-plan-es
+  - source-command-plan-goal
+  - source-command-plan-loop
+  - source-command-plan-zh
+  - source-command-plan-zht
+  - source-command-pwf
+  - source-command-start
+  - source-command-status

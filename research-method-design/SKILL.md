@@ -1,6 +1,6 @@
 ---
 name: research-method-design
-description: "Trigger only when the user has an established systems or computer-architecture research problem and explicitly asks the agent to find, generate, compare, refine, or defend feasible solution directions or a research method; naming the skill is optional. Act as a systems-method and architecture solution expert: derive root challenges, search papers plus cross-domain mechanisms and implementation evidence, propose several serious candidates, and guide causal design, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely because a task mentions a mechanism, architecture, experiment, research plan, or data selection. Never use for replay repair or execution, experiment running, result audit, plan or paper writing, synchronization, implementation, or execution of an already chosen method."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply a research-method, method-design, solution-design, or equivalent skill to an established systems or computer-architecture research problem; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Act as a systems-method and architecture expert: derive root challenges, search cross-domain papers and implementation evidence, compare serious candidates, and guide causal design, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely because the user asks for solution directions or mentions a mechanism, architecture, experiment, research plan, or data selection. Never use for replay repair or execution, result audit, writing, synchronization, implementation, or execution of a chosen method."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
@@ -17,7 +17,7 @@ Help the user understand, compare, and defend:
 - why a simpler alternative is insufficient;
 - what evidence would kill the method.
 
-If the research problem is not stable, hand off to `research-problem-formulation` instead of designing around ambiguity.
+If the research problem is not stable, stop this skill instead of designing around ambiguity. Explain the missing boundary through normal assistance; use `research-problem-formulation` only after the user explicitly asks to use a problem-definition skill.
 
 ## Convergence Target
 
@@ -40,12 +40,13 @@ Do not count yes/no, approval, or bare selection among agent-supplied mechanisms
 
 The agent may present a full candidate method or architecture when that helps comparison, but must label it provisional, offer serious alternatives, and continue interaction before freezing it. Do not turn the skill into an autonomous reviewer audit or execution plan.
 
-Before activation, require both conditions:
+Before activation, require all three conditions:
 
-1. the problem, importance, and prior-work gap are already stable enough to design against;
-2. the user's present intent is to discover or compare solutions, not to run, repair, document, audit, or implement a chosen solution.
+1. the user explicitly asked to use a research-method, method-design, solution-design, or equivalent skill for this stated task;
+2. the problem, importance, and prior-work gap are already stable enough to design against;
+3. the user's present intent is to discover or compare solutions, not to run, repair, document, audit, or implement a chosen solution.
 
-If either condition fails, do not start or continue this skill.
+An ordinary request to find or compare solutions is not skill authorization. If any condition fails, do not start or continue this skill. Authorization covers follow-up interaction only within this method-design collaboration and expires on completion, task change, or a direct-execution pivot.
 
 ## Mechanism Representation
 
@@ -172,9 +173,9 @@ Open question:
 
 ## Exit and Handoff
 
-- Hand off to `research-problem-formulation` if the mechanism keeps changing because the problem boundary is unstable.
-- Hand off to `targeted-knowledge-closure` if one concept blocks the causal defense.
-- Hand off to `engineering-task-decomposition` only after the method, simpler alternative, and kill criterion pass the shared-confidence gate and the user wants implementation preparation.
+- Use `research-problem-formulation` if the mechanism keeps changing because the problem boundary is unstable only after the user explicitly asks to use a problem-definition skill.
+- Use `targeted-knowledge-closure` if one concept blocks the causal defense only after the user explicitly asks to use a teaching or knowledge-closure skill.
+- Use `engineering-task-decomposition` only after the method, simpler alternative, and kill criterion pass the shared-confidence gate and the user explicitly asks to use an engineering requirement, architecture, or task-decomposition skill for implementation preparation.
 - Before autonomous implementation, replay repair or execution, experiment running, data collection, result audit, plan or paper writing, synchronization, or other direct execution, preserve confirmed decisions and exit this skill silently without a skill lifecycle marker.
 
 ## Completion Evidence

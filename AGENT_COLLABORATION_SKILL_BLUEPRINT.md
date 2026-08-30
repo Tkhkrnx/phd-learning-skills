@@ -11,6 +11,8 @@ This is the mandatory operating contract for:
 
 These are user-facing collaboration protocols. They make the agent an expert thinking tool for the user. They are never agent-only checklists for planning, auditing, explaining, or executing work more conveniently.
 
+They are also explicit-use-only skills. The agent must not start one merely because a request semantically matches its expertise. The user must explicitly ask to use a skill or equivalent named expert workflow for a stated task; the exact repository identifier is not required.
+
 ## Expert Strength Without Takeover
 
 Collaboration does not mean acting as a neutral facilitator or returning every hard question to the user. The agent must contribute expert labor that the user cannot efficiently supply alone:
@@ -27,18 +29,22 @@ Use progressive transfer: model the expert move, invite the user to question, co
 
 ## Trigger Boundary
 
-Activation requires an explicit matching intent. The user may either name the skill or clearly ask for the specific collaborative reasoning act; naming the skill is not mandatory.
+Activation requires an explicit skill-use request. The current request must say, in substance, “use/call/apply this kind of skill or expert workflow to this task.” The user may use the exact identifier or a recognizable plain-language label such as “研究方法的 skill”, “问题定义那个技能”, “需求分析 skill”, or “教学 skill”. The exact English name is not mandatory.
+
+A request for the underlying work is not authorization. “帮我判断这个想法是否是学术问题”, “给这个问题找方案”, “分析一下需求”, and “解释这个概念” use normal assistance unless the user also explicitly asks to use a skill. Topic match, collaborative wording, task complexity, previous use, and agent convenience are never sufficient.
 
 Use these intent boundaries:
 
-- `research-problem-formulation`: the user presents a research idea, phenomenon, or candidate claim and explicitly asks to judge, formulate, or challenge whether it is a valid academic problem.
-- `research-method-design`: the user presents an established and accepted research problem and explicitly asks the agent to find, design, compare, refine, or defend feasible solution directions or a research method.
-- `engineering-task-decomposition`: the user explicitly asks to analyze or clarify the real requirement, understand the relevant system or architecture deeply, compare implementation paths, or construct a first execution slice before implementation.
-- `targeted-knowledge-closure`: the user asks to learn a specific concept, principle, relation, or mechanism they do not understand, or explicitly requests guided teaching with their own restatement or application. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status is ordinary assistance, not knowledge closure.
+- `research-problem-formulation`: after an explicit request for a problem-definition or academic-problem-judgment skill, the user presents a research idea, phenomenon, or candidate claim to judge, formulate, or challenge.
+- `research-method-design`: after an explicit request for a research-method or solution-design skill, the user presents an established and accepted research problem and asks to find, design, compare, refine, or defend feasible solution directions.
+- `engineering-task-decomposition`: after an explicit request for a requirement-analysis, system-understanding, architecture-analysis, or engineering-decomposition skill, the user asks to recover the real requirement or system model before implementation.
+- `targeted-knowledge-closure`: after an explicit request for a teaching, guided-learning, concept-learning, or knowledge-closure skill, the user identifies a concept, principle, relation, or mechanism to learn. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status remains ordinary assistance unless the user explicitly requests a skill.
 
-Topic match, task complexity, or agent convenience is never sufficient. Do not activate any of these skills for an ordinary request to write, summarize, review, synchronize, implement, debug, run experiments, execute a frozen plan, or produce a deliverable. A direct request such as "按已确认方案同步实验计划、论文和代码" is normal execution even if the underlying work is research or engineering.
+Do not activate any of these skills for an ordinary request to write, summarize, review, synchronize, implement, debug, run experiments, execute a frozen plan, or produce a deliverable. A direct request such as "按已确认方案同步实验计划、论文和代码" is normal execution even if the underlying work is research or engineering.
 
-When several intents appear, choose the user's requested reasoning act, not the broad domain. If no explicit collaborative or learning intent is present, do not activate this skill family.
+When the user explicitly requests a skill but gives only a generic phrase such as “用一个合适的 skill”, do not select from task semantics. Ask which kind of skill they intend to use. When several named kinds appear, use only those the user explicitly requested and keep their scopes separate.
+
+The initial authorization covers follow-up interaction within the same stated collaboration; the user does not need to repeat the phrase in every reply. Authorization expires when the collaboration completes, the user changes tasks, or the user pivots to ordinary execution. It must not carry into a later long-running task, and resuming later requires a new explicit skill-use request.
 
 If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker. Replay repair, experiment execution, data collection, plan synchronization, writing, and implementation are not method design merely because they support a research project.
 
@@ -143,16 +149,18 @@ Broad search and concise collaboration are compatible: the agent performs retrie
 
 Use one primary collaboration skill per round.
 
+Authorization never transfers between skills. A handoff below is allowed only when the user explicitly asks to use the destination kind of skill. Otherwise close or pause the current skill and continue with normal assistance; do not silently start the destination skill.
+
 - `research-problem-formulation` -> `research-method-design`
-  - only after the problem, importance, and surviving prior-work gap are stable and the user explicitly asks for solution directions.
+  - only after the problem, importance, and surviving prior-work gap are stable and the user explicitly asks to use a research-method or solution-design skill.
 - `research-method-design` -> `engineering-task-decomposition`
-  - only after the method, causal mechanism, simpler alternative, and kill criterion are stable and the user asks to prepare implementation.
+  - only after the method, causal mechanism, simpler alternative, and kill criterion are stable and the user explicitly asks to use an engineering requirement, architecture, or task-decomposition skill for implementation preparation.
 - `engineering-task-decomposition` -> normal execution
   - only after requirement and system understanding pass the shared-confidence gate and the user approves the first execution slice.
 - any skill -> `targeted-knowledge-closure`
-  - when one blocking concept prevents the current judgment.
+  - only when one blocking concept prevents the current judgment and the user explicitly asks to use a teaching or knowledge-closure skill.
 - `targeted-knowledge-closure` -> originating skill
-  - after the user transfers the concept back into the live decision.
+  - after the user transfers the concept back into the still-authorized original task; do not revive an expired authorization.
 
 Announce the handoff and preserve the frozen state. Do not claim that multiple skills are simultaneously complete.
 
@@ -179,6 +187,10 @@ Keep these statuses internal. At completion or handoff, explain the achieved und
 
 The skill run fails if any of these occur:
 
+- the skill activates without an explicit user request to use a skill or recognizable expert workflow for the stated task;
+- the agent infers the skill from ordinary task semantics, a previous task's authorization, topic similarity, task complexity, or convenience;
+- authorization survives a task switch, direct-execution pivot, completion, or later resumption without a new explicit skill-use request;
+- one skill hands off to another without explicit user authorization for the destination kind;
 - the agent treats its own first candidate as final and closes the skill without a meaningful user exchange;
 - the agent forces the user to construct from a blank page when it could provide expert candidates or evidence;
 - the agent asks a long questionnaire instead of diagnosing the next uncertainty;

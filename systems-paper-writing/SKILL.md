@@ -1,6 +1,6 @@
 ---
 name: systems-paper-writing
-description: Draft, restructure, revise, or pre-submit audit a top-tier systems paper for OSDI, SOSP, EuroSys, ATC, NSDI, or similar venues. Use for systems problem framing, introduction narrative, motivation evidence, design justification, evaluation and ablation planning, related-work differentiation, figures, abstracts, and reviewer-facing paper checks.
+description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a systems-paper-writing, systems-writing, 系统论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. Support top-tier systems papers for OSDI, SOSP, EuroSys, ATC, NSDI, or similar venues, including framing, motivation, design, evaluation, related work, figures, abstracts, and reviewer-facing checks."
 ---
 
 # 系统顶会论文写作
