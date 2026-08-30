@@ -1,6 +1,6 @@
 ---
 name: hpc-paper-writing
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply an HPC-paper-writing, high-performance-computing-writing, HPC论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. Support SC, PPoPP, ICS, HPDC, or similar venues with performance narratives, profiling-driven motivation, hardware-aware optimization, roofline or scaling analysis, benchmarks, figures, abstracts, and reviewer-facing checks."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply an HPC-paper-writing, high-performance-computing-writing, HPC论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Support SC, PPoPP, ICS, HPDC, or similar venues with performance narratives, profiling-driven motivation, hardware-aware optimization, roofline or scaling analysis, benchmarks, figures, abstracts, and reviewer-facing checks."
 ---
 
 # HPC 论文写作

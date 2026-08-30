@@ -1,6 +1,6 @@
 ---
 name: reading-note-builder
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a reading-note, PaperQuay-reading-note, 阅读笔记, or equivalent skill to a stated note task; the exact identifier is optional. An ordinary request to write or enhance a note is not authorization. Build a formal Obsidian reading note from a PaperQuay note and mapped MinerU正文缓存 with 导师七问、理解纠偏、正文校验, and note-to-paper mapping."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a reading-note, PaperQuay-reading-note, 阅读笔记, or equivalent skill to a stated note task; the exact identifier is optional. An ordinary request to write or enhance a note is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Build a formal Obsidian reading note from a PaperQuay note and mapped MinerU正文缓存 with 导师七问、理解纠偏、正文校验, and note-to-paper mapping."
 ---
 
 Read `scripts/build_reading_note.py` and run it with a real `--note-id`.

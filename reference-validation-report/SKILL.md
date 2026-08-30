@@ -1,6 +1,6 @@
 ---
 name: reference-validation-report
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a reference-validation, bibliography-validation, 参考文献验证, or equivalent skill to a stated paper task; the exact identifier is optional. An ordinary request to check citations is not authorization. Verify LaTeX bibliography entries against authoritative sources and generate the accepted Chinese PDF 参考文献验证报告 with evidence-backed statuses and conclusions."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a reference-validation, bibliography-validation, 参考文献验证, or equivalent skill to a stated paper task; the exact identifier is optional. An ordinary request to check citations is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Verify LaTeX bibliography entries against authoritative sources and generate the accepted Chinese PDF 参考文献验证报告 with evidence-backed statuses and conclusions."
 ---
 
 # Reference Validation Report

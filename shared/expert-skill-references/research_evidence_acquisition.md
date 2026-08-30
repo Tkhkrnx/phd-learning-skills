@@ -55,7 +55,7 @@ Before searching, form a small portfolio rather than one oversized query. Includ
 - structural-signature queries that omit the target application name;
 - exact-title, author, citation, or artifact follow-ups from strong seeds.
 
-`topic-paper-finder` may supply the academic candidate pool in `problem-boundary` or `mechanism-inspiration` mode. When a research collaboration skill is already active, use it as an internal evidence backend rather than starting a second user-facing skill lifecycle or interaction protocol. It does not replace opening decisive primary sources. Non-paper evidence requires the available web, repository, documentation, and code-search tools.
+`topic-paper-finder` may supply the academic candidate pool in `problem-boundary` or `mechanism-inspiration` mode. When a research collaboration skill is already explicitly authorized, that primary authorization is sufficient for a bounded supporting invocation of the finder; the user does not need to request the finder separately. Read its `SKILL.md`, pass a concrete query portfolio and return boundary, and use it as an internal evidence backend rather than starting a second user-facing skill lifecycle or interaction protocol. The research skill remains primary and accountable. The finder does not replace opening decisive primary sources. Non-paper evidence requires the available web, repository, documentation, and code-search tools.
 
 ## Evidence Ledger
 

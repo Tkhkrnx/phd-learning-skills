@@ -1,6 +1,6 @@
 ---
 name: targeted-knowledge-closure
-description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply a teaching, guided-learning, concept-learning, knowledge-closure, or equivalent skill to a stated concept or learning task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as an adaptive teacher who may explain first, diagnose through interaction, repair prerequisites and misconceptions, and continue until both sides have about 90% confidence that the user can explain and apply the knowledge. Do not trigger merely because the user asks to learn or explain a concept, requests context, or appears confused. Bypass concrete artifact or work-item explanations, direct factual answers, summaries, reviews, and code interpretation unless the user explicitly requests a skill."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a teaching, guided-learning, concept-learning, knowledge-closure, or equivalent skill for a stated learning task; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Act as an adaptive teacher: explain when useful, diagnose through interaction, repair prerequisites and misconceptions, and continue until both sides have about 90% confidence that the user can explain and apply the knowledge. Do not trigger merely from requests to learn, explain, get context, or from apparent confusion. Bypass concrete artifact explanations, direct factual answers, summaries, reviews, and code interpretation unless the user explicitly requests a skill."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -117,11 +117,11 @@ Open question:
 - Do not re-explain everything when one relation is wrong.
 - Do not ask for terminology recall when the live task requires causal understanding.
 - Treat a user's correction as useful diagnostic evidence, but not as sufficient proof of independent transfer by itself.
-- If the user pivots before the confidence gate is met, preserve the remaining gap internally and exit. Use another skill only after an explicit user request for that destination kind.
+- If the user pivots before the confidence gate is met, preserve the remaining gap internally and exit. A new primary skill still requires an explicit user request for that destination kind; a bounded lookup or evidence skill may support the current learning goal under the shared delegation rule.
 
 ## Exit and Handoff
 
-- Return to the originating collaboration skill after successful transfer only if its original task authorization is still active; never revive an expired skill authorization.
+- When this skill was delegated by an originating collaboration skill, return control after successful transfer only if the original task authorization is still active; never revive an expired skill authorization or turn the concept repair into an independent learning goal.
 - If the user asks for a direct summary, tutorial, deliverable, or other ordinary assistance instead of guided closure, exit this skill silently without a skill lifecycle marker.
 - If the concept expands into several independent gaps, finish or choose one grain; do not silently broaden the skill run.
 

@@ -1,6 +1,6 @@
 ---
 name: research-problem-formulation
-description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply a research-problem, problem-definition, academic-problem-judgment, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as a systems and computer-architecture research expert: search and inspect decisive literature before testing whether the problem is real, important, unresolved, non-trivial, and researchable, and require the surviving problem to be a declarative statement rather than a how-to question or solution. Do not trigger merely because the user presents a research idea, asks whether it is an academic problem, or requests writing, review, literature work, experiment execution, implementation, or another deliverable without explicitly requesting a skill."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a research-problem, problem-definition, academic-problem-judgment, or equivalent skill for a stated task; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Act as a systems and architecture research expert: inspect decisive literature, test whether the problem is real, important, unresolved, non-trivial, and researchable, and state it declaratively rather than as a how-to question or solution. Do not trigger merely from a research idea, an academic problem question, or requests for writing, review, literature work, experiments, or implementation."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
@@ -72,7 +72,7 @@ The first candidate statement is a search hypothesis, not a conclusion. Before f
 - Maintain an evidence ledger that separates observation, source-backed claim, inference, hypothesis, strongest counterevidence, and remaining source gaps.
 - Search broadly but present only the evidence that changes the judgment, normally the closest three to five works plus any decisive counterexample.
 
-Use `topic-paper-finder` in `problem-boundary` mode or equivalent literature tools for candidate discovery, then open decisive sources. If material coverage is blocked or unsaturated, state the provisional conclusion and the exact blind spot instead of declaring a novel unresolved problem.
+Use `topic-paper-finder` in `problem-boundary` mode or equivalent literature tools for candidate discovery, then open decisive sources. When available, invoke it as a bounded supporting skill: read its `SKILL.md`, give it the query portfolio and evidence-return scope, and integrate the returned candidate pool without starting a second collaboration loop. If material coverage is blocked or unsaturated, state the provisional conclusion and the exact blind spot instead of declaring a novel unresolved problem.
 
 ## Interaction Gate
 
@@ -187,7 +187,7 @@ Open question:
 
 ## Exit and Handoff
 
-- If one concept blocks a boundary judgment, use `targeted-knowledge-closure` only after the user explicitly asks to use a teaching or knowledge-closure skill for it.
+- If one concept directly blocks a boundary judgment, `targeted-knowledge-closure` may be a bounded supporting skill inside this still-authorized problem-formulation goal. Keep problem formulation primary, repair only the blocking concept, and return control here. If the user changes the objective to independent learning, require an explicit teaching-skill request.
 - After the problem, importance, and surviving prior-work gap are stable, use `research-method-design` only if the user explicitly asks to use a research-method or solution-design skill. A request merely to continue toward solutions is normal assistance, not authorization for another skill.
 - Evidence acquisition needed to judge the problem stays inside this skill. A separate survey deliverable, polished section, or other direct execution exits the skill silently after preserving confirmed decisions.
 

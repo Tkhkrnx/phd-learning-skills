@@ -8,10 +8,17 @@ import yaml
 
 
 MANIFEST = Path(__file__).resolve().parents[2] / "explicit-skill-router" / "aliases.yaml"
-EXTERNAL_DESCRIPTION_PREFIX = (
+LEGACY_EXTERNAL_DESCRIPTION_PREFIX = (
     "Explicit skill-use request only. Activate only when the user explicitly asks to use, call, "
     "or apply this skill or an unmistakable plain-language label to a stated task; the exact "
     "identifier is optional. Ordinary task matching is not authorization. "
+)
+EXTERNAL_DESCRIPTION_PREFIX = (
+    "Explicit top-level skill-use request only. Activate as a primary skill only when the user "
+    "explicitly asks to use, call, or apply this skill or an unmistakable plain-language label to "
+    "a stated task; the exact identifier is optional. Ordinary task matching is not authorization. "
+    "An already authorized primary skill may invoke this skill as a bounded supporting dependency "
+    "for the same goal; this does not create a new primary activation. "
 )
 
 
@@ -50,9 +57,15 @@ def update_external_description(path: Path, check: bool) -> bool:
     if not isinstance(metadata, dict):
         raise ValueError(f"{path}: invalid YAML frontmatter")
     description = str(metadata.get("description", ""))
-    changed = not description.startswith(EXTERNAL_DESCRIPTION_PREFIX)
+    base_description = description
+    for prefix in (EXTERNAL_DESCRIPTION_PREFIX, LEGACY_EXTERNAL_DESCRIPTION_PREFIX):
+        if base_description.startswith(prefix):
+            base_description = base_description[len(prefix) :]
+            break
+    desired_description = EXTERNAL_DESCRIPTION_PREFIX + base_description
+    changed = description != desired_description
     if changed and not check:
-        metadata["description"] = EXTERNAL_DESCRIPTION_PREFIX + description
+        metadata["description"] = desired_description
         frontmatter = yaml.safe_dump(metadata, sort_keys=False, allow_unicode=True, width=1000).rstrip()
         body = text[end + 5 :]
         path.write_text(f"---\n{frontmatter}\n---\n{body}", encoding="utf-8")
@@ -88,7 +101,7 @@ def process_root(root: Path, check: bool) -> tuple[list[str], list[str]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Enforce explicit-only invocation for user-authored task skills."
+        description="Enforce explicit top-level invocation with bounded supporting delegation."
     )
     parser.add_argument("--root", action="append", required=True, type=Path)
     parser.add_argument("--check", action="store_true")

@@ -145,11 +145,24 @@ For `research-problem-formulation` and `research-method-design`, evidence acquis
 
 Broad search and concise collaboration are compatible: the agent performs retrieval and triage, then presents only the evidence that changes the shared judgment. Literature volume, snippets, or a single attractive cross-domain analogy never satisfy this gate.
 
-## Handoff Rules
+## Skill Composition and Handoff Rules
 
-Use one primary collaboration skill per round.
+Use one primary collaboration skill per round. The primary skill owns the user's goal, the interaction loop, and the final judgment.
 
-Authorization never transfers between skills. A handoff below is allowed only when the user explicitly asks to use the destination kind of skill. Otherwise close or pause the current skill and continue with normal assistance; do not silently start the destination skill.
+An explicitly authorized primary skill may use another personal skill as a supporting skill without asking the user to repeat a skill request when the supporting work is a bounded dependency of the same goal. This is supporting delegation, not authorization transfer or a second primary collaboration.
+
+Supporting delegation is valid only when:
+
+- the subtask is necessary or materially useful to the active goal, not merely convenient;
+- its scope, expected return, and stop point are concrete;
+- it does not introduce a new objective, independent deliverable, externally visible mutation, permission requirement beyond the parent task, or long-lived state;
+- the primary skill remains accountable and integrates the result into its own user-facing reasoning;
+- the supporting skill does not announce a separate lifecycle, take over the conversation, or continue after returning its result;
+- the delegation expires with the primary authorization.
+
+For example, problem formulation and method design may call `topic-paper-finder` for bounded academic candidate discovery, then inspect decisive sources and continue the original collaboration. Engineering decomposition may temporarily use `targeted-knowledge-closure` to repair one concept that directly blocks an architecture decision, then return control to engineering. Use the minimum supporting set that closes the concrete dependency.
+
+A change of primary goal or expert role is different. It still requires the user to explicitly request the destination kind of skill; ordinary task semantics or the current skill's convenience are insufficient. Apply that rule to these primary transitions:
 
 - `research-problem-formulation` -> `research-method-design`
   - only after the problem, importance, and surviving prior-work gap are stable and the user explicitly asks to use a research-method or solution-design skill.
@@ -157,12 +170,12 @@ Authorization never transfers between skills. A handoff below is allowed only wh
   - only after the method, causal mechanism, simpler alternative, and kill criterion are stable and the user explicitly asks to use an engineering requirement, architecture, or task-decomposition skill for implementation preparation.
 - `engineering-task-decomposition` -> normal execution
   - only after requirement and system understanding pass the shared-confidence gate and the user approves the first execution slice.
-- any skill -> `targeted-knowledge-closure`
-  - only when one blocking concept prevents the current judgment and the user explicitly asks to use a teaching or knowledge-closure skill.
-- `targeted-knowledge-closure` -> originating skill
-  - after the user transfers the concept back into the still-authorized original task; do not revive an expired authorization.
+- any skill -> `targeted-knowledge-closure` as a new primary learning goal
+  - only when the user explicitly asks to use a teaching or knowledge-closure skill. A bounded concept repair inside the still-authorized parent goal may instead be supporting delegation.
+- delegated `targeted-knowledge-closure` -> originating skill
+  - return control after the user transfers the blocking concept into the still-authorized original task; do not revive an expired authorization.
 
-Announce the handoff and preserve the frozen state. Do not claim that multiple skills are simultaneously complete.
+Explain a user-requested primary handoff naturally and preserve the frozen state. Keep supporting delegation internal unless the user asks for diagnostics. Do not claim that several skills independently own or completed the same collaboration.
 
 ## Status and Completion Evidence
 
@@ -190,7 +203,10 @@ The skill run fails if any of these occur:
 - the skill activates without an explicit user request to use a skill or recognizable expert workflow for the stated task;
 - the agent infers the skill from ordinary task semantics, a previous task's authorization, topic similarity, task complexity, or convenience;
 - authorization survives a task switch, direct-execution pivot, completion, or later resumption without a new explicit skill-use request;
-- one skill hands off to another without explicit user authorization for the destination kind;
+- the agent starts any top-level personal skill without an explicit user request and without a valid active parent authorization;
+- a supporting delegation creates a new goal, independent deliverable, separate user-facing lifecycle, or scope that outlives the primary authorization;
+- the supporting skill takes over accountability or interaction instead of returning control and results to the primary skill;
+- the primary expert role changes without explicit user authorization for the destination kind;
 - the agent treats its own first candidate as final and closes the skill without a meaningful user exchange;
 - the agent forces the user to construct from a blank page when it could provide expert candidates or evidence;
 - the agent asks a long questionnaire instead of diagnosing the next uncertainty;

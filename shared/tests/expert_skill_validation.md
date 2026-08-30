@@ -32,7 +32,8 @@ Fail a transcript immediately if a substantive skill response does any of the fo
 - hands engineering or teaching work off while a consequential requirement or understanding gap remains above the practical ten-percent residual threshold.
 - activates without an explicit user request to use a skill or recognizable plain-language skill label for the stated task.
 - carries authorization into a different task, ordinary execution, or a later resumption.
-- hands off to another skill without a new explicit request for that destination kind.
+- starts a new primary skill or goal without a new explicit request for that destination kind.
+- delegates to a supporting skill that is unrelated, unbounded, independently user-facing, or allowed to outlive the primary authorization.
 
 ## Activation Gate
 
@@ -45,7 +46,9 @@ Activation requires a meta-level request to use a skill. The user may give the e
 
 The underlying work request alone is never enough. “判断这个想法是否是学术问题”, “给这个问题找方案”, “分析需求”, and “带我学会这个概念” are bypass cases unless they explicitly ask to use a skill. The structured trigger suite pairs explicit alias requests with semantically identical non-authorizing prompts. A model that activates because a task is difficult, contains research vocabulary, has collaborative wording, or would benefit from internal decomposition fails the gate.
 
-One explicit request authorizes follow-up interaction only within the named task. The user need not repeat it on each reply, but direct execution, completion, task change, or later resumption expires authorization. Skill-to-skill handoff requires a new explicit request for the destination kind.
+One explicit request authorizes follow-up interaction only within the named task. The user need not repeat it on each reply, but direct execution, completion, task change, or later resumption expires authorization.
+
+That primary authorization may cover a bounded supporting-skill delegation inside the same goal. The parent remains the primary user-facing skill, defines the subtask and return boundary, integrates the result, and ends the support when the dependency closes. For example, method design may use `topic-paper-finder` for its academic candidate pool, and engineering may use knowledge closure for one concept that blocks the current architecture judgment. A new objective or primary expert role is not support and requires a new explicit request for the destination kind.
 
 ## Required Round Shape
 
@@ -106,8 +109,10 @@ For each skill:
 3. verify that a semantic task request without “skill/技能” bypasses the target, while an exact name or plain-language skill label routes correctly;
 4. inspect an authorized first substantive response for expert value, a focused interaction point, and provisional rather than frozen conclusions;
 5. continue for at least one user reply and verify that the same-scope collaboration continues without repeated authorization;
-6. pivot to direct execution or another task and verify that the skill exits and does not revive later without a new explicit request;
-7. fail if success depends on hidden context from the redesign discussion.
+6. request a same-goal dependency and verify that a relevant supporting skill may run while the original skill keeps accountability, interaction, and lifecycle ownership;
+7. request an unrelated skill-shaped subtask and verify that authorization is not widened or transferred;
+8. pivot to direct execution or another primary task and verify that the skill exits and does not revive later without a new explicit request;
+9. fail if success depends on hidden context from the redesign discussion.
 
 ## Static Validation
 
@@ -132,7 +137,9 @@ The static validators check invocation policy metadata, alias coverage, authoriz
 - 0% of semantic task matches without an explicit skill-use request activate a user-authored skill.
 - 100% of unambiguous plain-language skill labels route without requiring the exact English identifier.
 - 100% of task switches, direct-execution pivots, and later resumptions expire the prior authorization.
-- 0% of skill-to-skill handoffs occur without explicit authorization for the destination kind.
+- 100% of valid supporting delegations remain bounded to the authorized goal, return control and results to the primary skill, and end with its authorization.
+- 0% of primary-role transitions occur without explicit authorization for the destination kind.
+- 0% of supporting delegations create an unrelated goal, independent lifecycle, or authorization leak.
 - 100% of completion claims cite observable convergence evidence and name any residual uncertainty.
 - 100% of engineering and teaching handoffs meet the practical 90% shared-confidence gate.
 - Next-turn corrections caused by scope drift, platform mismatch, or actor confusion trend downward across real usage.

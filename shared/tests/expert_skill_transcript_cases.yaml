@@ -139,6 +139,7 @@ cases:
       - "treat the problem as a declarative statement, without forcing a contradiction"
       - "offer a provisional expert framing or candidate statement when useful"
       - "derive a multi-query evidence portfolio before judging unresolved status"
+      - "use topic-paper-finder as a bounded internal supporting skill when available while problem formulation remains primary"
       - "search broadly but compress the result into decisive evidence and counterevidence"
       - "invite the user to correct the observation, boundary, or evidence"
     forbidden:
@@ -180,6 +181,7 @@ cases:
       - "derive causal obstacles from the frozen problem"
       - "translate the obstacle into a structural signature for search"
       - "search same-field, adjacent-field, cross-domain, implementation, and negative-evidence lanes"
+      - "delegate academic candidate discovery to topic-paper-finder when available and return its evidence to the active method-design collaboration"
       - "propose several feasible mechanism directions with platform assumptions"
       - "ask which causal path or constraint changes the candidate ranking"
     forbidden:
@@ -195,6 +197,7 @@ cases:
     required:
       - "derive the root challenge from the frozen problem"
       - "offer multiple serious candidate solutions"
+      - "allow bounded paper-search support without replacing the primary method-design interaction"
       - "map source provenance, relevant or cross-domain principles, engineering carriers, and analogy-break conditions"
       - "invite comparison using a decisive trade-off or failure case"
     forbidden:

@@ -1,6 +1,6 @@
 ---
 name: engineering-task-decomposition
-description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use, call, or apply an engineering requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for the underlying work is not authorization. Then act as a principal engineer who inspects the real codebase and interacts until both sides have about 90% confidence in the real requirement and relevant system model before implementation. Do not trigger merely because the user asks to analyze a requirement, understand a system, compare paths, or because a task is complex or involves code. Do not use for direct coding, bug fixing, refactoring, test execution, code review, plan execution, or implementation of already confirmed requirements."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill for a stated task; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Act as a principal engineer: inspect the real codebase and interact until both sides have about 90% confidence in the real requirement and system model before implementation. Do not trigger merely from a request to analyze requirements, understand a system, compare paths, or from task complexity. Do not use for direct coding, bug fixing, refactoring, tests, code review, plan execution, or confirmed implementation work."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
@@ -161,7 +161,7 @@ For each layer, state trigger, time budget, coverage, evidence, and which higher
 
 ## Exit and Handoff
 
-- Use `targeted-knowledge-closure` when a concept, not architecture, blocks progress only after the user explicitly asks to use a teaching or knowledge-closure skill.
+- If a concept rather than architecture directly blocks the current decision, `targeted-knowledge-closure` may be a bounded supporting skill inside this still-authorized engineering goal. Keep engineering decomposition primary, close only the blocking concept, and return control here. If the user changes the objective to independent learning, require an explicit teaching-skill request.
 - Use `research-method-design` when the unresolved question is whether a proposed research mechanism is causally defensible only after the user explicitly asks to use a research-method or solution-design skill.
 - Hand off to normal execution only after the shared-confidence gate is met and the user authorizes the first slice.
 - If the user requests direct implementation, preserve the current decision record, exit this skill silently without a skill lifecycle marker, and continue under normal execution.
