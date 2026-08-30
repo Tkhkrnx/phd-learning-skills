@@ -1,4 +1,4 @@
-version: 1
+version: 2
 cases:
   - id: route-problem-alias
     user_prompt: "请用问题定义的 skill 判断这个 Agent 调度想法是否构成学术问题。"
@@ -39,6 +39,8 @@ cases:
   - id: bypass-paper-search-semantic
     user_prompt: "找最近三年的相关论文。"
     expected: none
+    forbidden_support:
+      - topic-paper-finder
   - id: bypass-long-execution
     user_prompt: "继续修复 replay，跑完实验并提交 PR。"
     expected: none
@@ -50,18 +52,57 @@ cases:
     active_scope: "为已定义的状态复用问题比较研究方法"
     user_prompt: "我认为候选 B 的状态迁移代价会抵消收益，你再按这个约束比较。"
     expected: research-method-design
+  - id: delegate-method-paper-search
+    active_skill: research-method-design
+    active_scope: "为已定义的状态复用问题比较研究方法"
+    user_prompt: "这些候选的证据还不够，请补齐本领域、相邻领域和跨领域论文，再回到机制比较。"
+    expected: research-method-design
+    expected_support:
+      - topic-paper-finder
+  - id: delegate-problem-paper-search
+    active_skill: research-problem-formulation
+    active_scope: "判断 Agent 状态复用的尾延迟现象是否构成学术问题"
+    user_prompt: "先把最接近工作、失败案例和反证查足，再和我一起判断这个边界是否还成立。"
+    expected: research-problem-formulation
+    expected_support:
+      - topic-paper-finder
+  - id: delegate-engineering-concept-closure
+    active_skill: engineering-task-decomposition
+    active_scope: "澄清 provider 切换需求和一致性边界"
+    user_prompt: "linearizability 这个概念直接卡住了我对接口边界的判断，先带我弄懂并应用到这里，再继续需求分析。"
+    expected: engineering-task-decomposition
+    expected_support:
+      - targeted-knowledge-closure
   - id: expire-on-direct-execution
     active_skill: research-method-design
     active_scope: "为已定义的状态复用问题比较研究方法"
     user_prompt: "方案就定 B，现在直接改代码、跑实验并提交 PR。"
     expected: none
+    forbidden_support:
+      - engineering-task-decomposition
   - id: expire-on-task-switch
     active_skill: targeted-knowledge-closure
     active_scope: "学习条件概率"
     user_prompt: "顺便帮我审查另一个仓库的代码。"
     expected: none
-  - id: no-automatic-handoff
+    forbidden_support:
+      - engineering-task-decomposition
+  - id: reject-implicit-primary-transition
     active_skill: research-problem-formulation
     active_scope: "定义 Agent 调度的学术问题"
     user_prompt: "问题定义先到这里，接下来你正常给我列几个可能方向。"
     expected: none
+    forbidden_support:
+      - research-method-design
+  - id: reject-unrelated-writing-delegation
+    active_skill: research-method-design
+    active_scope: "为已定义的状态复用问题比较研究方法"
+    user_prompt: "方案先不聊了，顺便把论文方法章节直接写完。"
+    expected: none
+    forbidden_support:
+      - systems-paper-writing
+  - id: allow-explicit-primary-transition
+    active_skill: research-problem-formulation
+    active_scope: "定义 Agent 调度的学术问题"
+    user_prompt: "问题、重要性和现有工作边界已经稳定，现在请用研究方法的 skill 带我设计方案。"
+    expected: research-method-design

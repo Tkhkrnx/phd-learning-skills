@@ -1,6 +1,6 @@
 ---
 name: systems-paper-writing
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a systems-paper-writing, systems-writing, 系统论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. Support top-tier systems papers for OSDI, SOSP, EuroSys, ATC, NSDI, or similar venues, including framing, motivation, design, evaluation, related work, figures, abstracts, and reviewer-facing checks."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a systems-paper-writing, systems-writing, 系统论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Support top-tier systems papers for OSDI, SOSP, EuroSys, ATC, NSDI, or similar venues, including framing, motivation, design, evaluation, related work, figures, abstracts, and reviewer-facing checks."
 ---
 
 # 系统顶会论文写作

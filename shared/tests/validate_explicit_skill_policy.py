@@ -81,23 +81,28 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             errors.append(str(exc))
 
+        try:
+            description = parse_description(skill_dir / "SKILL.md").lower()
+            for marker in (
+                "explicit skill-use request only",
+                "exact identifier is optional",
+                "not authorization",
+                "already authorized primary skill",
+                "bounded supporting dependency",
+                "does not create a new primary activation",
+            ):
+                if marker not in description:
+                    errors.append(f"{name}: description missing {marker!r}")
+            if "explicitly asks to use" not in description and "explicitly ask to use" not in description:
+                errors.append(f"{name}: description missing an explicit-use phrase")
+        except Exception as exc:  # noqa: BLE001
+            errors.append(str(exc))
+
     for name, route in external_skills.items():
         if not isinstance(route, dict) or not isinstance(route.get("labels"), list):
             errors.append(f"{name}: external labels must be a list")
         elif len(route["labels"]) < 2 or any(not str(label).strip() for label in route["labels"]):
             errors.append(f"{name}: needs at least two non-empty external labels")
-        try:
-            description = parse_description(skill_dir / "SKILL.md").lower()
-            for marker in (
-                "explicit skill-use request only",
-                "explicitly asks to use",
-                "exact identifier is optional",
-                "not authorization",
-            ):
-                if marker not in description:
-                    errors.append(f"{name}: description missing {marker!r}")
-        except Exception as exc:  # noqa: BLE001
-            errors.append(str(exc))
 
     try:
         if implicit_policy(ROUTER) is not True:
@@ -110,14 +115,19 @@ def main() -> int:
         "only implicitly discoverable entry point",
         "Ordinary intent is not authorization",
         "Authorization expires immediately",
-        "never authorizes another skill",
-        "Do not perform an automatic handoff",
+        "Supporting Delegation",
+        "The authorized primary skill may invoke",
+        "primary skill remains accountable",
+        "transition to a new primary expert role",
+        "read that supporting skill's `SKILL.md` completely",
         "do not infer the target from task semantics",
     ):
         if marker not in router_text:
             errors.append(f"explicit-skill-router: missing marker {marker!r}")
 
     case_data = read_yaml(CASES)
+    if case_data.get("version") != 2:
+        errors.append("explicit_skill_routing_cases.yaml: version must be 2")
     cases = case_data.get("cases")
     if not isinstance(cases, list) or not cases:
         errors.append("explicit_skill_routing_cases.yaml: cases must be a non-empty list")
@@ -128,6 +138,9 @@ def main() -> int:
     coverage = {value: 0 for value in ("none", "clarify")}
     active_continuations = 0
     active_expirations = 0
+    supporting_delegations = 0
+    supporting_rejections = 0
+    explicit_primary_transitions = 0
     for case in cases:
         if not isinstance(case, dict):
             errors.append("routing case must be a mapping")
@@ -151,6 +164,27 @@ def main() -> int:
                 active_continuations += 1
             if expected == "none":
                 active_expirations += 1
+            if expected in route_targets and expected != active_skill:
+                explicit_primary_transitions += 1
+
+        expected_support = case.get("expected_support", [])
+        forbidden_support = case.get("forbidden_support", [])
+        for field, values in (
+            ("expected_support", expected_support),
+            ("forbidden_support", forbidden_support),
+        ):
+            if not isinstance(values, list) or any(value not in route_targets for value in values):
+                errors.append(f"{case_id}: {field} must contain only known skill names")
+        if isinstance(expected_support, list) and isinstance(forbidden_support, list):
+            overlap = set(expected_support) & set(forbidden_support)
+            if overlap:
+                errors.append(f"{case_id}: support skill cannot be both expected and forbidden: {sorted(overlap)}")
+            if expected_support:
+                supporting_delegations += 1
+                if expected not in route_targets:
+                    errors.append(f"{case_id}: supporting delegation requires an active primary route")
+            if forbidden_support:
+                supporting_rejections += 1
 
     if coverage["none"] < 6:
         errors.append("routing cases need at least six ordinary-request bypasses")
@@ -158,6 +192,12 @@ def main() -> int:
         errors.append("routing cases need an ambiguous generic-skill clarification case")
     if active_continuations < 1 or active_expirations < 2:
         errors.append("routing cases need same-scope continuation and multiple expiry cases")
+    if supporting_delegations < 2:
+        errors.append("routing cases need at least two valid supporting-delegation cases")
+    if supporting_rejections < 2:
+        errors.append("routing cases need at least two delegation scope-leak rejection cases")
+    if explicit_primary_transitions < 1:
+        errors.append("routing cases need an explicitly authorized primary-role transition")
 
     if errors:
         print("Explicit skill policy validation failed:")
@@ -168,7 +208,8 @@ def main() -> int:
     print(
         "Explicit skill policy validation passed: "
         f"{len(skills)} repository skills, {len(external_skills)} optional installed skills, "
-        f"{len(explicit_only_commands)} explicit commands, 1 narrow router, {len(cases)} routing cases"
+        f"{len(explicit_only_commands)} explicit commands, 1 narrow router, {len(cases)} routing cases, "
+        f"{supporting_delegations} supporting delegations"
     )
     return 0
 

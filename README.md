@@ -31,6 +31,8 @@ The expert may lead with a complete candidate problem statement, several feasibl
 
 The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage, presents only decision-changing evidence, and still requires the user's reasoned challenge or correction before convergence.
 
+Explicit authorization applies to the primary skill, not to every internal dependency. During that same authorized goal, the primary skill may invoke a bounded supporting skill when needed—for example, method design may call `topic-paper-finder` for academic candidate discovery. The primary skill keeps ownership of the conversation and integrates the result; the supporting skill does not start an independent goal or lifecycle. Switching the primary expert role or starting a different task still requires a new explicit skill request.
+
 Trigger examples:
 
 | User intent | Behavior |

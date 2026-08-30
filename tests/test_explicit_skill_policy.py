@@ -9,6 +9,7 @@ import yaml
 
 from shared.scripts.enforce_explicit_skill_policy import (
     EXTERNAL_DESCRIPTION_PREFIX,
+    LEGACY_EXTERNAL_DESCRIPTION_PREFIX,
     MANIFEST,
     process_root,
 )
@@ -37,7 +38,9 @@ class ExplicitSkillPolicyTests(unittest.TestCase):
             external = root / "planning-with-files"
             (external / "agents").mkdir(parents=True)
             (external / "SKILL.md").write_text(
-                "---\nname: planning-with-files\ndescription: Plan long tasks.\ncustom: keep-me\n---\n\nBody.\n",
+                "---\nname: planning-with-files\ndescription: "
+                f"{LEGACY_EXTERNAL_DESCRIPTION_PREFIX}Plan long tasks.\n"
+                "custom: keep-me\n---\n\nBody.\n",
                 encoding="utf-8",
             )
             (external / "agents" / "openai.yaml").write_text(
@@ -62,6 +65,9 @@ class ExplicitSkillPolicyTests(unittest.TestCase):
             )
             self.assertEqual("keep-me", external_frontmatter["custom"])
             self.assertTrue(external_frontmatter["description"].startswith(EXTERNAL_DESCRIPTION_PREFIX))
+            self.assertFalse(external_frontmatter["description"].startswith(LEGACY_EXTERNAL_DESCRIPTION_PREFIX))
+            self.assertIn("bounded supporting dependency", external_frontmatter["description"])
+            self.assertEqual(1, external_frontmatter["description"].count("Plan long tasks."))
 
             external_metadata = yaml.safe_load(
                 (external / "agents" / "openai.yaml").read_text(encoding="utf-8")

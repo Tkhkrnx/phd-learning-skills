@@ -1,6 +1,6 @@
 ---
 name: weekly-paper-radar
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a weekly-paper-radar, paper-radar, 每周论文雷达, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for recent papers is not authorization. Search recent systems-A papers for State-Centric Runtime Design and Hardware-Conscious Execution, use broader high-quality venues only when needed, and optionally download PDFs into the local submission directory."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a weekly-paper-radar, paper-radar, 每周论文雷达, or equivalent skill to a stated task; the exact identifier is optional. An ordinary request for recent papers is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Search recent systems-A papers for State-Centric Runtime Design and Hardware-Conscious Execution, use broader high-quality venues only when needed, and optionally download PDFs into the local submission directory."
 ---
 
 Read `radar_config.yaml` and `scripts/weekly_radar.py`.

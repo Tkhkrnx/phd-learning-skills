@@ -101,7 +101,11 @@ def main() -> int:
         "explicit skill-use request",
         "exact repository identifier is not required",
         "Authorization expires",
-        "Authorization never transfers between skills",
+        "Skill Composition and Handoff Rules",
+        "supporting delegation",
+        "primary skill remains accountable",
+        "return control",
+        "new primary",
         "Exit silently",
         "ordinary execution request triggers",
         "Expert Strength Without Takeover",
@@ -134,6 +138,9 @@ def main() -> int:
             "explicitly asks to use",
             "exact identifier is optional",
             "not authorization",
+            "already authorized primary skill",
+            "bounded supporting dependency",
+            "does not create a new primary activation",
             "do not trigger merely",
         ):
             if marker not in description:

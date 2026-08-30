@@ -1,6 +1,6 @@
 ---
 name: topic-paper-finder
-description: "Explicit skill-use request only: activate only when the user explicitly asks to use, call, or apply a paper-search, literature-search, topic-paper-finder, or equivalent skill to a stated search task; the exact identifier is optional. An ordinary request to find papers is not authorization. Search academic papers for a recent taxonomy-aligned study, a problem-boundary evidence portfolio, or cross-domain mechanism inspiration, with optional PDF download and local-vault matching. This skill discovers candidates; it does not prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs."
+description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a paper-search, literature-search, topic-paper-finder, or equivalent skill to a stated search task; the exact identifier is optional. An ordinary request to find papers is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Search academic papers for a recent taxonomy-aligned study, a problem-boundary evidence portfolio, or cross-domain mechanism inspiration, with optional PDF download and local-vault matching. This skill discovers candidates; it does not prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs."
 ---
 
 Read `finder_config.yaml`, `weekly-paper-radar/radar_config.yaml`, `scripts/topic_finder.py`, and the required `shared/search` and `shared/obsidian` modules before running the script.
@@ -28,7 +28,7 @@ The script outputs JSON only. It records `mode`, `queries`, `search_policy`, `co
 
 This skill covers academic candidate discovery. For method design, search repositories, official documentation, issues, pull requests, benchmarks, engineering articles, and technical blogs with the available web and code tools. Use those sources for implementation facts or inspiration, not as sole proof of academic novelty.
 
-When `research-problem-formulation` or `research-method-design` is already active, act only as its internal academic evidence backend. Do not open a second collaboration loop, emit a separate lifecycle marker, or replace the active skill's user interaction.
+When `research-problem-formulation` or `research-method-design` is already authorized and delegates a bounded candidate-discovery subtask, that active primary authorization is sufficient for this supporting use. Act only as its internal academic evidence backend. Return the candidate pool, coverage, failures, and blind spots to the primary skill; do not open a second collaboration loop, emit a separate lifecycle marker, or replace the active skill's user interaction.
 
 ## Commands
 
