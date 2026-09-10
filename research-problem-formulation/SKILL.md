@@ -28,6 +28,8 @@ Preserve the original workflow outcome. Converge on the user's ability to explai
 
 ## Problem Ontology
 
+Before presenting ANY candidate as the problem, including a provisional framing, summary, title, or handoff, apply the semantic gate below. A question is permitted for user interaction or an evaluation RQ, but never as the delivered problem statement.
+
 A research problem is a defensible declarative statement about a real and important state, phenomenon, limitation, or unresolved condition in a defined context. It does not have to be phrased as a contradiction or include a known cause. It is not a question about what to build.
 
 Use this distinction:
@@ -38,6 +40,12 @@ Use this distinction:
 - problem: humans cannot breathe underwater unaided;
 - research challenge: maintaining safe gas delivery under pressure, mobility, and resource constraints;
 - method: a particular regulator, control policy, or apparatus design.
+
+Semantic gate: identify the affected object and the evidence-supported state or limitation. Remove the proposed remedy and check that the statement still describes the condition to be understood or addressed. Reject both question forms used as the problem and declarative disguises such as "研究如何优化 X", "需要设计一个 X", or "缺少我们提出的 X". Removing a question mark does not repair the meaning. A documented lack of capability can be a problem; absence of the preferred solution alone cannot establish one.
+
+中文锚点：“人在水下如何用潜水装置才能呼吸？”是求解请求；“人在水下不能自然呼吸。”是问题陈述。“需要更好的潜水装置。”仍是方案需求。这个例子只说明问题与方案的区别，并不证明它是尚未解决的学术问题；后者仍须查证已有方案与适用边界。
+
+If the input supplies only a desired solution, expose the missing observation and ask one focused question about the actual failure or limitation. Do not invent a failure, cause, quantitative threshold, or literature gap to manufacture a declarative sentence. When evidence is incomplete, label the candidate as a hypothesis or state that the problem is not yet established.
 
 Depending on the evidence, a systems problem may take forms such as:
 
@@ -151,7 +159,7 @@ Open question:
 
 Agent scaffold:
 
-- provide one or more declarative candidate statements when useful;
+- provide a concise declarative candidate stating the actual condition; run the semantic gate before displaying it, then separate importance and surviving prior-work gap;
 - explain which observations, assumptions, and prior-work comparisons each candidate depends on;
 - keep the candidate revisable until the shared-confidence gate is met.
 
@@ -174,6 +182,7 @@ Open question:
 ## Research-Specific Guardrails
 
 - Keep problem, challenge, mechanism, and RQ distinct.
+- Apply the semantic gate again to every reformulation and final handoff. Keep clarification questions separate from the problem sentence; do not replace the statement with a question even when the user supplied a question or calls it an RQ.
 - Reject question-shaped formulations such as "how to optimize X" as objectives or design questions, not research problems.
 - Require the problem statement to remain meaningful when the proposed solution is removed from the discussion.
 - Distinguish a fundamental system limitation from an incidental bug, missing implementation, or fashionable topic.

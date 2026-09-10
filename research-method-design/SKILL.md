@@ -19,6 +19,8 @@ Help the user understand, compare, and defend:
 
 If the research problem is not stable, stop this skill instead of designing around ambiguity. Explain the missing boundary through normal assistance; use `research-problem-formulation` only after the user explicitly asks to use a problem-definition skill.
 
+At intake, require an evidence-supported declarative condition that survives removal of the proposed solution. "How can we build X?", "research how to optimize X", and "we lack our proposed X" do not establish the problem, even when labeled frozen. Separate the problem from the user's request for methods; ask for the missing observed limitation without inventing one. A genuine existing-system limitation may mention that system, but absence of a favored mechanism alone is not the gap. Preserve the declarative problem in every method comparison and handoff; experimental RQs may remain questions.
+
 ## Convergence Target
 
 Converge on a defensible method package:
