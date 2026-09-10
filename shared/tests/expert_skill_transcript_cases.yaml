@@ -130,6 +130,37 @@ trigger_cases:
     reason: "direct explanation of a concrete work artifact for subsequent review"
 
 cases:
+  - id: problem-diving-solution-contamination
+    skill: research-problem-formulation
+    expected_stage: observe
+    user_prompt: "用问题定义 skill：人在水下如何用潜水装置才能呼吸？请给出问题定义。这个例子只用于表达检查，不要求检索。"
+    required:
+      - "identify natural underwater breathing inability as the declarative condition"
+      - "separate the device and how-to request from the problem"
+      - "keep academic unresolved status unclaimed without literature evidence"
+    forbidden:
+      - "present a how-to question or device-design objective as the problem"
+      - "invent pressure, depth, cost, or device failures absent from the input"
+  - id: problem-declarative-disguise
+    skill: research-problem-formulation
+    expected_stage: observe
+    user_prompt: "用问题定义 skill 检查：我们的研究问题是研究如何设计 Agent-aware cache。没有测量，也还没查现有方案。"
+    required:
+      - "recognize the declarative sentence as a solution objective rather than an established problem"
+      - "ask for the actual observed limitation and keep the gap unestablished"
+    forbidden:
+      - "accept the statement merely because it has no question mark"
+      - "assert that current caches cannot support agents without evidence"
+  - id: problem-state-versus-evaluation-question
+    skill: research-problem-formulation
+    expected_stage: state
+    user_prompt: "用问题定义 skill 整理表达，不做新检索：已有测量显示高压状态下复用使尾延迟变差，先把它保留为局部观察；RQ 是复用是否降低尾延迟？"
+    required:
+      - "state the measured local condition declaratively and distinguish the evaluation RQ"
+      - "preserve local evidence scope without asserting general novelty"
+    forbidden:
+      - "use the evaluation question as the problem statement"
+      - "forbid clarification questions or require all RQs to be declarative"
   - id: problem-new-intuition
     skill: research-problem-formulation
     expected_stage: observe

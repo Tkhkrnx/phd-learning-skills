@@ -130,6 +130,8 @@ Never reorganize problem, challenge, mechanism, RQ, implementation scope, or acc
 
 ## Evidence Before Judgment
 
+Whenever this family states a research problem, describe the evidence-supported condition in a declarative sentence. Keep the user's clarification questions and experimental RQs separate. A goal ("build X"), a how-to request, or the absence of a preferred solution is not a problem merely because it is written without a question mark. Problem formulation checks this before every candidate and handoff; method design checks it on intake. Do not invent a limitation or novelty claim to satisfy the sentence form.
+
 Do not ask the user to guess discoverable facts.
 
 Before presenting a judgment:
