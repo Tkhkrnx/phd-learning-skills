@@ -35,6 +35,10 @@ Explicit authorization applies to the primary skill, not to every internal depen
 
 Trigger examples:
 
+Evidence-led collaboration starts with source investigation and accessible explanation, then uses focused user discussion to revise the actual account. Method design follows the problem through existing-method failures, core challenges, transferable principles, adapted elements, an integrated solution and discriminating evidence. The research target remains systems/architecture/LLM inference and serving; inspiration can cross disciplines and the resulting method need not be a new system mechanism. Three challenges are common, never a quota.
+
+Preserve the user's requested headings, order, language and source wording during delivery. Abstract-level background and problem definitions should be concise paper-quality paragraphs. Formatting and handoffs must not silently change the agreed research claim or its evidence status.
+
 | User intent | Behavior |
 |---|---|
 | "请用需求分析的 skill 把这个需求弄清楚，先别写代码" | `engineering-task-decomposition` |

@@ -38,7 +38,7 @@ Map every analogy back to the exact technical objects and state where it breaks.
 
 ## Interaction Gate
 
-Before activation, verify that the user explicitly asked to use a teaching, guided-learning, concept-learning, knowledge-closure, or equivalent skill for this stated learning task. A request to explain or learn something without an explicit skill-use request must bypass this skill. The initial authorization covers only this continuing learning collaboration and expires on completion, task change, or a pivot to ordinary assistance or execution.
+For primary activation, require an explicit teaching, guided-learning, concept-learning or equivalent skill request. A bounded concept repair delegated by an authorized parent also passes this gate without a second user request. Keep that parent primary and return after the blocking concept is usable there. Ordinary explanations without either authorization bypass this skill. Authorization expires on completion, task change, or a pivot to ordinary assistance or execution.
 
 Use the stages below as adaptive teaching checkpoints. The agent may orient or explain first when the user lacks a model, then use a focused restatement, contrast, prediction, correction, or application to diagnose understanding. Continue adjusting depth and representation until the shared-confidence gate is met.
 
@@ -88,6 +88,8 @@ Open question:
 - In your own words, how do the key objects relate, and what would you now predict in the worked example?
 
 ### 3. `correct`
+
+Use the user's actual explanation, prediction, question or correction as diagnostic evidence. Do not manufacture a misconception or demand a ritual restatement after a successful application. If the user is confused, change the explanation or representation and provide a scaffold before trying again. A user correction may demonstrate the required relation; check only transfer that remains unproven.
 
 Agent scaffold:
 

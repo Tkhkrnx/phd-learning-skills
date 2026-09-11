@@ -3,7 +3,7 @@ name: topic-paper-finder
 description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a paper-search, literature-search, topic-paper-finder, or equivalent skill to a stated search task; the exact identifier is optional. An ordinary request to find papers is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Search academic papers for a recent taxonomy-aligned study, a problem-boundary evidence portfolio, or cross-domain mechanism inspiration, with optional PDF download and local-vault matching. This skill discovers candidates; it does not prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs."
 ---
 
-Read `finder_config.yaml`, `weekly-paper-radar/radar_config.yaml`, `scripts/topic_finder.py`, and the required `shared/search` and `shared/obsidian` modules before running the script.
+Resolve paths relative to this skill directory: read `finder_config.yaml`, `../weekly-paper-radar/radar_config.yaml`, `scripts/topic_finder.py`, and the required `../shared/search` and `../shared/obsidian` modules before running the script. The command examples run from the parent skill root. If a configured source or local vault is unavailable, report it and use available academic retrieval tools; identify the fallback and do not claim the configured engine ran.
 
 ## Modes
 
@@ -14,6 +14,10 @@ Read `finder_config.yaml`, `weekly-paper-radar/radar_config.yaml`, `scripts/topi
 An explicit `--min-year` applies in every mode. Evidence modes retain already-noted papers and annotate their vault matches because an existing note may still contain decisive evidence.
 
 ## Workflow
+
+Anchor each search to the current question: object, phenomenon, comparison, source role, and failure condition. Existing favorite papers are seeds only, never a default answer set. For a benchmark question search benchmark/evaluation and measurement work directly; mechanism papers can supply context but cannot replace the closest evaluation alternatives. Keep study-mode filters out of boundary and inspiration searches unless the user requests them.
+
+For shortlisted sources, explain the original problem, contribution, assumptions, relevant evidence and exact relation to the current question, including counterevidence. Distinguish inspected full text from abstract-only leads and blocked sources. Return uncovered query families as well as results. When the user changes the phenomenon or rejects a proposed connection, revise the query portfolio rather than recycling the same citations. For standalone use, ask a focused follow-up only when selection depends on user intent; supporting use returns evidence to the parent without a second interview.
 
 1. Normalize the request into one or more focused academic queries. When the request is Chinese, derive established English terminology and synonyms rather than sending only a literal Chinese sentence. Use repeated `--query` arguments instead of one oversized Boolean query.
 2. Select the mode from the user's intent. Do not apply the three-year study default to novelty-boundary or mechanism-inspiration work.

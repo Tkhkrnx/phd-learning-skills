@@ -50,7 +50,7 @@ Inspect and preserve repository conventions, public interfaces, invariants, data
 
 ## Interaction Gate
 
-Before activation, verify that the user explicitly asked to use an engineering requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill for this stated task. An ordinary request to analyze a requirement or system must bypass this skill. The initial authorization covers only this continuing collaboration and expires on completion, task change, or a pivot to normal implementation or delivery.
+For primary activation, require an explicit engineering requirement-analysis, system-understanding or equivalent skill request. A bounded supporting invocation is also authorized under the shared blueprint; retain the parent goal and return boundary. Ordinary task matching is insufficient. Authorization expires on completion, task change, or a pivot to implementation or delivery.
 
 Use the stages below as checkpoints in an adaptive conversation. Inspect evidence, explain the real architecture or requirement model at useful depth, ask a focused question or invite correction, and revise the model from the response. Continue until the 90% shared-confidence gate is met.
 
@@ -63,6 +63,8 @@ Do not ask the user to locate directories, symbols, or logs that the agent can i
 ## Stage Machine
 
 ### 1. `requirement-contract`
+
+Inspect the relevant code, existing requirements and real usage before decomposing deliverables. Distinguish the stakeholder outcome from the requested artifact: a tool, chart or Issue may be a means rather than success. Explain that distinction with the observed workflow and ask the user to correct the decisive outcome or missing constraint. Treat illustrative examples as examples unless the user actually makes them requirements. Update acceptance criteria after a correction; do not merely append it to the old plan.
 
 Agent scaffold:
 
@@ -158,6 +160,8 @@ smoke -> targeted CI -> regression -> full acceptance
 ```
 
 For each layer, state trigger, time budget, coverage, evidence, and which higher layer it cannot replace.
+
+Set verification frequency by what can change: reuse unchanged environment and interface evidence, validate per-item facts per item, and perform batch checks at the appropriate boundary. Do not turn every execution item into a full engineering acceptance cycle. The execution handoff must identify actual outcome evidence, not just readiness or preparation completed.
 
 ## Exit and Handoff
 
