@@ -11,7 +11,7 @@ Read `aliases.yaml` completely before routing.
 
 ## Authorization Gate
 
-Route a target skill only when all of these are true:
+Route a primary target skill only when all of these are true (bounded supporting invocations use Supporting Delegation below):
 
 1. the user explicitly asks to use, call, invoke, apply, or run a skill/技能 in the current request;
 2. the user identifies the kind of skill through its exact identifier or an unambiguous plain-language label;
@@ -57,6 +57,8 @@ Do not use supporting delegation to smuggle in a new primary task. Moving from p
 5. Keep router mechanics, paths, lifecycle state, and target identifiers internal unless the user asks for diagnostics.
 
 When an authorized primary skill identifies a supporting skill under the conditions above, read that supporting skill's `SKILL.md` completely and apply only the relevant bounded subworkflow. A supporting skill's top-level explicit-use boundary remains intact: delegated use is valid only because an already authorized primary skill owns the same task.
+
+A valid supporting invocation satisfies the target's authorization check without a second user request; its subject-matter prerequisites still apply. Record the parent goal, concrete dependency and return boundary internally. This permission does not authorize spawning agents, starting new conversations or changing the research objective.
 
 Files, scripts, references, search utilities, and supporting skills that an authorized skill uses under this rule are internal backends. They do not become a second primary skill or broaden the authorization scope.
 

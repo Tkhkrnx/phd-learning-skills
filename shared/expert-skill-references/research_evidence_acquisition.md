@@ -28,6 +28,8 @@ Use surveys to map vocabulary and neighborhoods, not as sole proof of novelty. U
 
 Search for causal levers, not only papers sharing the application label. First express the root challenge as a structural signature:
 
+Start from the agreed problem and the nearest existing approaches: record what each achieves, the relevant conditions under which it fails, and the evidence for that failure. Derive candidate challenges from these failure explanations and discuss them with the user. For each challenge, search for transferable principles, not a preselected solution. Keep the target within the user's systems/architecture/inference research direction even when searching inspiration in other disciplines.
+
 ```text
 actor/object + state or resource + constraint + observable signal + controllable lever
 + decision granularity + reversibility + cost + failure mode
@@ -42,6 +44,8 @@ Then search several lanes:
 5. negative evidence showing why an attractive mechanism fails under the target constraints.
 
 Cross-domain observation is a hypothesis source, not design proof. For every borrowed idea, record the transferable principle, original assumptions, target-system mapping, carrier, cost model, and the condition that breaks the analogy.
+
+Return a challenge-to-evidence account: existing approach and failure -> challenge -> candidate source principle -> adaptation -> trade-off -> test. Include competing explanations and simpler alternatives. Explain these relationships before asking the user to choose. Compose the selected elements only after examining interactions and incompatible assumptions; citation diversity alone does not produce a coherent solution.
 
 ## Query Portfolio
 
@@ -70,6 +74,8 @@ Maintain a compact internal ledger during the run:
 | unresolved gap | what remains unknown after inspection |
 
 Keep evidence, inference, and hypothesis separate. A blog or repository can establish an implementation fact or reveal a lead; it normally cannot alone establish academic novelty. A paper title or search snippet is not evidence that its full method or assumptions match.
+
+Mark source inspection depth (full text, abstract/snippet only, inaccessible) and the exact section or artifact behind decisive claims. Separate source-established limitations from agent-inferred gaps and untested user observations. Do not recycle a familiar citation set when the research object changes. Source collection must reduce uncertainty in the current problem, not merely increase the bibliography.
 
 ## Coverage and Stop Rule
 

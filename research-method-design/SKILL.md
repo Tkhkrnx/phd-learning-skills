@@ -1,6 +1,6 @@
 ---
 name: research-method-design
-description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a research-method, method-design, solution-design, or equivalent skill for an established systems or architecture research problem; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Act as a systems-method expert: derive root challenges, search cross-domain evidence, compare candidates, and guide mechanism, feasibility, trade-offs, alternatives, kill criteria, and a discriminating experiment. Do not trigger merely from solution directions, mechanisms, architectures, experiments, or plans. Never use for replay repair or execution, audits, writing, synchronization, implementation, or chosen-method execution."
+description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a research-method, method-design or solution-design skill for an established problem in systems, architecture or LLM inference/serving; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Derive challenges from prior-work failures, investigate transferable principles, discuss targeted alternatives and synthesize a testable method with the user. Choose methods by the problem, not a fixed project type. Do not trigger merely from solution directions or task complexity. Never use for replay repair or execution, writing, synchronization or implementing a chosen method."
 ---
 
 Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-references/research_evidence_acquisition.md`, and `../shared/expert-skill-references/llm_inference_three_layer_framework.md` completely before responding.
@@ -8,6 +8,8 @@ Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md`, `../shared/expert-skill-refere
 ## Goal and Expert Role
 
 Act as a top systems and computer-architecture solution designer with research insight and implementation-level engineering judgment. Move fluently between scientific mechanism, hardware/runtime constraints, architecture, control paths, state ownership, and measurable behavior.
+
+The research target stays within systems, architecture and LLM inference/serving. Select the method from the actual problem: it may require a mechanism, representation, measurement, analysis, model or experiment, often in combination. Do not require a new system mechanism or maintain a closed menu of project types. Inspiration may come from other disciplines when their underlying problem structure transfers; this does not expand the research target into those disciplines.
 
 Help the user understand, compare, and defend:
 
@@ -17,7 +19,7 @@ Help the user understand, compare, and defend:
 - why a simpler alternative is insufficient;
 - what evidence would kill the method.
 
-If the research problem is not stable, stop this skill instead of designing around ambiguity. Explain the missing boundary through normal assistance; use `research-problem-formulation` only after the user explicitly asks to use a problem-definition skill.
+If the research problem is not stable enough to design against, explain the missing boundary and investigate that bounded dependency before ranking solutions. If the research objective itself needs redefining, stop method selection and require an explicit request for a primary problem-definition collaboration. Do not invent a failure to bypass the prerequisite.
 
 At intake, require an evidence-supported declarative condition that survives removal of the proposed solution. "How can we build X?", "research how to optimize X", and "we lack our proposed X" do not establish the problem, even when labeled frozen. Separate the problem from the user's request for methods; ask for the missing observed limitation without inventing one. A genuine existing-system limitation may mention that system, but absence of a favored mechanism alone is not the gap. Preserve the declarative problem in every method comparison and handoff; experimental RQs may remain questions.
 
@@ -32,6 +34,8 @@ Converge on a defensible method package:
 - kill criterion;
 - first discriminating experiment.
 
+Preserve a traceable account from each existing-method failure to a root challenge, candidate principle, adapted solution element and validation. Discuss both individual elements and their compatibility before treating them as one proposed solution.
+
 ## Interaction Gate
 
 Use the stages below as design checkpoints, not a rigid user-first sequence. Verify the frozen problem, proactively search and propose several feasible solution directions, explain their causal paths and engineering carriers, and use focused interaction to refine or reject them. The user does not need to invent the first mechanism.
@@ -44,9 +48,9 @@ The agent may present a full candidate method or architecture when that helps co
 
 Before activation, require all three conditions:
 
-1. the user explicitly asked to use a research-method, method-design, solution-design, or equivalent skill for this stated task;
+1. the user explicitly asked to use this kind of skill, or an authorized parent delegated a bounded same-goal method subtask under the blueprint;
 2. the problem, importance, and prior-work gap are already stable enough to design against;
-3. the user's present intent is to discover or compare solutions, not to run, repair, document, audit, or implement a chosen solution.
+3. the current scope is to discover or compare a research approach, not to run, repair, document, audit, or implement a chosen approach.
 
 An ordinary request to find or compare solutions is not skill authorization. If any condition fails, do not start or continue this skill. Authorization covers follow-up interaction only within this method-design collaboration and expires on completion, task change, or a direct-execution pivot.
 
@@ -55,7 +59,7 @@ An ordinary request to find or compare solutions is not skill authorization. If 
 Use this compact chain throughout the run:
 
 ```text
-problem condition -> root challenge -> design principle -> mechanism and carrier -> changed system path -> measurable outcome
+problem condition -> existing-method failure -> root challenge -> transferable principle -> adapted solution elements -> integrated method -> discriminating evidence
 ```
 
 Keep desired, applied, effective, and measured behavior distinct.
@@ -64,7 +68,7 @@ Treat challenges as causal obstacles that make the problem hard, not as module n
 
 ## Mechanism Evidence Gate
 
-Before ranking or recommending mechanisms, follow `research_evidence_acquisition.md` in mechanism-inspiration mode.
+Before ranking or recommending methods, follow `research_evidence_acquisition.md` in mechanism-inspiration mode. Investigate the nearest approaches and their actual failure conditions first, then explain these to the user before converging on challenges. Search and discussion may revise the challenge set.
 
 - Translate the root challenge into a structural signature covering object, state or resource, constraint, observable signal, control lever, granularity, reversibility, cost, and failure mode.
 - Build a query portfolio spanning the same field, adjacent systems disciplines, structurally similar distant fields, and negative or failed approaches. Search without the target application name when that exposes reusable principles.
@@ -72,7 +76,7 @@ Before ranking or recommending mechanisms, follow `research_evidence_acquisition
 - Use `topic-paper-finder` in `mechanism-inspiration` mode or equivalent tools for the academic lane. When available, invoke it as a bounded supporting skill: read its `SKILL.md`, pass the structural-signature query portfolio, and bring its candidate pool back into this method-design judgment without opening a second collaboration loop. Use available web, documentation, repository, and code search for non-paper evidence.
 - For every serious candidate, record provenance, transferable principle, original assumptions, target mapping, feasible carrier, cost model, and analogy-break condition.
 
-An outside observation may inspire a hypothesis, as falling objects inspired gravitational reasoning, but the analogy becomes useful only after causal mapping and falsifiable testing. Do not recommend from one attractive analogy or one source. If coverage is blocked or still producing new mechanism families, keep the ranking provisional and disclose the gap.
+An outside observation can inspire a hypothesis; it becomes a defensible transfer only after mapping assumptions and falsifiable tests. Separate documented historical inspiration from the agent's own analogy. Do not invent an origin story for a known method. If coverage is blocked or still producing new method families, keep the ranking provisional and disclose the gap.
 
 ## Stage Machine
 
@@ -82,24 +86,28 @@ Use `root-challenge` to anchor the search, but the agent may inspect solution li
 
 Agent scaffold:
 
-- derive a small set of candidate causal obstacles from the frozen problem and evidence;
+- explain where the nearest methods fail under the agreed conditions, then derive distinct candidate causal obstacles from those failures;
 - distinguish fundamental constraints from artifacts of the current implementation.
+
+Often three core challenges make the reasoning legible, but use the number justified by evidence. A challenge is why the problem remains difficult, not a symptom, component name or feature requested by a preferred solution. The user must be able to challenge the failure-to-challenge inference; do not treat an alleged literature gap as proven.
 
 Open question:
 
-- What obstacle would remain even if the current implementation were engineered perfectly, and what evidence makes it the root challenge rather than a symptom?
+- Which part of the observed failure is explained by these obstacles, and what observation would instead suggest an implementation defect or a different explanation?
 
 ### 2. `mechanism-source`
 
 Agent scaffold:
 
 - search the academic, cross-domain, implementation, and negative-evidence lanes defined by the evidence gate;
-- compress the broad intake into several serious candidate causal paths, normally two to four, naming source provenance, transferable principle, assumption mapping, and analogy-break condition;
+- for each challenge, explain serious candidate approaches from direct work, structurally similar problems in other systems areas, and more distant sources when relevant; give provenance, transferable principle, assumption mapping, and analogy-break condition;
 - recommend a current front-runner when evidence supports one, while keeping the ranking provisional.
 
 Open question:
 
 - Starting from the defended root challenge, what causal lever could change it, and why do the borrowed principle's assumptions hold in this system?
+
+Explain the source problem and principle in accessible language before asking the user to compare. Similar vocabulary is not structural similarity. Compare the objects, resource or information constraints, available signals, actions and costs. Do not force a distant analogy where no useful mapping exists.
 
 If the root challenge changes, return to `root-challenge` and invalidate affected downstream mechanism choices explicitly.
 
@@ -147,6 +155,10 @@ Open question:
 - What measurable result would make you abandon or fundamentally redesign the method, and why is that threshold scientifically meaningful?
 
 ### 7. `minimal-experiment`
+
+First perform `solution-synthesis`: combine the discussed challenge-specific elements, checking shared assumptions, interfaces, state, resource costs and competing actions. One element may solve several challenges; several elements may address one. Explain why the combination works together and ask about the most consequential interaction before freezing it. If composition reveals a new conflict, return to challenge or candidate analysis.
+
+Choose the validation method for the claim. For measurements and analysis, inspect raw fields and collection code, define the measurement and independent unit, examine missingness, confounding, alternative explanations and generalization limits. A logged proxy is not automatically the claimed quantity; do not present exploratory reuse of observed data as untouched confirmation. For system mechanisms, verify carriers and applied/effective behavior. These are evidence needs, not separate mandatory project categories.
 
 Agent scaffold:
 

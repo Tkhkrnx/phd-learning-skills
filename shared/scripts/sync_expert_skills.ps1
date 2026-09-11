@@ -1,7 +1,8 @@
 param(
     [string]$SourceRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")),
     [string]$VaultRoot = (Join-Path $env:USERPROFILE "Documents\PHR\obsidian_phr"),
-    [string[]]$TargetRoots
+    [string[]]$TargetRoots,
+    [switch]$ProtocolOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -44,6 +45,16 @@ $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\
     ForEach-Object { "shared\search\$($_.Name)" }
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
     ForEach-Object { "shared\obsidian\$($_.Name)" }
+
+if ($ProtocolOnly) {
+    # Update the collaboration family without overwriting separately maintained tools.
+    $requiredPaths = @($requiredPaths | Where-Object {
+        $_ -eq "AGENT_COLLABORATION_SKILL_BLUEPRINT.md" -or
+        $_ -like "explicit-skill-router\*" -or
+        $_ -like "shared\expert-skill-references\*" -or
+        $_ -match '^(research-problem-formulation|research-method-design|engineering-task-decomposition|targeted-knowledge-closure|topic-paper-finder)\\(SKILL\.md|agents\\openai\.yaml)$'
+    })
+}
 
 foreach ($relativePath in $requiredPaths) {
     $sourcePath = Join-Path $sourceRootPath $relativePath

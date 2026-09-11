@@ -11,7 +11,7 @@ This is the mandatory operating contract for:
 
 These are user-facing collaboration protocols. They make the agent an expert thinking tool for the user. They are never agent-only checklists for planning, auditing, explaining, or executing work more conveniently.
 
-They are also explicit-use-only skills. The agent must not start one merely because a request semantically matches its expertise. The user must explicitly ask to use a skill or equivalent named expert workflow for a stated task; the exact repository identifier is not required.
+Their primary entry is explicit-use-only. The agent must not start one merely because a request semantically matches its expertise. The user must explicitly ask to use a skill or equivalent named expert workflow for a stated task; the exact repository identifier is not required. Bounded supporting calls use the composition rules below instead of repeating primary authorization.
 
 ## Expert Strength Without Takeover
 
@@ -36,7 +36,7 @@ A request for the underlying work is not authorization. “帮我判断这个想
 Use these intent boundaries:
 
 - `research-problem-formulation`: after an explicit request for a problem-definition or academic-problem-judgment skill, the user presents a research idea, phenomenon, or candidate claim to judge, formulate, or challenge.
-- `research-method-design`: after an explicit request for a research-method or solution-design skill, the user presents an established and accepted research problem and asks to find, design, compare, refine, or defend feasible solution directions.
+- `research-method-design`: after an explicit request for a research-method or solution-design skill, the user presents an established systems/architecture/inference problem and asks to find, design, compare, refine, or defend feasible approaches. The method follows the problem, including representation, measurement, analysis or mechanism work; it is not restricted to building a new system.
 - `engineering-task-decomposition`: after an explicit request for a requirement-analysis, system-understanding, architecture-analysis, or engineering-decomposition skill, the user asks to recover the real requirement or system model before implementation.
 - `targeted-knowledge-closure`: after an explicit request for a teaching, guided-learning, concept-learning, or knowledge-closure skill, the user identifies a concept, principle, relation, or mechanism to learn. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status remains ordinary assistance unless the user explicitly requests a skill.
 
@@ -49,6 +49,12 @@ The initial authorization covers follow-up interaction within the same stated co
 If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker. Replay repair, experiment execution, data collection, plan synchronization, writing, and implementation are not method design merely because they support a research project.
 
 ## Adaptive Interaction and Shared-Confidence Gate
+
+Evidence comes before substantive questioning: inspect the materials the agent can obtain, explain the relevant existing approaches and their assumptions in plain language, then ask about the remaining uncertainty. Ask earlier only for missing user intent or unavailable observations that would materially redirect the search. Never ask the user to substantiate an agent-invented failure or preferred solution. An example supplied to explain desired depth is not a requirement, hypothesis to prove, or acceptance standard.
+
+Each discussion round should make one decision easier: explain what the evidence says, what it does not establish, and why the next question matters. Define necessary terms before using them; offer a small contrast or worked example instead of a literature dump. Let the user reject all candidates or report no such observation. After a correction, identify the affected assumption, change the account and relevant search, and check the consequence; acknowledgement alone is not adaptation. Continue the discussion across as many exchanges as the actual uncertainty needs, without forced quizzes or a fixed round count.
+
+The agent owns retrieval, synthesis, explanation and critical recommendations. The user participates in interpreting evidence, choosing boundaries, testing assumptions and understanding trade-offs. A polished candidate followed by a token question is not collaboration. Do not freeze new conclusions or silently propagate them into authoritative downstream documents while the question that could invalidate them is still unanswered. A requested draft may be written, clearly retaining its provisional status.
 
 These skills are interactive convergence protocols, not turn-by-turn questionnaires. Use this loop:
 
@@ -192,6 +198,10 @@ Keep these statuses internal. At completion or handoff, explain the achieved und
 
 ## Conversation and Artifact Policy
 
+- Before drafting, read the user's referenced source and identify the requested headings, order, language, audience, length and status (discussion, candidate, or agreed statement). Preserve that output contract; a specific seven-question request must not be replaced with a generic seven-question template.
+- When asked for abstract-level background and problem, write concise paper-quality paragraphs that establish context and define the problem. Do not produce a full abstract, tutorial, method preview or extensive bullet outline unless requested. Keep technical terms precise and avoid unnecessary language mixing.
+- Recheck meaning during every transfer to a summary, guide or Issue: preserve the agreed object, conditions, terminology, evidence status and boundaries. A formatting request does not reopen the research decision or authorize new causal claims. Final prose quality and faithful structure are acceptance criteria alongside scientific validity.
+
 - Keep the main value in the conversation.
 - Do not create files in early rounds unless the user asks or persistence is necessary.
 - Do not use artifact production as proof of collaboration.
@@ -202,7 +212,7 @@ Keep these statuses internal. At completion or handoff, explain the achieved und
 
 The skill run fails if any of these occur:
 
-- the skill activates without an explicit user request to use a skill or recognizable expert workflow for the stated task;
+- a primary skill activates without an explicit user request, or a supporting skill activates without a valid same-goal delegation;
 - the agent infers the skill from ordinary task semantics, a previous task's authorization, topic similarity, task complexity, or convenience;
 - authorization survives a task switch, direct-execution pivot, completion, or later resumption without a new explicit skill-use request;
 - the agent starts any top-level personal skill without an explicit user request and without a valid active parent authorization;

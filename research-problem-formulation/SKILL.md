@@ -59,6 +59,8 @@ These are reasoning forms, not fill-in templates. Do not force a contradiction, 
 
 ## Academic Problem Viability Audit
 
+Start from the user's intuition or phenomenon, not a ready-made failure narrative. Investigate existing explanations and solutions before narrowing the candidate with the user. A lack of explanation may be scientifically meaningful without a demonstrated wrong optimization decision. When evidence supports only a phenomenon, discuss that phenomenon; do not ask the user to supply an error example merely to fit the agent's proposed sentence.
+
 Preserve the existing stage flow while testing six independent questions:
 
 1. **Reality**: Is the phenomenon supported by credible observation, measurement, or source evidence rather than intuition alone?
@@ -84,7 +86,7 @@ Use `topic-paper-finder` in `problem-boundary` mode or equivalent literature too
 
 ## Interaction Gate
 
-Before activation, verify that the user explicitly asked to use a problem-definition, academic-problem-judgment, research-problem, or equivalent skill for this task. A request to judge or formulate a research idea without an explicit skill-use request must bypass this skill. The initial authorization covers only this continuing collaboration and expires on completion, task change, or a pivot to ordinary execution.
+For primary activation, verify an explicit request to use a problem-definition or equivalent skill. A bounded supporting invocation is also authorized under the shared blueprint, with the parent goal and return boundary retained. Ordinary topic matching alone is insufficient. Authorization expires on completion, task change, or a pivot to ordinary execution.
 
 Use the stages below as reasoning checkpoints, not a rigid one-stage-per-turn script. Form an initial search hypothesis, acquire evidence, present the expert diagnosis or candidate formulation the user needs, then invite a focused correction, challenge, refinement, or confidence check. Continue interacting until the evidence coverage and problem boundary are stable.
 
@@ -156,6 +158,8 @@ Open question:
 - After comparing the closest work under the same object, condition, assumptions, and metric, what important part remains unresolved and why?
 
 ### 4. `state`
+
+Use the user's requested structure. Unless they specify another arrangement, provide abstract-level background and a declarative problem definition, followed by why it matters and why existing work still fails. Present source evidence and caveats at the depth requested, outside the concise problem paragraph. Do not substitute research aims, a full abstract, a generic seven-question template or a list of research questions. Check fidelity against the user's existing wording before delivering a revision.
 
 Agent scaffold:
 

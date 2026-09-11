@@ -116,6 +116,8 @@ For each skill:
 
 ## Static Validation
 
+These scripts validate structure and fixture coverage only. They do not execute prompts, evaluate model answers, or establish a behavioral pass. Report actual forward-test outcomes separately, including model/session, supplied evidence, user correction, observed response and untested boundaries. Use `collaboration_forward_cases.md` for focused multi-turn evaluations without exposing reviewer criteria to the tested model.
+
 Run:
 
 ```powershell
