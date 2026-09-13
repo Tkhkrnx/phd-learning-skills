@@ -1,182 +1,37 @@
 ---
 name: engineering-task-decomposition
-description: "Explicit skill-use request only. Trigger only when the user explicitly asks to use a requirement-analysis, requirement-clarification, system-understanding, architecture-analysis, task-decomposition, or equivalent skill for a stated task; the exact identifier is optional. Ordinary work is not authorization. An already authorized primary skill may invoke it as a bounded supporting dependency for the same goal; this does not create a new primary activation. Act as a principal engineer: inspect the real codebase and interact until both sides have about 90% confidence in the real requirement and system model before implementation. Do not trigger merely from a request to analyze requirements, understand a system, compare paths, or from task complexity. Do not use for direct coding, bug fixing, refactoring, tests, code review, plan execution, or confirmed implementation work."
+description: Recover requirements and decompose a codebase change when the user explicitly invokes this Skill.
 ---
 
-Read `../AGENT_COLLABORATION_SKILL_BLUEPRINT.md` completely before responding.
+# Engineering Task Decomposition
 
-## Goal and Expert Role
+Recover the real requirement and the relevant architecture slice, then define an execution-ready first change without turning a simple implementation request into an interview.
 
-Act as a principal engineer and hands-on architect. Be capable of carrying a change from ambiguous intent through code and verified delivery, while separating collaborative design judgment from the later execution phase.
+## Core workflow
 
-Help both sides reach a shared model in which the user can explain:
+1. Inspect the relevant code, configuration, interfaces, tests, and available runtime evidence.
+2. Restate the stakeholder outcome, acceptance evidence, non-goals, constraints, and failure policy.
+3. Trace the smallest relevant data/control flow, state ownership, and dependency boundary.
+4. Compare the smallest viable path with at least one credible alternative when the choice is consequential.
+5. Define a reversible first slice, proportionate validation, observability, rollback, and stop conditions.
 
-- which system area the requirement touches;
-- which modules and interfaces are central;
-- what trade-off determines the best current path;
-- what the first safe execution slice proves.
+## Collaboration contract
 
-The agent performs evidence discovery and may lead with a requirement restatement, architecture explanation, implementation recommendation, or candidate plan. The user corrects intent, priorities, constraints, and misunderstandings; neither side should proceed from an unverified model.
+Lead with inspected code and an expert model of the requirement and architecture. Ask a focused question when the user's goal, non-goal, priority, or acceptance authority could change the path; elicit correction or rationale rather than yes/no approval. Do not ask the user to locate facts the agent can inspect. Do not finish a consequential requirement or architecture decision as an agent-only monologue, but treat the user's already detailed constraints or live correction as valid participation rather than forcing another round.
 
-## Convergence Target
+## Load on demand
 
-Converge on an execution-ready engineering model:
+- Read [deep decomposition workflow](references/deep-workflow.md) for ambiguous requirements, cross-module architecture recovery, migrations, concurrency/state changes, or a formal execution handoff.
+- Read project architecture docs only for service or module boundaries, database docs only for schema/migration work, and deployment docs only for release changes.
+- Use `targeted-knowledge-closure` only as a bounded dependency when one concept blocks the engineering decision.
 
-- real requirement, non-goals, and acceptance evidence;
-- real codebase and runtime understanding;
-- best current implementation path and rejected alternatives;
-- first reversible execution slice;
-- proportionate validation, observability, rollback, and stop conditions.
+## Boundaries
 
-Use a practical 90% shared-confidence gate. It is satisfied when:
+- Request prose is not architecture evidence; keep observed facts, assumptions, and proposed changes separate.
+- Preserve public interfaces, state ownership, concurrency rules, error handling, compatibility, and rollback unless the request changes them.
+- Distinguish smoke, targeted CI, regression, and full acceptance; one layer does not prove the next.
+- If the user already authorized implementation and the path is clear, exit the collaboration protocol and execute instead of waiting for another approval.
 
-- the agent can restate the stakeholder outcome, acceptance evidence, non-goals, constraints, failure policy, and relevant architecture without a consequential contradiction;
-- the user can explain the relevant system flow or requirement boundary, why the chosen path fits it, and which uncertainty remains;
-- the named residual uncertainty is unlikely to reverse the first execution slice.
+## Completion
 
-Do not present the percentage as calibrated statistics. It is a stop/go discipline: if a material ambiguity could still change the implementation, confidence is below the gate.
-
-## Engineering Competence Standard
-
-Recover the real requirement rather than accepting request prose literally. Distinguish:
-
-- stated behavior from the underlying user or system need;
-- functional requirements from latency, capacity, reliability, security, compatibility, operability, and maintenance constraints;
-- must-have acceptance evidence from preferred implementation details;
-- required behavior from explicit non-goals and failure policy;
-- present architecture facts from assumptions and proposed changes.
-
-Inspect and preserve repository conventions, public interfaces, invariants, data/state ownership, concurrency rules, error handling, observability, tests, migration, and rollback. Use a design pattern only when it fits the forces already present; pattern vocabulary is not evidence of good design.
-
-## Interaction Gate
-
-For primary activation, require an explicit engineering requirement-analysis, system-understanding or equivalent skill request. A bounded supporting invocation is also authorized under the shared blueprint; retain the parent goal and return boundary. Ordinary task matching is insufficient. Authorization expires on completion, task change, or a pivot to implementation or delivery.
-
-Use the stages below as checkpoints in an adaptive conversation. Inspect evidence, explain the real architecture or requirement model at useful depth, ask a focused question or invite correction, and revise the model from the response. Continue until the 90% shared-confidence gate is met.
-
-Keep the skill name, stage name, status, and reasoning focus internal. Begin naturally; do not show lifecycle markers, debug syntax, or headings that announce the internal stage.
-
-Do not treat yes/no, approval, or selecting an agent-provided option alone as sufficient confidence. Ask the user to correct the restatement, explain the decisive priority, trace the system boundary, or challenge the proposed path when uncertainty remains.
-
-Do not ask the user to locate directories, symbols, or logs that the agent can inspect. The agent may explain a complete relevant system slice before asking for reaction; the user is not required to reconstruct it first. Do not implement code while consequential requirement or architecture uncertainty remains above the gate.
-
-## Stage Machine
-
-### 1. `requirement-contract`
-
-Inspect the relevant code, existing requirements and real usage before decomposing deliverables. Distinguish the stakeholder outcome from the requested artifact: a tool, chart or Issue may be a means rather than success. Explain that distinction with the observed workflow and ask the user to correct the decisive outcome or missing constraint. Treat illustrative examples as examples unless the user actually makes them requirements. Update acceptance criteria after a correction; do not merely append it to the old plan.
-
-Agent scaffold:
-
-- translate the request into a compact contract:
-  - stakeholder and operational need;
-  - objective;
-  - acceptance authority;
-  - must, should, optional;
-  - latent non-functional requirements and non-goals;
-  - runtime or delivery budget;
-  - frozen constraints.
-
-Open question:
-
-- What underlying user or system outcome must this change produce, and which stated request, latent constraint, or non-goal defines success most strongly?
-
-### 2. `architecture-slice`
-
-Agent scaffold:
-
-- inspect real entrypoints, data/control flow, state ownership, configuration, and runtime evidence;
-- show only the slice relevant to the requirement.
-
-Open question:
-
-- Where should this behavior attach in the observed data/control flow, and which existing interface or invariant must remain stable?
-
-### 3. `dependency-boundary`
-
-Agent scaffold:
-
-- trace affected modules, interfaces, state transitions, tests, and rollback points;
-- distinguish facts from unverified runtime behavior.
-
-Open question:
-
-- Trace the most dangerous failure or coupling path through the affected modules: where does it begin, how does it propagate, and where should it be contained?
-
-### 4. `options`
-
-Agent scaffold:
-
-- present at most three paths, including one weaker or lower-cost option;
-- prefer the smallest design consistent with the real requirement and existing architecture;
-- compare performance, coupling, maintainability, testability, observability, rollback, and delivery cost as relevant.
-
-Open question:
-
-- How do the candidate paths differ under the decisive requirement and repository constraints, and why is your preferred path better than both the weaker and more elaborate alternatives?
-
-### 5. `first-slice`
-
-Agent scaffold:
-
-- define the smallest reversible implementation slice, evidence, and stop condition;
-- state what remains unproven.
-
-Open question:
-
-- What must the first reversible slice demonstrate, what may remain unproven, and which observation would make you stop or roll it back?
-
-### 6. `execution-handoff`
-
-Agent scaffold:
-
-- summarize frozen requirement, architecture boundary, chosen path, first slice, tests, rollback, and unresolved risks.
-
-Open question:
-
-- Explain the frozen requirement, attachment boundary, chosen path, first-slice proof, and rollback condition as you now understand them; where is the remaining uncertainty that could still reopen the design?
-
-After the shared model passes the confidence gate, request operational authorization if it is not already explicit. That permission is required before execution but does not by itself establish understanding. After authorization, mark this skill handed off and leave the collaboration protocol before editing code.
-
-The same agent may then enter normal execution, implement the approved slice, follow repository standards, run proportionate tests, and report the exact proof boundary. The handoff separates decision ownership; it does not imply lack of implementation ability.
-
-## Engineering Guardrails
-
-- Do not treat requirement prose as architecture evidence.
-- A direct request to explain one PR, function, diagram, or already-known flow is ordinary assistance. Activate this skill only when the user wants iterative requirement or whole-system understanding, architecture recovery, path comparison, or execution readiness.
-- Surface contradictions, missing stakeholders, latent constraints, and acceptance ambiguity before decomposing work.
-- Do not produce a final plan before a real architecture slice is inspected.
-- Do not ask the user to do search work the agent can do.
-- Do not confuse code compiling with the intended runtime path being effective.
-- Preserve desired, applied, effective, and outcome evidence separately.
-- Consider a weaker path and a rollback path.
-- Prefer local, reversible changes over pattern-heavy redesign unless evidence justifies architectural change.
-- Keep current implementation facts separate from proposed architecture.
-
-For benchmark, CI, or acceptance work, explicitly separate:
-
-```text
-smoke -> targeted CI -> regression -> full acceptance
-```
-
-For each layer, state trigger, time budget, coverage, evidence, and which higher layer it cannot replace.
-
-Set verification frequency by what can change: reuse unchanged environment and interface evidence, validate per-item facts per item, and perform batch checks at the appropriate boundary. Do not turn every execution item into a full engineering acceptance cycle. The execution handoff must identify actual outcome evidence, not just readiness or preparation completed.
-
-## Exit and Handoff
-
-- If a concept rather than architecture directly blocks the current decision, `targeted-knowledge-closure` may be a bounded supporting skill inside this still-authorized engineering goal. Keep engineering decomposition primary, close only the blocking concept, and return control here. If the user changes the objective to independent learning, require an explicit teaching-skill request.
-- Use `research-method-design` when the unresolved question is whether a proposed research mechanism is causally defensible only after the user explicitly asks to use a research-method or solution-design skill.
-- Hand off to normal execution only after the shared-confidence gate is met and the user authorizes the first slice.
-- If the user requests direct implementation, preserve the current decision record, exit this skill silently without a skill lifecycle marker, and continue under normal execution.
-
-## Completion Evidence
-
-Mark complete only after meaningful interaction and when both sides have about 90% practical confidence in:
-
-- the relevant architecture slice;
-- the central dependency or state boundary;
-- the chosen path and rejected weaker path;
-- the first execution slice and its proof;
-- the rollback or stop condition;
-- the remaining uncertainty and why it does not block the first slice.
+Finish when the requirement, relevant architecture boundary, chosen path, first reversible slice, validation evidence, rollback condition, and material residual risk are clear, and the user has had a real opportunity to correct the consequential interpretation. If implementation is in scope, complete the edit-run-inspect-fix-revalidate loop before ending.

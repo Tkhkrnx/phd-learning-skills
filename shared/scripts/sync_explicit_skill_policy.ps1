@@ -40,6 +40,13 @@ $requiredPaths = @(
 )
 $requiredPaths += $protectedSkillNames | ForEach-Object { "$_\SKILL.md" }
 $requiredPaths += $protectedSkillNames | ForEach-Object { "$_\agents\openai.yaml" }
+$requiredPaths += foreach ($skillName in $protectedSkillNames) {
+    $referenceRoot = Join-Path $sourceRootPath "$skillName\references"
+    if (Test-Path -LiteralPath $referenceRoot -PathType Container) {
+        Get-ChildItem -LiteralPath $referenceRoot -File -Recurse |
+            ForEach-Object { $_.FullName.Substring($sourceRootPath.Length + 1) }
+    }
+}
 
 foreach ($relativePath in $requiredPaths) {
     $sourcePath = Join-Path $sourceRootPath $relativePath

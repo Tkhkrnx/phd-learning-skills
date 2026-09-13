@@ -27,9 +27,9 @@ These four skills are designed to solve real work while improving the user's own
 
 They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires an explicit request to use a recognizable kind of skill for the stated task; exact identifiers are optional, but the underlying collaboration request alone is not authorization. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
 
-The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. That candidate remains provisional: the skill must invite a focused reaction, update its model from the user's correction, evidence, choice, restatement, challenge, or application, and continue until the important uncertainty is closed. The practical exit gate is about 90% shared confidence in the skill's target outcome, with residual uncertainty stated explicitly. This is an operational readiness threshold, not a calibrated probability. Stage names, statuses, and lifecycle markers stay internal so the conversation remains natural. If the user pivots to direct execution, the skill preserves confirmed decisions and exits silently.
+The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. The Skill asks for a focused reaction only when a user-owned decision or missing observation could materially change the result. Candidate conclusions remain provisional while such uncertainty is open; otherwise the agent proceeds. Stage names, statuses, and lifecycle markers stay internal. If the user pivots to direct execution, the Skill preserves confirmed decisions and exits silently.
 
-The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage, presents only decision-changing evidence, and still requires the user's reasoned challenge or correction before convergence.
+The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage and presents only decision-changing evidence.
 
 Explicit authorization applies to the primary skill, not to every internal dependency. During that same authorized goal, the primary skill may invoke a bounded supporting skill when needed—for example, method design may call `topic-paper-finder` for academic candidate discovery. The primary skill keeps ownership of the conversation and integrates the result; the supporting skill does not start an independent goal or lifecycle. Switching the primary expert role or starting a different task still requires a new explicit skill request.
 
@@ -73,7 +73,7 @@ They are intentionally expert-role skills, not generic templates:
     - first discriminating experiment
 - `engineering-task-decomposition`
   - acts like a senior engineer or architect
-  - keeps interacting until the agent understands the real need and the user understands the consequential system boundaries at roughly the 90% readiness threshold
+  - resolves material requirement and system-boundary uncertainty before a consequential handoff
   - converges on:
     - real requirement, non-goals, and acceptance evidence
     - real codebase and runtime understanding
@@ -82,7 +82,7 @@ They are intentionally expert-role skills, not generic templates:
     - validation, observability, and rollback
 - `targeted-knowledge-closure`
   - acts like a subject-matter teacher with scaffolding discipline
-  - may explain first, then adapts through reconstruction, correction, and transfer until roughly 90% learning confidence
+  - adapts through explanation, correction, and transfer only as far as the live learning goal requires
   - converges on:
     - accurate mental model and repaired prerequisites
     - user reconstruction in their own words
@@ -217,7 +217,7 @@ Synchronize the four expert skills, the evidence-oriented paper finder, and thei
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
-Codex uses `allow_implicit_invocation: false` for every protected task skill. Codex and Claude receive the same explicit-use-only descriptions plus the narrow alias router. Restart an already-open client or start a new task after deployment if its skill catalog was loaded before the update.
+Codex uses `allow_implicit_invocation: false` for every protected task Skill. Short descriptions state only the discriminating capability; the narrow alias router handles explicit plain-language requests. Optional external Skills and migrated command adapters keep their upstream bodies, while deployed copies receive explicit-only metadata and a short description prefix for clients that do not honor Codex metadata. Restart an already-open client or start a new task after deployment if its Skill catalog was loaded before the update.
 
 ## Quickstart
 

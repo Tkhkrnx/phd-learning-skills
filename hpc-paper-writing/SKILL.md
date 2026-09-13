@@ -1,13 +1,13 @@
 ---
 name: hpc-paper-writing
-description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply an HPC-paper-writing, high-performance-computing-writing, HPC论文写作, or equivalent skill to a stated manuscript task; the exact identifier is optional. An ordinary request to draft, revise, or review a paper is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Support SC, PPoPP, ICS, HPDC, or similar venues with performance narratives, profiling-driven motivation, hardware-aware optimization, roofline or scaling analysis, benchmarks, figures, abstracts, and reviewer-facing checks."
+description: Write or revise an HPC paper for venues such as SC, PPoPP, ICS, or HPDC when the user explicitly invokes this Skill.
 ---
 
 # HPC 论文写作
 
 将论文组织为一条可验证的性能证据链：应用或算法的重要性 → 可量化的硬件/算法瓶颈 → 由该瓶颈导出的优化 → 公平、可复现的性能证据。不要把工程实现量或单一 speedup 当作贡献。
 
-先阅读 [参考指南](references/hpc-paper-writing-guide.md)，再处理具体稿件。保留用户已有的术语、实测数据和结论；没有实测证据时，明确标为待验证，不要补造数字或性能归因。
+保留用户已有的术语、实测数据和结论；没有实测证据时，明确标为待验证，不要补造数字或性能归因。需要完整论文结构、venue 细则或投稿前检查时，再读取 [参考指南](references/hpc-paper-writing-guide.md)。
 
 ## 工作流
 

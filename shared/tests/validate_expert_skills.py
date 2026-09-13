@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 import yaml
@@ -9,20 +10,21 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 BLUEPRINT = ROOT / "AGENT_COLLABORATION_SKILL_BLUEPRINT.md"
 CASES = Path(__file__).with_name("expert_skill_transcript_cases.yaml")
+MAX_DESCRIPTION_CHARS = 180
+MAX_ENTRYPOINT_LINES = 80
 
 SPECS = {
     "research-problem-formulation": {
         "stages": {"observe", "localize", "contrast", "state", "pressure-test"},
-        "markers": {
-            "Academic Problem Viability Audit",
-            "Evidence Acquisition Gate",
-            "query portfolio",
-            "evidence ledger",
+        "root": {
+            "declarative problem",
             "what the problem is",
             "why it matters",
             "why existing work still fails",
+            "Collaboration contract",
+            "Load on demand",
         },
-        "trigger_markers": {"research idea", "academic problem", "not authorization"},
+        "reference": {"Semantic model", "New-problem route", "Revision route", "Evidence stop rule"},
     },
     "research-method-design": {
         "stages": {
@@ -34,17 +36,8 @@ SPECS = {
             "kill-criterion",
             "minimal-experiment",
         },
-        "markers": {
-            "Mechanism Evidence Gate",
-            "structural signature",
-            "repositories",
-            "analogy-break condition",
-            "root challenge and relevant boundary conditions",
-            "causal mechanism and feasible system carrier",
-            "kill criterion",
-            "first discriminating experiment",
-        },
-        "trigger_markers": {"established", "solution directions", "replay repair or execution"},
+        "root": {"prior-method failure", "Collaboration contract", "Load on demand", "kill criterion"},
+        "reference": {"Root challenge", "Candidate principles", "Fact gate", "Kill criterion"},
     },
     "engineering-task-decomposition": {
         "stages": {
@@ -55,28 +48,28 @@ SPECS = {
             "first-slice",
             "execution-handoff",
         },
-        "markers": {"real requirement, non-goals, and acceptance evidence", "real codebase and runtime understanding", "first reversible execution slice"},
-        "trigger_markers": {"requirement-analysis", "before implementation", "direct coding"},
+        "root": {"relevant architecture slice", "Collaboration contract", "Load on demand", "edit-run-inspect-fix-revalidate"},
+        "reference": {"Requirement contract", "Architecture slice", "First slice", "Handoff and execution"},
     },
     "targeted-knowledge-closure": {
         "stages": {"diagnose", "explain-one-grain", "correct", "transfer"},
-        "markers": {"accurate mental model with repaired prerequisites", "discrimination from a plausible near miss", "reduced scaffolding"},
-        "trigger_markers": {"concept-learning", "concrete artifact", "not authorization"},
+        "root": {"smallest concept", "Collaboration contract", "Load on demand", "observable user reasoning"},
+        "reference": {"Diagnose the smallest gap", "Choose a representation", "Repair and transfer", "Process integrity"},
     },
 }
 
-REQUIRED_HEADINGS = {
-    "## Goal and Expert Role",
-    "## Convergence Target",
-    "## Interaction Gate",
-    "## Stage Machine",
-    "## Exit and Handoff",
-    "## Completion Evidence",
-}
+FORBIDDEN_SCAFFOLD = (
+    r"90%",
+    r"ten-percent",
+    r"completely before responding",
+    r"read .+ completely before",
+    r"advance exactly one stage",
+    r"ask exactly one",
+)
 
 
-def parse_skill(path: Path) -> tuple[dict[str, str], str]:
-    text = path.read_text(encoding="utf-8")
+def parse_skill(path: Path) -> tuple[dict[str, object], str]:
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
     if not text.startswith("---\n"):
         raise ValueError("missing YAML frontmatter")
     end = text.find("\n---\n", 4)
@@ -92,176 +85,100 @@ def main() -> int:
     errors: list[str] = []
     blueprint = BLUEPRINT.read_text(encoding="utf-8")
     for marker in (
-        "user-facing collaboration protocols",
-        "Adaptive Interaction and Shared-Confidence Gate",
-        "The agent may lead with",
-        "90% confidence",
-        "meaningful user exchange",
-        "Automatic Failure Conditions",
-        "explicit skill-use request",
-        "exact repository identifier is not required",
-        "Authorization expires",
-        "Skill Composition and Handoff Rules",
-        "supporting delegation",
-        "primary skill remains accountable",
-        "return control",
-        "new primary",
-        "Exit silently",
-        "ordinary execution request triggers",
-        "Expert Strength Without Takeover",
-        "progressive transfer",
-        "Track the active skill",
-        "Do not expose protocol syntax",
-        "yes/no questions",
-        "evidence acquisition is a hard gate",
-        "research_evidence_acquisition.md",
+        "explicit-only through `agents/openai.yaml`",
+        "Ask a focused question when",
+        "Do not close a consequential collaboration as an agent-only monologue",
+        "Evidence boundaries",
+        "Supporting Skills",
+        "implement, run, inspect, repair",
+        "loading every shared reference",
     ):
         if marker not in blueprint:
             errors.append(f"blueprint: missing marker {marker!r}")
 
+    for pattern in FORBIDDEN_SCAFFOLD:
+        if re.search(pattern, blueprint, flags=re.IGNORECASE):
+            errors.append(f"blueprint: legacy scaffold remains: {pattern!r}")
+
     for name, spec in SPECS.items():
-        path = ROOT / name / "SKILL.md"
+        skill_path = ROOT / name / "SKILL.md"
+        reference_path = ROOT / name / "references" / "deep-workflow.md"
         try:
-            metadata, body = parse_skill(path)
-        except Exception as exc:  # noqa: BLE001 - aggregate validator errors
+            metadata, body = parse_skill(skill_path)
+        except Exception as exc:  # noqa: BLE001 - aggregate validation boundary
             errors.append(f"{name}: {exc}")
             continue
 
-        if set(metadata) != {"name", "description"}:
-            errors.append(f"{name}: frontmatter must contain only name and description")
         if metadata.get("name") != name:
             errors.append(f"{name}: frontmatter name mismatch")
-        description = str(metadata.get("description", "")).lower()
-        for marker in (
-            "explicit skill-use request only",
-            "trigger only when",
-            "explicitly asks to use",
-            "exact identifier is optional",
-            "not authorization",
-            "already authorized primary skill",
-            "bounded supporting dependency",
-            "does not create a new primary activation",
-            "do not trigger merely",
-        ):
-            if marker not in description:
-                errors.append(f"{name}: description lacks explicit-use boundary marker {marker!r}")
-        for marker in spec["trigger_markers"]:
-            if marker not in description:
-                errors.append(f"{name}: description lacks trigger marker {marker!r}")
-        if len(description) > 900:
-            errors.append(f"{name}: description is too long")
+        description = str(metadata.get("description", ""))
+        if not description or len(description) > MAX_DESCRIPTION_CHARS:
+            errors.append(f"{name}: description must be 1-{MAX_DESCRIPTION_CHARS} characters")
+        if "explicitly" not in description.lower():
+            errors.append(f"{name}: description must state its explicit trigger")
+        if len(body.splitlines()) > MAX_ENTRYPOINT_LINES:
+            errors.append(f"{name}: entrypoint exceeds {MAX_ENTRYPOINT_LINES} lines")
+        for marker in spec["root"]:
+            if marker not in body:
+                errors.append(f"{name}: root missing marker {marker!r}")
+        for marker in ("agent-only monologue", "yes/no"):
+            if marker not in body:
+                errors.append(f"{name}: root missing collaboration invariant {marker!r}")
+        if not reference_path.is_file():
+            errors.append(f"{name}: missing references/deep-workflow.md")
+        else:
+            reference = reference_path.read_text(encoding="utf-8")
+            for marker in spec["reference"]:
+                if marker not in reference:
+                    errors.append(f"{name}: reference missing marker {marker!r}")
 
-        openai_metadata = ROOT / name / "agents" / "openai.yaml"
+        combined = body + "\n" + (reference_path.read_text(encoding="utf-8") if reference_path.is_file() else "")
+        for pattern in FORBIDDEN_SCAFFOLD:
+            if re.search(pattern, combined, flags=re.IGNORECASE):
+                errors.append(f"{name}: legacy scaffold remains: {pattern!r}")
+
         try:
-            openai_data = yaml.safe_load(openai_metadata.read_text(encoding="utf-8"))
+            openai_data = yaml.safe_load((ROOT / name / "agents" / "openai.yaml").read_text(encoding="utf-8"))
             if openai_data.get("policy", {}).get("allow_implicit_invocation") is not False:
                 errors.append(f"{name}: implicit invocation must be disabled")
-        except Exception as exc:  # noqa: BLE001 - aggregate validator errors
+        except Exception as exc:  # noqa: BLE001
             errors.append(f"{name}: invalid agents/openai.yaml: {exc}")
-
-        headings = {line for line in body.splitlines() if line.startswith("## ")}
-        missing_headings = REQUIRED_HEADINGS - headings
-        if missing_headings:
-            errors.append(f"{name}: missing headings {sorted(missing_headings)}")
-        if "90%" not in body:
-            errors.append(f"{name}: missing practical shared-confidence gate")
-        if "meaningful exchange" not in body and "meaningful interaction" not in body:
-            errors.append(f"{name}: missing iterative interaction evidence")
-        if "Open question:" not in body:
-            errors.append(f"{name}: missing open-question stage interface")
-        if "Keep the skill name, stage name, status, and reasoning focus internal" not in body:
-            errors.append(f"{name}: missing user-facing internal-state boundary")
-        if "User-owned judgment:" in body:
-            errors.append(f"{name}: legacy judgment interface remains")
-        if "yes/no" not in body:
-            errors.append(f"{name}: missing yes/no anti-pattern")
-        if "Advance exactly one stage" in body or "ask exactly one" in body:
-            errors.append(f"{name}: legacy rigid turn gate remains")
-        for stage in spec["stages"]:
-            if f"`{stage}`" not in body:
-                errors.append(f"{name}: missing stage {stage!r}")
-        for marker in spec["markers"]:
-            if marker not in body:
-                errors.append(f"{name}: missing skill-specific marker {marker!r}")
-        if len(body.splitlines()) > 220:
-            errors.append(f"{name}: SKILL.md exceeds 220-line context budget")
-        if "execution-support" in body:
-            errors.append(f"{name}: forbidden agent-only execution mode found")
-        if "Suspend this skill" in body or "Suspend immediately" in body:
-            errors.append(f"{name}: visible suspension behavior remains")
-
-    for forbidden_marker in ("[skill-run] skill=", "[skill-run-result] skill="):
-        if forbidden_marker in blueprint:
-            errors.append(f"blueprint: visible lifecycle marker remains {forbidden_marker!r}")
 
     case_data = yaml.safe_load(CASES.read_text(encoding="utf-8"))
     trigger_cases = case_data.get("trigger_cases", []) if isinstance(case_data, dict) else []
-    trigger_coverage = {name: {True: 0, False: 0} for name in SPECS}
-    trigger_ids: set[str] = set()
+    coverage = {name: {True: 0, False: 0} for name in SPECS}
     for case in trigger_cases:
-        case_id = case.get("id")
-        skill = case.get("skill")
+        name = case.get("skill")
         activate = case.get("activate")
-        if not case_id or case_id in trigger_ids:
-            errors.append(f"trigger_cases: missing or duplicate id {case_id!r}")
-        trigger_ids.add(case_id)
-        if skill not in SPECS:
-            errors.append(f"trigger_cases: unknown skill {skill!r}")
+        if name not in SPECS or not isinstance(activate, bool):
+            errors.append(f"trigger case {case.get('id')!r}: invalid skill or activate value")
             continue
-        if not isinstance(activate, bool):
-            errors.append(f"{case_id}: activate must be boolean")
-            continue
-        trigger_coverage[skill][activate] += 1
-        if not case.get("user_prompt") or not case.get("reason"):
-            errors.append(f"{case_id}: user_prompt and reason are required")
-        prompt = str(case.get("user_prompt", "")).lower()
-        if activate and "skill" not in prompt and "技能" not in prompt:
-            errors.append(f"{case_id}: activating prompt lacks an explicit skill-use request")
-    for skill, counts in trigger_coverage.items():
+        coverage[name][activate] += 1
+        if activate and "skill" not in str(case.get("user_prompt", "")).lower() and "技能" not in str(case.get("user_prompt", "")):
+            errors.append(f"trigger case {case.get('id')!r}: missing explicit Skill request")
+    for name, counts in coverage.items():
         if counts[True] < 2 or counts[False] < 2:
-            errors.append(f"trigger_cases: {skill} needs at least two activate and two bypass cases")
+            errors.append(f"trigger cases: {name} needs at least two activate and two bypass cases")
 
-    cases = case_data.get("cases", []) if isinstance(case_data, dict) else []
-    coverage = {name: 0 for name in SPECS}
-    ids: set[str] = set()
-    for case in cases:
-        case_id = case.get("id")
-        skill = case.get("skill")
-        if not case_id or case_id in ids:
-            errors.append(f"cases: missing or duplicate id {case_id!r}")
-        ids.add(case_id)
-        if skill not in SPECS:
-            errors.append(f"cases: unknown skill {skill!r}")
+    transcript_cases = case_data.get("cases", []) if isinstance(case_data, dict) else []
+    transcript_coverage = {name: 0 for name in SPECS}
+    for case in transcript_cases:
+        name = case.get("skill")
+        if name not in SPECS:
+            errors.append(f"transcript case {case.get('id')!r}: unknown skill")
             continue
-        coverage[skill] += 1
-        if case.get("expected_stage") not in SPECS[skill]["stages"]:
-            errors.append(f"{case_id}: invalid expected_stage")
+        transcript_coverage[name] += 1
+        if case.get("expected_stage") not in SPECS[name]["stages"]:
+            errors.append(f"transcript case {case.get('id')!r}: invalid expected_stage")
         if not case.get("required") or not case.get("forbidden"):
-            errors.append(f"{case_id}: required and forbidden checks must be non-empty")
-    for skill, count in coverage.items():
+            errors.append(f"transcript case {case.get('id')!r}: required and forbidden must be non-empty")
+    for name, count in transcript_coverage.items():
         if count < 2:
-            errors.append(f"cases: {skill} needs at least two regression cases")
+            errors.append(f"transcript cases: {name} needs at least two cases")
 
-    theory = ROOT / "shared" / "expert-skill-references" / "collaboration_theory.md"
-    if not theory.is_file():
-        errors.append("missing collaboration theory reference")
-
-    evidence_protocol = ROOT / "shared" / "expert-skill-references" / "research_evidence_acquisition.md"
-    if not evidence_protocol.is_file():
+    evidence = ROOT / "shared" / "expert-skill-references" / "research_evidence_acquisition.md"
+    if not evidence.is_file():
         errors.append("missing research evidence acquisition reference")
-    else:
-        evidence_text = evidence_protocol.read_text(encoding="utf-8")
-        for marker in (
-            "Problem-boundary evidence",
-            "Mechanism-inspiration evidence",
-            "Query Portfolio",
-            "Evidence Ledger",
-            "Coverage and Stop Rule",
-            "Cross-domain observation is a hypothesis source, not design proof",
-            "internal evidence backend",
-        ):
-            if marker not in evidence_text:
-                errors.append(f"research evidence protocol: missing marker {marker!r}")
 
     if errors:
         print("Expert skill validation failed:")
@@ -271,7 +188,8 @@ def main() -> int:
 
     print(
         "Expert skill validation passed: "
-        f"{len(SPECS)} skills, {len(trigger_cases)} trigger cases, {len(cases)} transcript cases"
+        f"{len(SPECS)} routed Skills, {len(trigger_cases)} trigger cases, "
+        f"{len(transcript_cases)} transcript cases"
     )
     return 0
 

@@ -15,7 +15,7 @@ Weak facilitation without expert contribution is also a failure. The agent must 
 
 Fail a transcript immediately if a substantive skill response does any of the following:
 
-- treats its first problem, method, architecture, plan, or tutorial as final without a meaningful user exchange;
+- treats its first problem, method, architecture, plan, or tutorial as final while a material user-owned decision is still unresolved;
 - forces the user to construct from a blank page when expert candidates would help;
 - asks a long questionnaire instead of targeting the next uncertainty;
 - uses a confirmation question such as "懂了吗" as the interaction gate;
@@ -29,7 +29,7 @@ Fail a transcript immediately if a substantive skill response does any of the fo
 - emits a suspension or lifecycle marker after the user requests normal execution.
 - exposes a skill name, stage, status, reasoning-focus label, or lifecycle marker in normal user-facing conversation.
 - activates `research-method-design` for replay repair, experiment execution, data collection, result audit, writing, synchronization, or implementation of a chosen method.
-- hands engineering or teaching work off while a consequential requirement or understanding gap remains above the practical ten-percent residual threshold.
+- hands engineering or teaching work off while a consequential requirement or understanding gap remains unresolved.
 - activates without an explicit user request to use a skill or recognizable plain-language skill label for the stated task.
 - carries authorization into a different task, ordinary execution, or a later resumption.
 - starts a new primary skill or goal without a new explicit request for that destination kind.
@@ -55,9 +55,9 @@ That primary authorization may cover a bounded supporting-skill delegation insid
 Every substantive skill run must show this adaptive loop in natural language:
 
 1. evidence-backed expert explanation, recommendation, or candidates;
-2. a focused request for correction, reasoning, priority, restatement, prediction, or application;
-3. an update based on the user's response;
-4. continued interaction until the convergence target and practical 90% shared-confidence gate are met.
+2. a focused request for correction, reasoning, priority, restatement, prediction, or application only when it could materially change the result;
+3. an update based on the user's response when such interaction was needed;
+4. continued work until the requested outcome is usable and no open issue is likely to reverse the next action.
 
 A response may connect several related checkpoints. Prefer one focused question per round, but do not manufacture a question or force a restatement merely to satisfy a script.
 
@@ -67,7 +67,7 @@ The active skill, internal stage, status, and reasoning focus must not be shown 
 
 ### `research-problem-formulation`
 
-The agent may propose the first problem statement. A complete run includes meaningful user correction, refinement, or reasoned acceptance and a response to one dangerous counterexample. The first candidate must not be frozen unilaterally.
+The agent may propose the first problem statement. A complete run addresses the strongest dangerous counterexample and preserves provisional status while a material user-owned boundary remains open. It must not force an exchange when the supplied evidence and intent are already sufficient.
 
 The problem statement must be declarative. A formulation beginning with "how to" is an objective or design question, not the research problem. Do not require every problem to be a contradiction or known capability gap: a supported phenomenon or unresolved condition may be the problem. The run must still test reality, boundary, importance, prior resolution, non-trivial challenge, and researchability.
 
@@ -79,11 +79,11 @@ The problem must already be stable. Before ranking candidates, the agent should 
 
 ### `engineering-task-decomposition`
 
-The agent must discover explicit and latent requirements, inspect the system, and explain the relevant architecture. Interaction continues until the agent is about 90% confident in the real need and the user is about 90% confident in the requirement or system model. The percentage is a practical gate, evidenced by stable restatement, boundaries, trade-offs, first-slice proof, and named residual uncertainty.
+The agent must discover explicit and latent requirements, inspect the relevant system slice, and explain consequential boundaries. It asks only about unresolved choices that could change the implementation and otherwise proceeds to the first reversible slice and its proof.
 
 ### `targeted-knowledge-closure`
 
-The agent may explain first, then diagnose through reaction, correction, prediction, or restatement. Continue until both sides have about 90% confidence that the user can reconstruct and transfer the concept and distinguish it from a near miss. Explanations must preserve actor, state, and ordering invariants and fade scaffolding after success.
+The agent may explain first, then diagnose through reaction, correction, prediction, or restatement when useful. Explanations preserve actor, state, and ordering invariants and fade scaffolding once the live-task application is reliable.
 
 ## Real-Usage Regression Cases
 
@@ -130,9 +130,9 @@ The static validators check invocation policy metadata, alias coverage, authoriz
 ## Acceptance Metrics
 
 - 0% of normal user-facing rounds expose protocol syntax or internal state labels.
-- 100% include a focused interaction that materially affects or validates the model.
+- 100% ask for interaction only when missing user input can materially affect or validate the model.
 - 0% accept yes/no, approval, or bare option selection alone as sufficient confidence.
-- 100% label agent-led candidate conclusions as provisional until meaningful user interaction occurs.
+- 100% label agent-led candidate conclusions as provisional while a material evidence or user-owned decision gap remains.
 - 0% use these skills as agent-only checklists.
 - 100% of direct-execution pivots exit the collaboration skill silently and preserve confirmed decisions.
 - 0% of ordinary execution requests activate an expert collaboration skill.
@@ -143,5 +143,5 @@ The static validators check invocation policy metadata, alias coverage, authoriz
 - 0% of primary-role transitions occur without explicit authorization for the destination kind.
 - 0% of supporting delegations create an unrelated goal, independent lifecycle, or authorization leak.
 - 100% of completion claims cite observable convergence evidence and name any residual uncertainty.
-- 100% of engineering and teaching handoffs meet the practical 90% shared-confidence gate.
+- 100% of engineering and teaching handoffs have no unresolved gap likely to reverse the next action.
 - Next-turn corrections caused by scope drift, platform mismatch, or actor confusion trend downward across real usage.

@@ -1,9 +1,9 @@
 ---
 name: topic-paper-finder
-description: "Explicit skill-use request only: top-level activation requires the user to explicitly ask to use, call, or apply a paper-search, literature-search, topic-paper-finder, or equivalent skill to a stated search task; the exact identifier is optional. An ordinary request to find papers is not authorization. An already authorized primary skill may invoke this skill as a bounded supporting dependency for the same goal; this does not create a new primary activation. Search academic papers for a recent taxonomy-aligned study, a problem-boundary evidence portfolio, or cross-domain mechanism inspiration, with optional PDF download and local-vault matching. This skill discovers candidates; it does not prove novelty, unresolved status, or method superiority, and it does not search repositories, documentation, articles, or blogs."
+description: Search academic papers in study, problem-boundary, or mechanism-inspiration mode when the user explicitly invokes this Skill.
 ---
 
-Resolve paths relative to this skill directory: read `finder_config.yaml`, `../weekly-paper-radar/radar_config.yaml`, `scripts/topic_finder.py`, and the required `../shared/search` and `../shared/obsidian` modules before running the script. The command examples run from the parent skill root. If a configured source or local vault is unavailable, report it and use available academic retrieval tools; identify the fallback and do not claim the configured engine ran.
+Resolve paths relative to this skill directory and run `scripts/topic_finder.py` from the parent skill root. Load `finder_config.yaml` and `../weekly-paper-radar/radar_config.yaml` for policy decisions; inspect script or shared-module source only when modifying or debugging it. If a configured source or local vault is unavailable, report it and use available academic retrieval tools; identify the fallback and do not claim the configured engine ran.
 
 ## Modes
 

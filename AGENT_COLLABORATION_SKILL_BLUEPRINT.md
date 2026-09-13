@@ -2,237 +2,76 @@
 
 ## Purpose
 
-This is the mandatory operating contract for:
+This document defines the shared contract for `research-problem-formulation`, `research-method-design`, `engineering-task-decomposition`, and `targeted-knowledge-closure`. It is a maintenance reference, not a document that every Skill run must load.
 
-- `research-problem-formulation`
-- `research-method-design`
-- `engineering-task-decomposition`
-- `targeted-knowledge-closure`
+These Skills help the user make a consequential research, engineering, or learning judgment. They should add expert evidence and alternatives without taking ownership of decisions that depend on the user's intent.
 
-These are user-facing collaboration protocols. They make the agent an expert thinking tool for the user. They are never agent-only checklists for planning, auditing, explaining, or executing work more conveniently.
+## Activation
 
-Their primary entry is explicit-use-only. The agent must not start one merely because a request semantically matches its expertise. The user must explicitly ask to use a skill or equivalent named expert workflow for a stated task; the exact repository identifier is not required. Bounded supporting calls use the composition rules below instead of repeating primary authorization.
+The four primary collaboration Skills are explicit-only through `agents/openai.yaml`. Route to one only when the user explicitly asks to use a Skill or recognizable expert-workflow label for a stated task. An ordinary request to analyze, explain, design, search, write, code, debug, review, or run experiments remains normal assistance.
 
-## Expert Strength Without Takeover
+`explicit-skill-router` is the only implicit entrypoint. It reads `aliases.yaml` when the user explicitly requests a Skill but names it in plain language. If the label is ambiguous, ask one short routing question; do not infer a target from the task topic alone.
 
-Collaboration does not mean acting as a neutral facilitator or returning every hard question to the user. The agent must contribute expert labor that the user cannot efficiently supply alone:
+Authorization covers the stated collaboration and expires when it completes, the task changes, or the user pivots to direct execution. A new primary expert role requires a new explicit request.
 
-- inspect evidence and recover the real system model;
-- generate root-cause hypotheses, counterexamples, and strong alternatives;
-- connect relevant literature, engineering precedent, and transferable ideas from other fields;
-- make a reasoned recommendation and expose why it could be wrong;
-- critique the user's judgment at the standard of a top researcher, architect, engineer, or teacher.
+## Collaboration
 
-Never ask the user to reason from a blank page when an expert scaffold can narrow the space. The agent may lead with a candidate model, diagnosis, problem statement, solution set, architecture explanation, or worked example. The user is not required to construct the answer first. Never confuse withholding expertise with collaboration.
+Start with the useful expert work: inspect available evidence, explain the current model, surface serious alternatives or counterexamples, and identify the decision that remains. Do not make the user reconstruct facts that the agent can inspect.
 
-Use progressive transfer: model the expert move, invite the user to question, correct, select, restate, or apply it, then refine and fade support. The long-term success criterion is that the user needs less scaffolding for the same class of judgment, not that the user keeps returning for the same answer.
+Interaction is adaptive, not a staged questionnaire. The agent leads with evidence and expert candidates, while the user remains part of consequential framing, design, requirement, and learning judgments. Ask a focused question when the answer could materially change or validate the boundary, recommendation, implementation path, or learning diagnosis. Elicit reasoning, correction, application, or a concrete constraint rather than accepting yes/no approval as convergence. Do not close a consequential collaboration as an agent-only monologue; if the user's supplied reasoning or live application already provides the needed signal, proceed without manufacturing another turn.
 
-## Trigger Boundary
+Treat agent-generated problem statements, methods, architecture models, and explanations as provisional when a user-owned judgment is still unresolved. Incorporate corrections by updating the affected assumption and downstream conclusion. Do not require ritual restatements, fixed turn counts, arbitrary confidence percentages, or performative questions that add no evidence.
 
-Activation requires an explicit skill-use request. The current request must say, in substance, “use/call/apply this kind of skill or expert workflow to this task.” The user may use the exact identifier or a recognizable plain-language label such as “研究方法的 skill”, “问题定义那个技能”, “需求分析 skill”, or “教学 skill”. The exact English name is not mandatory.
+Keep internal routing, stage labels, status fields, and lifecycle mechanics out of normal conversation. Preserve the user's requested structure, language, terminology, and tentative or confirmed status.
 
-A request for the underlying work is not authorization. “帮我判断这个想法是否是学术问题”, “给这个问题找方案”, “分析一下需求”, and “解释这个概念” use normal assistance unless the user also explicitly asks to use a skill. Topic match, collaborative wording, task complexity, previous use, and agent convenience are never sufficient.
+## Evidence boundaries
 
-Use these intent boundaries:
+- Separate observation, source-backed fact, inference, hypothesis, and missing evidence.
+- Research-problem and method claims about novelty, unresolved status, or superiority require targeted evidence acquisition and decisive-source inspection; use `shared/expert-skill-references/research_evidence_acquisition.md` only for those claims.
+- For LLM inference or serving questions that span workload, model, and runtime layers, use `shared/expert-skill-references/llm_inference_three_layer_framework.md`.
+- Engineering judgments should inspect the relevant code, interfaces, configuration, tests, or runtime evidence rather than relying on request prose.
+- Teaching explanations of processes should preserve actor identity, state, operation, and ordering; verify niche or current facts when they matter.
+- Static checks, fixtures, historical data, and live runtime evidence are different proof levels and must not be substituted for one another.
 
-- `research-problem-formulation`: after an explicit request for a problem-definition or academic-problem-judgment skill, the user presents a research idea, phenomenon, or candidate claim to judge, formulate, or challenge.
-- `research-method-design`: after an explicit request for a research-method or solution-design skill, the user presents an established systems/architecture/inference problem and asks to find, design, compare, refine, or defend feasible approaches. The method follows the problem, including representation, measurement, analysis or mechanism work; it is not restricted to building a new system.
-- `engineering-task-decomposition`: after an explicit request for a requirement-analysis, system-understanding, architecture-analysis, or engineering-decomposition skill, the user asks to recover the real requirement or system model before implementation.
-- `targeted-knowledge-closure`: after an explicit request for a teaching, guided-learning, concept-learning, or knowledge-closure skill, the user identifies a concept, principle, relation, or mechanism to learn. A request to explain a concrete PR, commit, issue, paper, code change, log, result, or project status remains ordinary assistance unless the user explicitly requests a skill.
+## Frozen decisions
 
-Do not activate any of these skills for an ordinary request to write, summarize, review, synchronize, implement, debug, run experiments, execute a frozen plan, or produce a deliverable. A direct request such as "按已确认方案同步实验计划、论文和代码" is normal execution even if the underlying work is research or engineering.
+Treat user-confirmed problem statements, requirements, constraints, RQs, evaluation gates, and architecture choices as frozen within the current task. When new evidence conflicts:
 
-When the user explicitly requests a skill but gives only a generic phrase such as “用一个合适的 skill”, do not select from task semantics. Ask which kind of skill they intend to use. When several named kinds appear, use only those the user explicitly requested and keep their scopes separate.
+1. name the exact conflict;
+2. propose the smallest affected revision;
+3. ask only if the choice is genuinely user-owned or would materially change scope;
+4. update dependent artifacts only after the authority is clear.
 
-The initial authorization covers follow-up interaction within the same stated collaboration; the user does not need to repeat the phrase in every reply. Authorization expires when the collaboration completes, the user changes tasks, or the user pivots to ordinary execution. It must not carry into a later long-running task, and resuming later requires a new explicit skill-use request.
+Do not reorganize confirmed content merely for a cleaner narrative.
 
-If the user requests direct execution while a collaboration skill is active, preserve the confirmed decisions, stop applying the skill, and continue under the normal execution workflow. Exit silently without a skill lifecycle marker. Replay repair, experiment execution, data collection, plan synchronization, writing, and implementation are not method design merely because they support a research project.
+## Supporting Skills
 
-## Adaptive Interaction and Shared-Confidence Gate
+An authorized primary Skill may use another Skill as a bounded dependency without a second request when the subtask is necessary to the same goal, introduces no independent deliverable or external side effect, and returns control to the primary Skill. Use the minimum supporting set.
 
-Evidence comes before substantive questioning: inspect the materials the agent can obtain, explain the relevant existing approaches and their assumptions in plain language, then ask about the remaining uncertainty. Ask earlier only for missing user intent or unavailable observations that would materially redirect the search. Never ask the user to substantiate an agent-invented failure or preferred solution. An example supplied to explain desired depth is not a requirement, hypothesis to prove, or acceptance standard.
+Examples include academic candidate discovery for a research judgment or a short concept repair that unblocks an engineering decision. Supporting use must not become a new primary workflow, broaden permissions, or outlive the parent task.
 
-Each discussion round should make one decision easier: explain what the evidence says, what it does not establish, and why the next question matters. Define necessary terms before using them; offer a small contrast or worked example instead of a literature dump. Let the user reject all candidates or report no such observation. After a correction, identify the affected assumption, change the account and relevant search, and check the consequence; acknowledgement alone is not adaptation. Continue the discussion across as many exchanges as the actual uncertainty needs, without forced quizzes or a fixed round count.
+Direct implementation, writing, synchronization, experiment execution, data collection, publishing, and other delivery work are normal execution, not supporting collaboration Skills. When the user requests them, preserve confirmed decisions, exit the collaboration protocol silently, and execute within the current authorization and safety boundaries.
 
-The agent owns retrieval, synthesis, explanation and critical recommendations. The user participates in interpreting evidence, choosing boundaries, testing assumptions and understanding trade-offs. A polished candidate followed by a token question is not collaboration. Do not freeze new conclusions or silently propagate them into authoritative downstream documents while the question that could invalidate them is still unanswered. A requested draft may be written, clearly retaining its provisional status.
+## Completion
 
-These skills are interactive convergence protocols, not turn-by-turn questionnaires. Use this loop:
+A collaboration Skill is complete when its requested outcome is usable and no unresolved issue is likely to reverse the next action. State any material residual uncertainty and its consequence.
 
-1. inspect discoverable evidence and construct an expert model;
-2. explain, recommend, or propose useful candidates at the depth the user needs;
-3. invite a focused reaction that reveals agreement, confusion, correction, priorities, or causal reasoning;
-4. update the model from the user's response and make disagreements or residual uncertainty explicit;
-5. continue until the relevant convergence target and confidence gate are met.
+Outcome examples:
 
-The agent may cover closely related checkpoints in one response and may present a complete candidate answer before the user responds. That candidate remains provisional. Do not freeze a consequential problem, method, requirement, architecture, or understanding solely from the agent's own reasoning.
+- problem formulation: an abstract-level account of what the problem is, why it matters, why existing work still fails, and what evidence could invalidate it;
+- method design: a causal method, feasible carrier, strongest simpler alternative, key assumption, and discriminating evidence;
+- engineering decomposition: requirement, relevant architecture slice, chosen path, first reversible implementation slice, validation, and rollback boundary;
+- knowledge closure: an accurate working model that the user can apply to the current task, with any remaining misconception identified.
 
-Prefer one focused question or request for reaction per round. Use a small grouped set only when the questions are inseparable. The question should help diagnose or converge, not exist merely to satisfy a protocol. Useful interactions include asking the user to explain, correct, compare, trace, restate, falsify, prioritize, or apply something. Examples include:
+When the user also requested execution, completion requires the normal implementation loop: implement, run, inspect, repair failures caused by the change, and revalidate. Do not stop after a first draft while a safe, in-scope verification or fix remains.
 
-- "What observed behavior is the problem, and which part is still only your hypothesis?"
-- "Why does this mechanism change the target system path rather than merely rename the policy?"
-- "How do these implementation paths differ under the requirement you consider decisive?"
-- "Explain this concept in your own words, then predict what changes in the live case."
-- "What evidence would make this research claim collapse, and why?"
+## Failure patterns
 
-These do not establish shared confidence by themselves:
-
-- "Do you understand?"
-- "Shall I continue?"
-- yes/no questions, approval requests, or bare option selection without revealing why;
-- "choose A, B, or C" without requiring the user's reasoning or allowing them to construct a better account;
-- asking the user to find files, facts, or documentation the agent can inspect itself;
-- asking for approval after the agent has already treated its candidate as final;
-- ignoring or merely acknowledging a user correction without revising and re-checking the affected model.
-
-Use a practical shared-confidence gate before completion or implementation handoff. About 90% confidence means the important objective, boundary, causal model, trade-off, or concept is stable and the remaining uncertainty is named and unlikely to reverse the next action. It is an operational threshold, not a calibrated probability claim.
-
-## Agent and User Responsibilities
-
-The agent must:
-
-- inspect discoverable code, documents, logs, runtime evidence, and literature itself;
-- expose a compact expert model of the current decision;
-- narrow the choice space when the user lacks a workable model;
-- critique the user's judgment after the user attempts it;
-- preserve uncertainty and distinguish observation from hypothesis;
-- pause for user input whenever the next consequential conclusion depends on their intent, evidence, reasoning, or understanding.
-
-The user's participation must remain visible for:
-
-- problem boundaries;
-- mechanism rationale;
-- design priorities and trade-offs;
-- the interpretation of evidence;
-- the final restatement, defense, or transfer judgment.
-
-The user may participate by correcting the agent, adding evidence, choosing with reasons, restating the model, challenging an assumption, or applying it. The agent may recommend strongly, but must obtain a meaningful user response before freezing a consequential conclusion.
-
-An operational authorization question may be yes/no when real permission is required before editing, executing, publishing, or another consequential action. That authorization is a safety boundary; it never counts as the user's reasoning contribution or as completion evidence.
-
-## Internal Round State
-
-Track the active skill, current checkpoints, status, reasoning focus, shared-confidence estimate, unresolved uncertainty, and frozen decisions internally. Do not expose protocol syntax, lifecycle markers, debug labels, or state-machine names in normal user-facing conversation. Emit structured state only when the user explicitly asks for a skill-run log or debugging trace.
-
-In natural language, state only what helps the collaboration:
-
-- what is already frozen;
-- what evidence or scaffold this round adds;
-- the focused question, correction request, or confidence check that moves the discussion forward.
-
-When resuming, restore the last confirmed stage and frozen decisions. Do not reinterpret earlier user decisions without showing the conflict and asking which authority wins.
-
-## Frozen Decisions and Change Control
-
-Treat user-confirmed problem statements, RQs, requirements, constraints, experiment gates, and architecture choices as frozen until explicitly reopened.
-
-When new evidence conflicts with a frozen decision:
-
-1. identify the exact conflict;
-2. show the smallest proposed change;
-3. ask the user whether to preserve or revise the decision;
-4. do not rewrite downstream structures before the answer.
-
-Never reorganize problem, challenge, mechanism, RQ, implementation scope, or acceptance criteria merely to make the narrative look cleaner.
-
-## Evidence Before Judgment
-
-Whenever this family states a research problem, describe the evidence-supported condition in a declarative sentence. Keep the user's clarification questions and experimental RQs separate. A goal ("build X"), a how-to request, or the absence of a preferred solution is not a problem merely because it is written without a question mark. Problem formulation checks this before every candidate and handoff; method design checks it on intake. Do not invent a limitation or novelty claim to satisfy the sentence form.
-
-Do not ask the user to guess discoverable facts.
-
-Before presenting a judgment:
-
-- research skills: separate observed evidence, assumptions, and literature pressure;
-- method design: verify platform, runtime, and mechanism-carrier facts;
-- engineering: inspect real files, symbols, interfaces, configuration, logs, or runtime behavior;
-- knowledge closure: verify niche or current factual claims and make actor, state, and sequence explicit.
-
-Use evidence to scaffold the user's reasoning, not to replace it.
-
-For `research-problem-formulation` and `research-method-design`, evidence acquisition is a hard gate, not an optional supporting step. Read and follow `shared/expert-skill-references/research_evidence_acquisition.md` before freezing a problem or ranking a method. A provisional framing may organize search, but novelty, unresolved status, and mechanism superiority require a query portfolio, decisive primary-source inspection, counterevidence, material blind spots, and a saturation or blocked-coverage statement.
-
-Broad search and concise collaboration are compatible: the agent performs retrieval and triage, then presents only the evidence that changes the shared judgment. Literature volume, snippets, or a single attractive cross-domain analogy never satisfy this gate.
-
-## Skill Composition and Handoff Rules
-
-Use one primary collaboration skill per round. The primary skill owns the user's goal, the interaction loop, and the final judgment.
-
-An explicitly authorized primary skill may use another personal skill as a supporting skill without asking the user to repeat a skill request when the supporting work is a bounded dependency of the same goal. This is supporting delegation, not authorization transfer or a second primary collaboration.
-
-Supporting delegation is valid only when:
-
-- the subtask is necessary or materially useful to the active goal, not merely convenient;
-- its scope, expected return, and stop point are concrete;
-- it does not introduce a new objective, independent deliverable, externally visible mutation, permission requirement beyond the parent task, or long-lived state;
-- the primary skill remains accountable and integrates the result into its own user-facing reasoning;
-- the supporting skill does not announce a separate lifecycle, take over the conversation, or continue after returning its result;
-- the delegation expires with the primary authorization.
-
-For example, problem formulation and method design may call `topic-paper-finder` for bounded academic candidate discovery, then inspect decisive sources and continue the original collaboration. Engineering decomposition may temporarily use `targeted-knowledge-closure` to repair one concept that directly blocks an architecture decision, then return control to engineering. Use the minimum supporting set that closes the concrete dependency.
-
-A change of primary goal or expert role is different. It still requires the user to explicitly request the destination kind of skill; ordinary task semantics or the current skill's convenience are insufficient. Apply that rule to these primary transitions:
-
-- `research-problem-formulation` -> `research-method-design`
-  - only after the problem, importance, and surviving prior-work gap are stable and the user explicitly asks to use a research-method or solution-design skill.
-- `research-method-design` -> `engineering-task-decomposition`
-  - only after the method, causal mechanism, simpler alternative, and kill criterion are stable and the user explicitly asks to use an engineering requirement, architecture, or task-decomposition skill for implementation preparation.
-- `engineering-task-decomposition` -> normal execution
-  - only after requirement and system understanding pass the shared-confidence gate and the user approves the first execution slice.
-- any skill -> `targeted-knowledge-closure` as a new primary learning goal
-  - only when the user explicitly asks to use a teaching or knowledge-closure skill. A bounded concept repair inside the still-authorized parent goal may instead be supporting delegation.
-- delegated `targeted-knowledge-closure` -> originating skill
-  - return control after the user transfers the blocking concept into the still-authorized original task; do not revive an expired authorization.
-
-Explain a user-requested primary handoff naturally and preserve the frozen state. Keep supporting delegation internal unless the user asks for diagnostics. Do not claim that several skills independently own or completed the same collaboration.
-
-## Status and Completion Evidence
-
-Use one of these statuses:
-
-- `awaiting-user`: the current interaction gate is open.
-- `partial`: task understanding advanced, but user-owned evidence is incomplete.
-- `handed-off`: this skill finished its local responsibility and transferred state.
-- `complete`: the user independently demonstrated the required judgment.
-
-Keep these statuses internal. At completion or handoff, explain the achieved understanding and next step naturally; do not emit a structured result marker unless the user explicitly requested diagnostic output. Do not mark a skill complete based only on answer quality, artifacts, code changes, or the agent's own reasoning. Completion requires at least one meaningful user exchange and a stable shared model.
-
-## Conversation and Artifact Policy
-
-- Before drafting, read the user's referenced source and identify the requested headings, order, language, audience, length and status (discussion, candidate, or agreed statement). Preserve that output contract; a specific seven-question request must not be replaced with a generic seven-question template.
-- When asked for abstract-level background and problem, write concise paper-quality paragraphs that establish context and define the problem. Do not produce a full abstract, tutorial, method preview or extensive bullet outline unless requested. Keep technical terms precise and avoid unnecessary language mixing.
-- Recheck meaning during every transfer to a summary, guide or Issue: preserve the agreed object, conditions, terminology, evidence status and boundaries. A formatting request does not reopen the research decision or authorize new causal claims. Final prose quality and faithful structure are acceptance criteria alongside scientific validity.
-
-- Keep the main value in the conversation.
-- Do not create files in early rounds unless the user asks or persistence is necessary.
-- Do not use artifact production as proof of collaboration.
-- Keep scaffolds proportionate to the user's need. Prefer a few serious candidates, one decisive contrast, or one worked example over an exhaustive dump.
-- Correct one central misconception at a time unless several errors share the same missing relation.
-
-## Automatic Failure Conditions
-
-The skill run fails if any of these occur:
-
-- a primary skill activates without an explicit user request, or a supporting skill activates without a valid same-goal delegation;
-- the agent infers the skill from ordinary task semantics, a previous task's authorization, topic similarity, task complexity, or convenience;
-- authorization survives a task switch, direct-execution pivot, completion, or later resumption without a new explicit skill-use request;
-- the agent starts any top-level personal skill without an explicit user request and without a valid active parent authorization;
-- a supporting delegation creates a new goal, independent deliverable, separate user-facing lifecycle, or scope that outlives the primary authorization;
-- the supporting skill takes over accountability or interaction instead of returning control and results to the primary skill;
-- the primary expert role changes without explicit user authorization for the destination kind;
-- the agent treats its own first candidate as final and closes the skill without a meaningful user exchange;
-- the agent forces the user to construct from a blank page when it could provide expert candidates or evidence;
-- the agent asks a long questionnaire instead of diagnosing the next uncertainty;
-- the question can be answered by yes/no or a bare option and the agent treats that alone as shared confidence;
-- the agent ignores or fails to incorporate a user correction;
-- the agent asks the user to perform discoverable evidence gathering;
-- direct implementation continues while the collaboration skill remains nominally active;
-- an ordinary execution request triggers or emits lifecycle output from this skill family;
-- protocol syntax or an internal stage label appears in normal user-facing conversation;
-- frozen decisions change without an explicit user choice;
-- completion is claimed without observable convergence evidence from the user;
-- `research-method-design` activates for replay repair, experiment execution, data collection, writing, review, synchronization, or implementation of an already chosen method;
-- engineering or teaching hands off while consequential misunderstanding or requirement uncertainty remains above the practical 10% residual threshold.
-
-## Design Rationale
-
-The protocol is informed by cognitive apprenticeship, scaffolding, cognitive-load control, worked examples, retrieval practice, falsification, situated cognition, and evidence-based diagnosis. See `shared/expert-skill-references/collaboration_theory.md` when revising the skill family; do not load it during normal skill execution.
+- activating a primary Skill from topic similarity or task complexity;
+- loading every shared reference before knowing it is needed;
+- turning checkpoints into a fixed one-stage-per-turn itinerary;
+- asking the user to find evidence or code the agent can inspect;
+- manufacturing a failure, novelty claim, challenge, or mechanism to fit a template;
+- changing frozen decisions without exposing the conflict;
+- treating an artifact, static validator, or polished answer as stronger evidence than it is;
+- carrying a Skill into a new task or direct-execution phase without authorization.

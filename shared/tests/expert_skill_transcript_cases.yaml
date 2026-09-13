@@ -172,14 +172,14 @@ cases:
       - "derive a multi-query evidence portfolio before judging unresolved status"
       - "use topic-paper-finder as a bounded internal supporting skill when available while problem formulation remains primary"
       - "search broadly but compress the result into decisive evidence and counterevidence"
-      - "invite the user to correct the observation, boundary, or evidence"
+      - "ask for correction only if a material observation, boundary, or evidence choice remains unresolved"
     forbidden:
       - "how-to question presented as the problem"
       - "assume the academic problem is valid before checking motivation and prior solutions"
       - "literature survey dump"
       - "start a second topic-paper-finder lifecycle instead of continuing the active collaboration"
       - "claim novelty or unresolved status from a few close-looking papers"
-      - "freeze the first candidate without a meaningful user exchange"
+      - "freeze the first candidate while a material user-owned boundary remains unresolved"
 
   - id: problem-frozen-rqs
     skill: research-problem-formulation
@@ -257,7 +257,7 @@ cases:
       - "separate acceptance authority from CI purpose"
       - "surface latent non-functional requirements"
       - "provide a provisional requirement and test-layer model"
-      - "ask the user to correct the decisive priority or missing boundary"
+      - "ask about the decisive priority only if available evidence does not establish it"
     forbidden:
       - "treat CI as a replacement for acceptance"
       - "freeze the test matrix before shared confidence is established"
@@ -270,7 +270,7 @@ cases:
       - "separate stated feature from underlying outcome"
       - "surface acceptance evidence and non-goals"
       - "offer an expert requirement restatement for correction"
-      - "continue until material uncertainty is below the practical ten-percent threshold"
+      - "resolve material uncertainty that could change the first implementation slice"
     forbidden:
       - "start coding"
       - "freeze multi-provider support as the real requirement"

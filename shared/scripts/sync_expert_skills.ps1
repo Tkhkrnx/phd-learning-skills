@@ -38,6 +38,13 @@ $requiredPaths = @(
 )
 $requiredPaths += $skillNames | ForEach-Object { "$_\SKILL.md" }
 $requiredPaths += $skillNames | ForEach-Object { "$_\agents\openai.yaml" }
+$requiredPaths += foreach ($skillName in $skillNames) {
+    $referenceRoot = Join-Path $sourceRootPath "$skillName\references"
+    if (Test-Path -LiteralPath $referenceRoot -PathType Container) {
+        Get-ChildItem -LiteralPath $referenceRoot -File -Recurse |
+            ForEach-Object { $_.FullName.Substring($sourceRootPath.Length + 1) }
+    }
+}
 $requiredPaths += "topic-paper-finder\agents\openai.yaml"
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\expert-skill-references") -File |
     ForEach-Object { "shared\expert-skill-references\$($_.Name)" }
@@ -52,7 +59,7 @@ if ($ProtocolOnly) {
         $_ -eq "AGENT_COLLABORATION_SKILL_BLUEPRINT.md" -or
         $_ -like "explicit-skill-router\*" -or
         $_ -like "shared\expert-skill-references\*" -or
-        $_ -match '^(research-problem-formulation|research-method-design|engineering-task-decomposition|targeted-knowledge-closure|topic-paper-finder)\\(SKILL\.md|agents\\openai\.yaml)$'
+        $_ -match '^(research-problem-formulation|research-method-design|engineering-task-decomposition|targeted-knowledge-closure|topic-paper-finder)\\(SKILL\.md|agents\\openai\.yaml|references\\.+)$'
     })
 }
 
