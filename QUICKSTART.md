@@ -10,7 +10,6 @@
 ```powershell
 pip install -r requirements.txt
 $env:PYTHONPATH="."
-$env:PAPERQUAY_DATA_DIR="$HOME\\Documents\\PHR\\Intellistream\\papers\\read"
 ```
 
 ## Expert Collaboration Skills
