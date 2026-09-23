@@ -6,7 +6,13 @@ import unittest
 from pathlib import Path
 from zipfile import ZipFile
 
-from shared.obsidian.note_quality import READING_HEADINGS, REVIEW_HEADINGS, validate_note_text
+from shared.obsidian.note_quality import (
+    READING_HEADINGS,
+    REVIEW_ANALYSIS_HEADINGS,
+    REVIEW_HEADINGS,
+    validate_note_text,
+    validate_review_pair,
+)
 from shared.obsidian.vault_paths import build_note_stem, formal_reading_path, formal_review_path
 from shared.paper_note_materials import collect_materials
 from shared.paperquay.paper_matcher import PaperMatcher
@@ -80,15 +86,39 @@ class PaperNoteWorkflowTests(unittest.TestCase):
         self.assertEqual(report["status"], "failed")
         self.assertTrue(any("paper_id mismatch" in error for error in report["errors"]))
 
-    def test_review_gate_accepts_five_checks_and_rejects_private_correction(self):
-        sections = [
+    def test_review_outputs_have_distinct_shapes_and_no_private_correction(self):
+        analysis_sections = [
             f"## {index}. {heading}\nAgents as Edges 的这一判断见正文 §3.2 与 Table 2；影响和修改建议在此说明。"
-            for index, heading in enumerate(REVIEW_HEADINGS, 1)
+            for index, heading in enumerate(REVIEW_ANALYSIS_HEADINGS, 1)
         ]
-        review = "# Review: Agents as Edges\n" + "\n".join(sections)
-        self.assertEqual(validate_note_text(review, "review", "Agents as Edges")["status"], "passed")
-        review += "\n## 你当前审稿笔记的遗漏与纠偏\n原审稿笔记漏了一个问题。"
-        self.assertEqual(validate_note_text(review, "review", "Agents as Edges")["status"], "failed")
+        analysis = "# Review Analysis: Agents as Edges\n" + "\n".join(analysis_sections)
+        analysis += "\nWeak Accept：主要是组合式创新。"
+        formal_sections = [
+            f"## {heading}\nAgents as Edges 的这一判断见正文 §3.2 与 Table 2；影响和修改建议在此说明。"
+            for heading in REVIEW_HEADINGS
+        ]
+        formal = "# Review: Agents as Edges\n" + "\n".join(formal_sections)
+        formal += "\nWeak Accept：主要是组合式创新。"
+        self.assertEqual(validate_note_text(analysis, "review-analysis", "Agents as Edges")["status"], "passed")
+        self.assertEqual(validate_note_text(formal, "review", "Agents as Edges")["status"], "passed")
+        self.assertEqual(validate_review_pair(analysis, formal)["status"], "passed")
+        self.assertEqual(validate_note_text(analysis, "review", "Agents as Edges")["status"], "failed")
+        formal += "\n## 你当前审稿笔记的遗漏与纠偏\n原审稿笔记漏了一个问题。"
+        self.assertEqual(validate_note_text(formal, "review", "Agents as Edges")["status"], "failed")
+
+    def test_pair_gate_catches_divergent_recommendations(self):
+        analysis = "# X\n## Overall Assessment\nWeak Accept，因为论文方法有效但创新偏组合。"
+        formal = "# X\n## Overall Recommendation\nWeak Reject，因为方法根本错误。"
+        report = validate_review_pair(analysis, formal)
+        self.assertEqual(report["status"], "failed")
+        self.assertTrue(any("mismatch" in error for error in report["errors"]))
+        self.assertEqual(
+            validate_review_pair(
+                "## Overall Assessment\n弱接收，创新偏组合。",
+                "## Overall Recommendation\nWeak Accept，系统有效。",
+            )["status"],
+            "passed",
+        )
 
     def test_no_note_mode_does_not_allow_invented_prior_view(self):
         sections = [

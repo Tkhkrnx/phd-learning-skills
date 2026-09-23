@@ -29,7 +29,8 @@ $requiredPaths = @(
 )
 $requiredPaths += @(
     "reading-note-builder\references\seven-question-reading.md",
-    "review-note-builder\references\five-question-review.md"
+    "review-note-builder\references\five-question-review.md",
+    "review-note-builder\references\formal-review.md"
 )
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
     ForEach-Object { "shared\obsidian\$($_.Name)" }

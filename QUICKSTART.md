@@ -101,7 +101,12 @@ python reading-note-builder\scripts\build_reading_note.py --paper <paper.pdf> --
 python review-note-builder\scripts\build_review_note.py --paper <paper.pdf> --pptx <optional-review.pptx> --note <optional-draft.md>
 ```
 
-脚本输出来源清单；主模型依照五问、书写细节和用户最新判断撰写正式审稿意见。
+脚本输出来源清单；主模型先写五问加书写细节的分析笔记，再基于同一组已核实判断撰写包含 Summary、Strengths、Weaknesses、Comments for Rebuttal 等部分的正式审稿意见。交付前分别检查两份文件，并配对核对推荐结论：
+
+```powershell
+python shared\obsidian\note_quality.py --kind review-analysis --path <analysis.md> --expected-title <paper-title>
+python shared\obsidian\note_quality.py --kind review --path <formal-review.md> --companion <analysis.md> --expected-title <paper-title>
+```
 
 修改 reading/review builder 或其共享依赖后，同步并验证五处安装副本：
 

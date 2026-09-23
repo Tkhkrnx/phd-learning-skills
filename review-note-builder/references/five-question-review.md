@@ -1,4 +1,4 @@
-# Five-question paper review guide
+# Five-question analysis note guide
 
 Read the paper before judging. For every question, say when the paper succeeds. Distinguish a false claim, insufficient explanation, an untested alternative explanation, and an optional extension. Do not promote a tentative PPT reaction into a confirmed flaw.
 
@@ -10,4 +10,4 @@ Read the paper before judging. For every question, say when the paper succeeds. 
 
 **Writing and details.** Locate contradictions, misleading wording, inconsistent labels, duplicate or erroneous references, and presentation issues. Cite the exact section, figure, table, or page. Put these after substantive assessment unless the writing error makes the result uninterpretable.
 
-Use the smallest revision that addresses each valid concern. Format consequential comments as judgment, source, consequence, and requested clarification or test. Do not fill a quota of weaknesses. The final recommendation must agree with the balance of strengths and weaknesses and with the user's latest stated position unless the manuscript reveals a decisive conflict that must be surfaced.
+Use the smallest revision that addresses each valid concern. Format consequential comments as judgment, source, consequence, and requested clarification or test. Do not fill a quota of weaknesses. Finish the analysis note with an overall assessment that explains the recommendation and identifies which findings actually affect it. The formal review is a separate deliverable: carry verified strengths and weaknesses into it using `formal-review.md`, while keeping exploratory thoughts in this note.

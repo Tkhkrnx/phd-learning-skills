@@ -117,7 +117,7 @@ The discovery and analysis tools can be used separately:
 1. search papers
 2. download PDFs into the local paper directory when possible
 3. read the paper directly; optionally add a Typora/Markdown note and presentation
-4. build a seven-question speaking note or a formal five-question review, checking user material against the paper
+4. build a seven-question speaking note, or produce both a five-question review analysis note and a formal reviewer report
 5. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
 
 ## Default PDF Directory
@@ -135,7 +135,7 @@ The discovery and analysis tools can be used separately:
 
 `reading-note-builder` 与 `review-note-builder` 不依赖 PaperQuay、MinerU 或 Obsidian。论文 PDF/全文 Markdown 是事实依据；用户 Markdown 笔记和 PPT 都是可选材料。PaperQuay 仍可用于个人阅读与旧资料定位，不再是这两个 Skill 的入口。
 
-本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；输出正式笔记或审稿意见由当前模型完成，并对照论文、PPT 和用户最新判断审读。
+本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；最终文稿由当前模型完成，并对照论文、PPT 和用户最新判断审读。审稿同时交付五问分析笔记与正式 reviewer report，两份结论保持一致。
 
 本仓库不再负责旧式 `paper-ingest` / `paper-translate` 流水线。
 
@@ -172,9 +172,9 @@ The discovery and analysis tools can be used separately:
 
 ### `review-note-builder`
 
-- 从论文和可选的审稿 PPT/Markdown 草稿出发，按五问及书写细节生成可交付的正式意见
+- 从论文和可选的审稿 PPT/Markdown 草稿出发，先生成五问加书写细节的分析笔记，再生成含优势、缺陷和作者问题的正式审稿意见
 - 用户与老师商讨后的最新判断决定评审立场；PPT 重点优先于较早笔记，事实仍须回原文核对
-- 对已确认缺陷、说明不足、待验证推测和可选增强分别措辞；不为了严格而硬凑缺点
+- 两份文件共用已核实的判断与推荐意见；对已确认缺陷、说明不足、待验证推测和可选增强分别措辞
 
 ### `reference-validation-report`
 
