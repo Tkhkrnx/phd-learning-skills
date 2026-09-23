@@ -24,12 +24,15 @@ $requiredPaths = @(
     "review-note-builder\SKILL.md",
     "review-note-builder\agents\openai.yaml",
     "review-note-builder\scripts\build_review_note.py",
-    "shared\__init__.py"
+    "shared\__init__.py",
+    "shared\paper_note_materials.py"
+)
+$requiredPaths += @(
+    "reading-note-builder\references\seven-question-reading.md",
+    "review-note-builder\references\five-question-review.md"
 )
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
     ForEach-Object { "shared\obsidian\$($_.Name)" }
-$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\paperquay") -File -Filter "*.py" |
-    ForEach-Object { "shared\paperquay\$($_.Name)" }
 
 foreach ($relativePath in $requiredPaths) {
     $sourcePath = Join-Path $sourceRootPath $relativePath

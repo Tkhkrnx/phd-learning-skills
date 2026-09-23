@@ -1,52 +1,29 @@
 ---
 name: review-note-builder
-description: Build an evidence-backed Obsidian review note from PaperQuay and MinerU sources when the user explicitly invokes this Skill.
+description: Produce a formal, evidence-backed paper review when the user explicitly invokes this Skill.
 ---
 
-Run `scripts/build_review_note.py` with a real `--note-id`. Inspect its source only when modifying it or diagnosing a failure.
+# Review Note Builder
 
-Workflow:
-- Resolve the note from `paperquay-notes.sqlite`.
-- Resolve the paper through anchors-first mapping.
-- Refuse generation when note metadata conflicts with anchors unless the operator supplies a verified explicit `--paper-id`.
-- Resolve `.mineru-cache` and bind the review to the正文 evidence source.
-- Export the raw import note.
-- Collect a structured evidence bundle for the current main model to read.
-- Use the current skill-running model to write the final formal review; the script itself must not call another model.
-- Support both PaperQuay-note mode and paper-only/local-draft mode. Use `--paper-id` with optional `--source-note` when PaperQuay has no review note.
-- Keep a supplied local draft at `Research/Papers/<short-name>/Support/review_draft.md` and write the final review to `Research/Papers/<short-name>/Review/enhanced.md`.
-- Store evidence bundles outside the Vault under `%LOCALAPPDATA%/phd-learning-skills/work` (or `PHD_SKILL_WORK_ROOT`).
-- Run `shared/obsidian/note_quality.py` after writing. The task is incomplete until the validator passes.
-- The model should first build an internal seven-question understanding of the paper, then translate that understanding into the review submission structure.
+Deliver a rigorous and fair review of the actual paper. A Markdown draft and presentation are optional. When supplied, they reveal the user's priorities; they do not replace checking the manuscript.
 
-Rules:
-- Prioritize evidence-backed weaknesses, missing evaluations, and threats to validity.
-- Explicitly note when the current review is too strong, too weak, or unsupported.
-- Keep filenames short and stable.
-- If正文 cache is unavailable, keep the output but mark it as note-only.
-- Every important criticism must be traceable back to正文 Markdown evidence.
-- Treat PaperQuay authors, year, and venue as locator metadata only. Verify frontmatter bibliography from the PDF title page or the first parsed page; never copy contradictory library metadata into the final review.
-- Focus on main-paper evidence first; Appendix is not the default battlefield.
-- The internal seven-question understanding used by review should match the reading-note workflow in depth, coverage, and rigor before it is translated into review structure.
-- Review should be written from a systems top-conference reviewer perspective: strict, skeptical, rigorous, detailed, and careful about evidence boundaries.
-- The final review should not merely restate the raw review draft. It should re-check, tighten, and supplement it from正文 evidence.
-- The review workflow should share the same deep understanding backbone as the reading-note workflow; the difference is the final output format, not the evidence standard.
+## Sources and judgment
 
-Default command:
+- Read the full relevant paper, pivotal figures/tables, and any appendix needed to verify a criticism before treating it as established. If the paper is unavailable, produce only a clearly limited review draft.
+- The user's latest conclusion, including a teacher-agreed recommendation, has highest priority for the intended verdict and emphasis. A review PPT comes next, then an older Markdown note. Independently test every factual claim against the manuscript. Keep a user judgment visible when the evidence does not yet settle it; do not convert it into a false factual assertion.
+- Inspect PPT text, figures, and speaker notes. The notes may contain generic prompts or provisional reactions. Preserve source identity and separate confirmed issues, missing explanation, hypotheses needing a test, and optional improvements.
+- For local files, `scripts/build_review_note.py --paper <paper.pdf> [--note <draft.md>] [--pptx <slides.pptx>]` inventories the source set without generating the review.
 
-```powershell
-$env:PYTHONPATH="."
-python review-note-builder\scripts\build_review_note.py --note-id <note_id>
-```
+## Review reasoning
 
-Paper-only or local-draft mode:
+Use [five-question review guide](references/five-question-review.md): whether the problem is clear, why it matters, whether existing work leaves the claimed gap, whether the key idea and design make sense, and whether experiments support the claims. These are checks, not five required weaknesses. Explain what the paper already does well. A method that combines known elements may still have value; assess the novelty and added capability of the integration precisely.
 
-```powershell
-python review-note-builder\scripts\build_review_note.py --paper-id <paper_id> --source-note <draft.md>
-```
+For each consequential criticism, verify the manuscript location, state the exact claim or missing information, explain its effect on the paper's conclusion, and request the smallest clarification, comparison, or experiment that would resolve it. Check whether an apparently missing item is already covered elsewhere. Review writing and presentation details separately, including inconsistent terminology, contradictory tables, unclear prose, citation or formatting errors. Keep minor details separate from acceptance-driving concerns.
 
-After writing `enhanced.md`:
+## Formal deliverable
 
-```powershell
-python shared\obsidian\note_quality.py --kind review --path <enhanced.md> --expected-title <paper-title> --expected-paper-id <verified-paper-id> --original <Support/review_draft.md>
-```
+Write a new Markdown review, in the requested language and venue format when provided. Otherwise use five numbered assessments, a writing/details section, and an overall recommendation with confidence. Lead each assessment with a clear judgment and concise evidence. Do not expose internal seven-question notes, invented user misconceptions, or a private correction ledger in the submission-ready review. Include confidential committee comments or numerical scores only when requested or required by the venue form.
+
+Preserve the source files and existing reviews. Return the formal review file and its main judgment in the conversation. Run `shared/obsidian/note_quality.py --kind review --path <output> --expected-title <title>`, then inspect the real prose against the paper, user PPT, and latest user conclusion. A structural pass alone cannot establish review quality.
+
+Ordinary requests to review a paper do not activate this explicit-only Skill.

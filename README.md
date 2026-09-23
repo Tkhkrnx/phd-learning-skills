@@ -112,12 +112,12 @@ The existing paper workflow family remains in the repository:
 - `review-note-builder`
 - `reference-validation-report`
 
-Its goal is to stabilize this chain:
+The discovery and analysis tools can be used separately:
 
 1. search papers
 2. download PDFs into the local paper directory when possible
-3. read and annotate in PaperQuay
-4. turn PaperQuay notes plus MinerU cache into formal Obsidian reading or review notes
+3. read the paper directly; optionally add a Typora/Markdown note and presentation
+4. build a seven-question speaking note or a formal five-question review, checking user material against the paper
 5. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
 
 ## Default PDF Directory
@@ -133,14 +133,9 @@ Its goal is to stabilize this chain:
 
 ## Dependency
 
-本仓库默认依赖 [PaperQuay](https://github.com/WangQrkkk/PaperQuay) 作为阅读、标注和正文缓存来源。
+`reading-note-builder` 与 `review-note-builder` 不依赖 PaperQuay、MinerU 或 Obsidian。论文 PDF/全文 Markdown 是事实依据；用户 Markdown 笔记和 PPT 都是可选材料。PaperQuay 仍可用于个人阅读与旧资料定位，不再是这两个 Skill 的入口。
 
-主要输入包括：
-
-- `paperquay-notes.sqlite`
-- `paperquay-library.sqlite`
-- `.mineru-cache/document-*/full.md`
-- `.mineru-cache/document-*/content_list_v2.json`
+本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；输出正式笔记或审稿意见由当前模型完成，并对照论文、PPT 和用户最新判断审读。
 
 本仓库不再负责旧式 `paper-ingest` / `paper-translate` 流水线。
 
@@ -171,14 +166,15 @@ Its goal is to stabilize this chain:
 
 ### `reading-note-builder`
 
-- 从 PaperQuay 阅读笔记出发，映射到对应论文和 MinerU 正文缓存
-- 导出 `original.md`、`evidence_bundle.json`、`paper_summary.json`、`mapping_report.json`、`writer_prompt.md`
-- 由当前执行 skill 的主模型完成正式 `enhanced.md`
+- 从论文本身出发，以七问组织可支撑 PPT 讲述的增强笔记；Markdown 笔记和 PPT 可选
+- 总问题、机制执行链和“实验问题—图表—结论—边界”必须与原文对齐
+- 只纠正用户实际表达过的误解，不强制生成“遗漏与纠偏”章节
 
 ### `review-note-builder`
 
-- 从 PaperQuay 审稿笔记出发，先完成内部七问式增强理解，再转成正式 review 结构
-- 所有关键批评都必须可回指到正文 Markdown 证据
+- 从论文和可选的审稿 PPT/Markdown 草稿出发，按五问及书写细节生成可交付的正式意见
+- 用户与老师商讨后的最新判断决定评审立场；PPT 重点优先于较早笔记，事实仍须回原文核对
+- 对已确认缺陷、说明不足、待验证推测和可选增强分别措辞；不为了严格而硬凑缺点
 
 ### `reference-validation-report`
 

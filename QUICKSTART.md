@@ -3,8 +3,7 @@
 ## Requirements
 
 - Python 3.11+
-- [PaperQuay](https://github.com/WangQrkkk/PaperQuay)
-- 一个可写的 Obsidian vault
+- 论文 PDF 或全文 Markdown；PaperQuay、笔记和 PPT 均为可选材料
 
 以下命令默认在仓库根目录执行：
 
@@ -92,14 +91,18 @@ python topic-paper-finder\scripts\topic_finder.py --mode mechanism-inspiration -
 ## Reading Note Builder
 
 ```powershell
-python reading-note-builder\scripts\build_reading_note.py --note-id <paperquay_note_id>
+python reading-note-builder\scripts\build_reading_note.py --paper <paper.pdf> --note <optional-note.md> --pptx <optional-slides.pptx>
 ```
+
+没有笔记或 PPT 时只传 `--paper`。脚本输出来源清单；主模型核对论文后生成七问讲述笔记。
 
 ## Review Note Builder
 
 ```powershell
-python review-note-builder\scripts\build_review_note.py --note-id <paperquay_note_id>
+python review-note-builder\scripts\build_review_note.py --paper <paper.pdf> --pptx <optional-review.pptx> --note <optional-draft.md>
 ```
+
+脚本输出来源清单；主模型依照五问、书写细节和用户最新判断撰写正式审稿意见。
 
 修改 reading/review builder 或其共享依赖后，同步并验证五处安装副本：
 

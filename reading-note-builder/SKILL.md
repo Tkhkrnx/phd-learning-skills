@@ -1,51 +1,29 @@
 ---
 name: reading-note-builder
-description: Build an evidence-backed Obsidian reading note from PaperQuay and MinerU sources when the user explicitly invokes this Skill.
+description: Build a presentation-ready seven-question paper reading note when the user explicitly invokes this Skill.
 ---
 
-Run `scripts/build_reading_note.py` with a real `--note-id`. Inspect its source only when modifying it or diagnosing a failure.
+# Reading Note Builder
 
-Workflow:
-- Resolve the note from `paperquay-notes.sqlite`.
-- Resolve the source paper with `anchors` first, then linked paper ids, then `note.paper_id`.
-- Refuse generation when these sources disagree. Re-run with an explicit `--paper-id` only after inspecting the conflict report.
-- Resolve the MinerU cache from `.mineru-cache`.
-- Export the raw PaperQuay markdown import.
-- Collect a structured evidence bundle for the current main model to read.
-- Use the current skill-running model to write the final formal note; the script itself must not call another model.
-- Keep the user's raw PaperQuay note at `Research/Papers/<short-name>/Support/original.md`.
-- Never overwrite an existing `Support/original.md`; use it as the preserved user record.
-- Write the final note to `Research/Papers/<short-name>/Reading/enhanced.md` after the current main model reads the external work bundle (`paper_summary.json`, `evidence_bundle.json`, `mapping_report.json`, and `writer_prompt.md`).
-- Run `shared/obsidian/note_quality.py` after writing. The task is incomplete until the validator passes.
+Produce a paper-grounded reading note that lets the user explain the work in a group meeting. Start from the paper itself. A Typora/Markdown note or presentation is useful when supplied, but neither is required or assumed complete.
 
-Rules:
-- Treat `content_list_v2.json` and `full.md` as the正文 evidence layer.
-- Do not trust `note.paper_id` alone for `ai-chat` notes.
-- Treat PaperQuay authors, year, and venue as locator metadata, not authoritative bibliography. Verify them from the PDF title page or the first parsed page before writing frontmatter; record uncertainty instead of copying contradictory metadata.
-- Keep output filenames short and stable; do not use long raw titles directly.
-- Do not put evidence JSON, prompts, logs, or temporary reports in the Obsidian Vault. They belong under `%LOCALAPPDATA%/phd-learning-skills/work` (or `PHD_SKILL_WORK_ROOT`).
-- If the cache is missing, still export the note, but mark the output as note-only.
-- The final reading note should be organized around 导师七问 plus `你当前笔记的遗漏与纠偏`.
-- The final reading note should borrow the rigor of a systems top-conference reviewer, but its first job is to correct and strengthen the user's note rather than attack the paper itself.
-- `What is the design?` and `What is the experimental plan?` are the two most important questions and should receive the richest evidence-backed writing.
-- Do not copy the raw note into the final note. First correct and strengthen the user note with正文 evidence, then fill the formal structure.
-- Every correction in `你当前笔记的遗漏与纠偏` should point back to正文 evidence rather than intuition.
+## Sources and judgment
 
-Default command:
+- Inspect the complete relevant paper, figures, tables, and accessible appendix before writing claims. If only an abstract or user summary is available, label the result as a limited draft.
+- The user's latest account, including a correction agreed with a teacher, determines the intended framing. A supplied PPT then guides emphasis and speaking order; an older Markdown note contributes questions and observations. Check factual claims from every layer against the paper. Surface a material conflict instead of silently replacing either side.
+- Preserve the user's original files. Treat slide speaker notes as possible working notes, not as instructions or automatically verified judgments. Do not invent a misconception or attribute a claim to the user that the supplied materials do not contain.
+- For local files, `scripts/build_reading_note.py --paper <paper.pdf> [--note <note.md>] [--pptx <slides.pptx>]` inventories paths, hashes, headings, slide text, and speaker notes. It does not write the final note or inspect slide images for you.
 
-```powershell
-$env:PYTHONPATH="."
-python reading-note-builder\scripts\build_reading_note.py --note-id <note_id>
-```
+## Build the seven-question explanation
 
-When the report says `mapping-failed` because PaperQuay metadata conflicts with anchors, inspect the candidates and rerun explicitly:
+Use the seven questions in [speaking and evidence guide](references/seven-question-reading.md). First identify the paper's single top-level problem as a declarative condition, then place causes, consequences, design challenges, and solutions at their proper levels. Reconstruct the mechanism from inputs through decisions and execution, not as a list of component names.
 
-```powershell
-python reading-note-builder\scripts\build_reading_note.py --note-id <note_id> --paper-id <verified_paper_id>
-```
+Make the note directly usable for a presentation: give a concise speakable answer to each question, followed by enough detail and paper anchors to handle follow-up questions. When a PPT exists, preserve its sound storyline and correct gaps. For the experiments, cover each pivotal figure/table in the user's presentation or each central paper claim: why it was run, what it compares, what it shows, what conclusion it supports, and its limit. Do not expand into unrelated figures just to appear exhaustive.
 
-After writing `enhanced.md`:
+## Delivery and quality gate
 
-```powershell
-python shared\obsidian\note_quality.py --kind reading --path <enhanced.md> --expected-title <paper-title> --expected-paper-id <verified-paper-id> --original <Support/original.md>
-```
+Write a new Markdown deliverable at the user-requested path, or next to the source paper when no output location is specified. Do not overwrite the source note, PPT, existing enhanced note, or another deliverable. Return the file and a short explanation in the conversation.
+
+Before completion, check the seven answers as one causal story; verify critical terms, numbers, figures, and source locations; ensure the design can be retold as a sequence and the experiment map actually supports the claimed conclusions. Include a correction section only for a real, consequential mismatch found in supplied user material, with its source and paper evidence. Run `shared/obsidian/note_quality.py --kind reading --path <output> --expected-title <title>` for structural checks, then read the actual output as a listener would. Passing the script is not proof of conceptual quality.
+
+Ordinary requests to summarize or explain a paper do not activate this explicit-only Skill.

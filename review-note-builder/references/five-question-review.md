@@ -1,0 +1,13 @@
+# Five-question paper review guide
+
+Read the paper before judging. For every question, say when the paper succeeds. Distinguish a false claim, insufficient explanation, an untested alternative explanation, and an optional extension. Do not promote a tentative PPT reaction into a confirmed flaw.
+
+1. **Problem definition.** Explain the target scenario, system object, actual difficulty, intended improvement, and constraints. Separate unclear definition, deliberately narrow scope, and a conclusion that overreaches the tested scope. The research problem is a declarative condition; a method question is not its substitute.
+2. **Why it matters.** Assess the loss, constraint, or capability gap in the paper's intended scenario. A credible causal argument or representative case can suffice; do not demand production statistics by default. Ask for more evidence only when the relevance or magnitude could change the review.
+3. **Existing work.** Identify what the closest approaches solve, their strengths, the conditions under which they fail or differ, and the actual added capability. Check the comparison against original sources when decisive. A related approach need not be an identical baseline; explain what a fair comparison would isolate.
+4. **Key idea and design.** Reconstruct the mechanism before criticizing it. Map claims to assumptions, observable signals, control points, costs, and failure conditions. A combination of established elements can be valuable, but distinguish its integration, new capability, and measured benefit from a new fundamental mechanism.
+5. **Experimental support.** Map each central claim to existing figures and tables. Ask whether baselines are comparable, metrics represent the goal, key gains are attributed to the claimed mechanism, costs are counted, and the scope is tested. Every requested extra experiment must name the missing comparison, the alternative explanation it separates, and why the answer could change the verdict.
+
+**Writing and details.** Locate contradictions, misleading wording, inconsistent labels, duplicate or erroneous references, and presentation issues. Cite the exact section, figure, table, or page. Put these after substantive assessment unless the writing error makes the result uninterpretable.
+
+Use the smallest revision that addresses each valid concern. Format consequential comments as judgment, source, consequence, and requested clarification or test. Do not fill a quota of weaknesses. The final recommendation must agree with the balance of strengths and weaknesses and with the user's latest stated position unless the manuscript reveals a decisive conflict that must be surfaced.

@@ -4,9 +4,11 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from zipfile import ZipFile
 
-from shared.obsidian.note_quality import READING_HEADINGS, validate_note_text
+from shared.obsidian.note_quality import READING_HEADINGS, REVIEW_HEADINGS, validate_note_text
 from shared.obsidian.vault_paths import build_note_stem, formal_reading_path, formal_review_path
+from shared.paper_note_materials import collect_materials
 from shared.paperquay.paper_matcher import PaperMatcher
 from shared.paperquay.source_validation import validate_source_alignment
 
@@ -59,23 +61,96 @@ class PaperNoteWorkflowTests(unittest.TestCase):
             )
             self.assertEqual(report["status"], "failed")
 
-    def test_quality_gate_rejects_scaffold_and_accepts_complete_note(self):
+    def test_quality_gate_rejects_scaffold_and_accepts_concise_seven_questions(self):
         scaffold = "\n".join(f"## {heading}\n写作提示：todo" for heading in READING_HEADINGS)
         self.assertEqual(validate_note_text(scaffold, "reading", "DSpark")["status"], "failed")
         sections = []
         for heading in READING_HEADINGS:
-            sections.append(f"## {heading}\nDSpark 的证据分析。正文 §3.1 与 Figure 2 支撑这一判断。" + "机制、边界与实验解释。" * 120)
+            sections.append(f"## {heading}\nDSpark 的这一判断见正文 §3.1 与 Figure 2；这里解释其机制、结果和适用条件。")
         complete = "# DSpark\n" + "\n".join(sections)
         self.assertEqual(validate_note_text(complete, "reading", "DSpark")["status"], "passed")
+        self.assertNotIn("遗漏与纠偏", complete)
 
     def test_quality_gate_rejects_wrong_frontmatter_paper_id(self):
         sections = []
         for heading in READING_HEADINGS:
-            sections.append(f"## {heading}\nDSpark 的证据分析。正文 §3.1 与 Figure 2 支撑这一判断。" + "机制、边界与实验解释。" * 120)
+            sections.append(f"## {heading}\nDSpark 的这一判断见正文 §3.1 与 Figure 2；这里解释其机制、结果和适用条件。")
         note = '---\npaper_id: "agents"\n---\n# DSpark\n' + "\n".join(sections)
         report = validate_note_text(note, "reading", "DSpark", expected_paper_id="dspark")
         self.assertEqual(report["status"], "failed")
         self.assertTrue(any("paper_id mismatch" in error for error in report["errors"]))
+
+    def test_review_gate_accepts_five_checks_and_rejects_private_correction(self):
+        sections = [
+            f"## {index}. {heading}\nAgents as Edges 的这一判断见正文 §3.2 与 Table 2；影响和修改建议在此说明。"
+            for index, heading in enumerate(REVIEW_HEADINGS, 1)
+        ]
+        review = "# Review: Agents as Edges\n" + "\n".join(sections)
+        self.assertEqual(validate_note_text(review, "review", "Agents as Edges")["status"], "passed")
+        review += "\n## 你当前审稿笔记的遗漏与纠偏\n原审稿笔记漏了一个问题。"
+        self.assertEqual(validate_note_text(review, "review", "Agents as Edges")["status"], "failed")
+
+    def test_no_note_mode_does_not_allow_invented_prior_view(self):
+        sections = [
+            f"## {heading}\nDSpark 的判断见正文 §3 与 Figure 1；这里解释其机制和证据边界。"
+            for heading in READING_HEADINGS
+        ]
+        text = "# DSpark\n" + "\n".join(sections) + "\n你原来误以为它只有一个模块。"
+        report = validate_note_text(text, "reading", "DSpark")
+        self.assertEqual(report["status"], "failed")
+        self.assertTrue(any("prior note" in error for error in report["errors"]))
+
+    def test_material_inventory_accepts_paper_without_note_and_preserves_sources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "study.md"
+            paper.write_text("# Example paper\n## Design\nText.", encoding="utf-8")
+            before = paper.read_bytes()
+            report = collect_materials("reading", paper=paper)
+            self.assertIsNone(report["note"])
+            self.assertIsNone(report["pptx"])
+            self.assertTrue(report["paper_source_available"])
+            self.assertEqual(report["paper"]["headings"], ["Example paper", "Design"])
+            self.assertEqual(paper.read_bytes(), before)
+
+    def test_ppt_inventory_keeps_slide_order_and_speaker_notes_separate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            deck = Path(tmp) / "review.pptx"
+            presentation = (
+                '<p:presentation xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+                'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+                '<p:sldIdLst><p:sldId r:id="rId2"/><p:sldId r:id="rId1"/></p:sldIdLst>'
+                '</p:presentation>'
+            )
+            rels = (
+                '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                '<Relationship Id="rId1" Type="slide" Target="slides/slide1.xml"/>'
+                '<Relationship Id="rId2" Type="slide" Target="slides/slide2.xml"/>'
+                '</Relationships>'
+            )
+            note_rels = (
+                '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                '<Relationship Id="rId1" Type="x/notesSlide" Target="../notesSlides/notesSlide2.xml"/>'
+                '</Relationships>'
+            )
+            def slide(label: str) -> str:
+                return (
+                    '<p:sld xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+                    'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
+                    f'<p:sp><p:txBody><a:p><a:r><a:t>{label}</a:t></a:r></a:p></p:txBody></p:sp></p:sld>'
+                )
+            with ZipFile(deck, "w") as archive:
+                archive.writestr("ppt/presentation.xml", presentation)
+                archive.writestr("ppt/_rels/presentation.xml.rels", rels)
+                archive.writestr("ppt/slides/slide1.xml", slide("older slide"))
+                archive.writestr("ppt/slides/slide2.xml", slide("first slide"))
+                archive.writestr("ppt/slides/_rels/slide2.xml.rels", note_rels)
+                archive.writestr("ppt/notesSlides/notesSlide2.xml", slide("teacher note"))
+            result = collect_materials("review", pptx=deck)
+            slides = result["pptx"]["slides"]
+            self.assertEqual([item["text"] for item in slides], ["first slide", "older slide"])
+            self.assertEqual(slides[0]["speaker_notes"], "teacher note")
+            self.assertIsNone(result["note"])
+            self.assertFalse(result["paper_source_available"])
 
 
 if __name__ == "__main__":

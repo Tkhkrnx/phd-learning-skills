@@ -7,15 +7,6 @@ from pathlib import Path
 from typing import Any
 
 
-SCAFFOLD_MARKERS = [
-    "写作提示：",
-    "这是写给当前主模型",
-    "这是给当前主模型",
-    "当前版本先保证映射正确",
-    "Source note draft",
-    "原始导入稿",
-]
-
 READING_HEADINGS = [
     "What is the problem?",
     "Why it matters?",
@@ -24,20 +15,26 @@ READING_HEADINGS = [
     "What is the design?",
     "What is the experimental plan?",
     "What is the takeaway?",
-    "你当前笔记的遗漏与纠偏",
 ]
 
 REVIEW_HEADINGS = [
-    "Summary and High Level Discussion",
-    "Strengths",
-    "Weaknesses",
-    "Comments for Rebuttal",
-    "Detailed Comments for Authors",
-    "Scored Review Questions",
-    "Reproducibility",
-    "Confidential Comments to the Program Committee",
-    "你当前审稿笔记的遗漏与纠偏",
+    "Problem Definition",
+    "Why It Matters",
+    "Existing Work",
+    "Key Idea and Design",
+    "Experimental Support",
+    "Writing and Presentation Details",
+    "Overall Assessment",
 ]
+
+SCAFFOLD_MARKERS = (
+    "写作提示：",
+    "这是写给当前主模型",
+    "这是给当前主模型",
+    "Source note draft",
+    "TODO",
+    "TBD",
+)
 
 
 def normalize(value: str) -> str:
@@ -52,6 +49,14 @@ def frontmatter_value(text: str, key: str) -> str:
     return field.group(1).strip().strip("\"'") if field else ""
 
 
+def _heading_bodies(text: str) -> list[tuple[str, str]]:
+    matches = list(re.finditer(r"(?m)^#{2,4}\s+(.+?)\s*$", text))
+    return [
+        (match.group(1), text[match.end() : matches[index + 1].start() if index + 1 < len(matches) else len(text)])
+        for index, match in enumerate(matches)
+    ]
+
+
 def validate_note_text(
     text: str,
     kind: str,
@@ -59,45 +64,54 @@ def validate_note_text(
     original_text: str = "",
     forbid_terms: list[str] | None = None,
     expected_paper_id: str = "",
+    venue_format: bool = False,
 ) -> dict[str, Any]:
+    if kind not in {"reading", "review"}:
+        raise ValueError(f"Unknown kind: {kind}")
     errors: list[str] = []
     warnings: list[str] = []
+    headings = _heading_bodies(text)
     required = READING_HEADINGS if kind == "reading" else REVIEW_HEADINGS
-    minimum_chars = 5000 if kind == "reading" else 4500
-    compact = normalize(text)
 
-    if len(compact) < minimum_chars:
-        errors.append(f"final note is too short: {len(compact)} < {minimum_chars}")
-    for heading in required:
-        if heading not in text:
-            errors.append(f"missing required heading: {heading}")
+    if not normalize(text):
+        errors.append("deliverable is empty")
+    if not headings:
+        errors.append("deliverable has no substantive sections")
     for marker in SCAFFOLD_MARKERS:
-        if marker in text:
+        if marker.lower() in text.lower():
             errors.append(f"scaffold marker remains: {marker}")
-    title_terms = [token.lower() for token in re.findall(r"[A-Za-z0-9][A-Za-z0-9-]*", expected_title) if len(token) > 2]
-    if title_terms and not any(term in text.lower() for term in title_terms[:4]):
-        errors.append("expected paper title is not represented in final note")
+    if not venue_format or kind == "reading":
+        for marker in required:
+            matching = [(heading, body) for heading, body in headings if marker.casefold() in heading.casefold()]
+            if not matching:
+                errors.append(f"missing required heading: {marker}")
+            elif all(len(normalize(body)) < 30 for _, body in matching):
+                errors.append(f"section lacks an answer: {marker}")
+
+    title_terms = [term.casefold() for term in re.findall(r"[A-Za-z0-9][A-Za-z0-9-]*", expected_title) if len(term) > 2]
+    if title_terms and not any(term in text.casefold() for term in title_terms[:4]):
+        errors.append("expected paper title is not represented in deliverable")
     actual_paper_id = frontmatter_value(text, "paper_id")
     if expected_paper_id and actual_paper_id != expected_paper_id:
         errors.append(f"frontmatter paper_id mismatch: {actual_paper_id or '<missing>'} != {expected_paper_id}")
     for term in forbid_terms or []:
-        if term and term.lower() in text.lower():
+        if term and term.casefold() in text.casefold():
             errors.append(f"forbidden cross-paper term found: {term}")
-    evidence_hits = len(re.findall(r"(?i)(?:正文\s*§|§\s*\d|figure\s*\d|table\s*\d|algorithm\s*\d|图\s*\d|表\s*\d)", text))
-    if evidence_hits < 6:
-        errors.append(f"too few evidence anchors: {evidence_hits} < 6")
-    if original_text:
-        source = normalize(original_text)
-        for start in range(0, max(0, len(source) - 600), 600):
-            fragment = source[start : start + 600]
-            if len(fragment) >= 500 and fragment in compact:
-                errors.append("large verbatim block copied from original note")
-                break
+
+    if not original_text and re.search(r"原笔记表述|原审稿笔记|你原来(认为|写道|误以为)", text):
+        errors.append("claims about a user's prior note without a supplied note")
+    if kind == "review" and re.search(r"你当前.*(笔记|审稿).*纠偏", text):
+        errors.append("private correction ledger appears in formal review")
+
+    anchors = len(re.findall(r"(?i)(?:§\s*\d|figure\s*\d|table\s*\d|algorithm\s*\d|图\s*\d|表\s*\d|p\.\s*\d)", text))
+    if anchors < 3:
+        warnings.append(f"few inspectable paper anchors: {anchors}; verify the evidence manually")
+
     return {
         "status": "passed" if not errors else "failed",
         "kind": kind,
-        "characters": len(compact),
-        "evidence_anchors": evidence_hits,
+        "characters": len(normalize(text)),
+        "evidence_anchors": anchors,
         "errors": errors,
         "warnings": warnings,
     }
@@ -110,39 +124,43 @@ def validate_note_file(
     original: Path | None = None,
     forbid_terms: list[str] | None = None,
     expected_paper_id: str = "",
+    venue_format: bool = False,
 ) -> dict[str, Any]:
     if not path.is_file():
-        return {"status": "failed", "errors": [f"final note does not exist: {path}"], "warnings": []}
-    original_text = original.read_text(encoding="utf-8", errors="ignore") if original and original.is_file() else ""
+        return {"status": "failed", "errors": [f"deliverable does not exist: {path}"], "warnings": []}
+    original_text = original.read_text(encoding="utf-8-sig") if original and original.is_file() else ""
     return validate_note_text(
-        path.read_text(encoding="utf-8", errors="ignore"),
+        path.read_text(encoding="utf-8-sig"),
         kind,
         expected_title,
         original_text,
         forbid_terms,
         expected_paper_id,
+        venue_format,
     )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--kind", choices=["reading", "review"], required=True)
-    parser.add_argument("--path", required=True)
+    parser.add_argument("--path", type=Path, required=True)
     parser.add_argument("--expected-title", required=True)
     parser.add_argument("--expected-paper-id", default="")
-    parser.add_argument("--original")
+    parser.add_argument("--original", type=Path)
     parser.add_argument("--forbid-term", action="append", default=[])
+    parser.add_argument("--venue-format", action="store_true")
     args = parser.parse_args()
     report = validate_note_file(
-        Path(args.path),
+        args.path,
         args.kind,
         args.expected_title,
-        Path(args.original) if args.original else None,
+        args.original,
         args.forbid_term,
         args.expected_paper_id,
+        args.venue_format,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    return 0 if report.get("status") == "passed" else 2
+    return 0 if report["status"] == "passed" else 2
 
 
 if __name__ == "__main__":

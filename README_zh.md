@@ -125,13 +125,15 @@
 
 其中 `topic-paper-finder` 有三种检索模式：`study` 保留近三年与固定 taxonomy；`problem-boundary` 和 `mechanism-inspiration` 默认不受年份、venue 或 taxonomy 限制，并支持多个 `--query` 组成证据组合。它只产生学术候选池，关键判断仍需检查原文；代码仓库、官方文档、issue、benchmark、工程文章和博客由方法设计流程使用相应工具另行检索。
 
-它们服务于这条链路：
+它们可以服务于以下链路：
 
 1. 搜索论文
 2. 下载 PDF 到本地论文目录
-3. 在 PaperQuay 阅读、标注、写原始笔记
-4. 基于 PaperQuay 笔记和 MinerU 缓存生成正式 Obsidian 阅读/审稿笔记
+3. 直接阅读论文；如果已有 Typora/Markdown 笔记或汇报 PPT，一并提供
+4. 生成可支撑 PPT 讲述的七问阅读笔记，或以五问加书写细节为主的正式审稿意见
 5. 核验 LaTeX 参考文献，并生成中文参考文献验证报告 PDF
+
+阅读与审稿 Skill 不再要求 PaperQuay ID、MinerU 缓存或已有笔记。用户与老师商讨后的最新总结决定表达重点，PPT 其次，较早笔记再次；论文原文负责核对事实。两种产物均保留源文件，不凭空编造用户曾有的误解。
 
 ### `reference-validation-report`
 
