@@ -13,7 +13,8 @@ READING_HEADINGS = [
     "Why existing works fail?",
     "What is the key idea?",
     "What is the design?",
-    "What is the experimental plan?",
+    "Experimental Setup and Figure/Table Map",
+    "Writing and Presentation Details",
     "What is the takeaway?",
 ]
 
@@ -21,8 +22,9 @@ REVIEW_ANALYSIS_HEADINGS = [
     "Problem Definition",
     "Why It Matters",
     "Existing Work",
-    "Key Idea and Design",
-    "Experimental Support",
+    "Key Idea",
+    "Experiment Plan",
+    "Experimental Setup and Figure/Table Map",
     "Writing and Presentation Details",
     "Overall Assessment",
 ]
@@ -59,11 +61,21 @@ def frontmatter_value(text: str, key: str) -> str:
 
 
 def _heading_bodies(text: str) -> list[tuple[str, str]]:
-    matches = list(re.finditer(r"(?m)^#{2,4}\s+(.+?)\s*$", text))
-    return [
-        (match.group(1), text[match.end() : matches[index + 1].start() if index + 1 < len(matches) else len(text)])
-        for index, match in enumerate(matches)
-    ]
+    matches = list(re.finditer(r"(?m)^(#{2,4})\s+(.+?)\s*$", text))
+    sections: list[tuple[str, str]] = []
+    for index, match in enumerate(matches):
+        level = len(match.group(1))
+        next_sibling = next(
+            (
+                candidate
+                for candidate in matches[index + 1 :]
+                if len(candidate.group(1)) <= level
+            ),
+            None,
+        )
+        end = next_sibling.start() if next_sibling else len(text)
+        sections.append((match.group(2), text[match.end() : end]))
+    return sections
 
 
 def _recommendation(text: str, kind: str) -> str:
@@ -73,6 +85,7 @@ def _recommendation(text: str, kind: str) -> str:
         "",
     )
     labels = (
+        (r"(?i)\brating\s*:?\s*6\b|\bmarginally\s+above\s+acceptance\s+threshold\b", "weak accept"),
         (r"(?i)\bstrong\s+accept\b|强接收", "strong accept"),
         (r"(?i)\bweak\s+accept\b|弱接收", "weak accept"),
         (r"(?i)\bborderline\b|边缘", "borderline"),
@@ -131,12 +144,21 @@ def validate_note_text(
         if marker.lower() in text.lower():
             errors.append(f"scaffold marker remains: {marker}")
     if not venue_format or kind == "reading":
+        required_positions: list[int] = []
         for marker in required:
-            matching = [(heading, body) for heading, body in headings if marker.casefold() in heading.casefold()]
+            matching = [
+                (position, heading, body)
+                for position, (heading, body) in enumerate(headings)
+                if marker.casefold() in heading.casefold()
+            ]
             if not matching:
                 errors.append(f"missing required heading: {marker}")
-            elif all(len(normalize(body)) < 30 for _, body in matching):
+            elif all(len(normalize(body)) < 30 for _, _, body in matching):
                 errors.append(f"section lacks an answer: {marker}")
+            else:
+                required_positions.append(matching[0][0])
+        if len(required_positions) == len(required) and required_positions != sorted(required_positions):
+            errors.append("required sections are not in the prescribed presentation order")
 
     title_terms = [term.casefold() for term in re.findall(r"[A-Za-z0-9][A-Za-z0-9-]*", expected_title) if len(term) > 2]
     if title_terms and not any(term in text.casefold() for term in title_terms[:4]):

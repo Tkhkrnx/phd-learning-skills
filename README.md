@@ -117,7 +117,7 @@ The discovery and analysis tools can be used separately:
 1. search papers
 2. download PDFs into the local paper directory when possible
 3. read the paper directly; optionally add a Typora/Markdown note and presentation
-4. build a seven-question speaking note, or produce both a five-question review analysis note and a formal reviewer report
+4. build a seven-question speaking note, or use the review workflow in two stages: a presentation-ready analysis note first, then a formal reviewer report after the presentation and discussion
 5. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
 
 ## Default PDF Directory
@@ -135,7 +135,9 @@ The discovery and analysis tools can be used separately:
 
 `reading-note-builder` 与 `review-note-builder` 不依赖 PaperQuay、MinerU 或 Obsidian。论文 PDF/全文 Markdown 是事实依据；用户 Markdown 笔记和 PPT 都是可选材料。PaperQuay 仍可用于个人阅读与旧资料定位，不再是这两个 Skill 的入口。
 
-本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；最终文稿由当前模型完成，并对照论文、PPT 和用户最新判断审读。审稿同时交付五问分析笔记与正式 reviewer report，两份结论保持一致。
+本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；最终文稿由当前模型完成，并对照论文、PPT 和用户最新判断审读。阅读笔记的前五问形成“问题—重要性—现有工作缺口—核心想法—设计”的讲述链，实验设置与图表目的/结论另列证据地图，第六问整理写作和内容细节，第七问总结证据支持的结论。审稿分析采用不同的五问：“问题定义—重要性—现有工作—核心想法—实验是否支撑结论”；在每一问中都要写出评审判断，实验设置与图表证据地图放在第五问内，第六问检查写作、术语与展示细节，最后给整体判断。
+
+`review-note-builder` 分两阶段运行。第一阶段只生成可直接用于准备 PPT 的分析笔记；第二阶段在用户汇报和讨论后，使用其 PPT、讨论结论及用户修改过的分析笔记生成正式审稿意见。阶段之间由用户自行推进，不强制插入讨论或确认回合。
 
 本仓库不再负责旧式 `paper-ingest` / `paper-translate` 流水线。
 
@@ -167,14 +169,18 @@ The discovery and analysis tools can be used separately:
 ### `reading-note-builder`
 
 - 从论文本身出发，以七问组织可支撑 PPT 讲述的增强笔记；Markdown 笔记和 PPT 可选
-- 总问题、机制执行链和“实验问题—图表—结论—边界”必须与原文对齐
+- 前五问遵循问题定义和方法设计的推理要求；实验设置适度展开，并将每个相关图表映射到实验目的和它支持的结论
+- 第六问检查写作、术语、方程、表格、引用和交叉引用，区分影响论证/汇报的主要问题与次要润色；第七问收束证据支持的结论
 - 只纠正用户实际表达过的误解，不强制生成“遗漏与纠偏”章节
 
 ### `review-note-builder`
 
-- 从论文和可选的审稿 PPT/Markdown 草稿出发，先生成五问加书写细节的分析笔记，再生成含优势、缺陷和作者问题的正式审稿意见
-- 用户与老师商讨后的最新判断决定评审立场；PPT 重点优先于较早笔记，事实仍须回原文核对
-- 两份文件共用已核实的判断与推荐意见；对已确认缺陷、说明不足、待验证推测和可选增强分别措辞
+- 阶段一按系统论文五问评审：问题定义、重要性、现有工作、核心想法、实验是否支撑结论；各问都须明确写出评审意见，而不只是复述论文
+- 实验设置和图表证据地图放在第五问中；第六问检查写作、术语、表格、引用与交叉引用，并把影响接收判断的问题和次要修订分开
+- 提供最终 PPT 时，笔记需达到足以重建其中问题、论证、方法和证据的表达深度；同时补上 PPT 漏掉但有证据支持的评审意见
+- 阶段二在用户汇报和讨论后，读取 PPT、讨论/导师结论及用户修改过的分析笔记，生成正式审稿意见
+- 最新讨论结论决定评审重点和立场，论文原文核验事实；保留原文术语、因果和证据限定，对已确认缺陷、说明不足、待验证解释和可选增强分别措辞
+- 阶段由用户推进，Skill 不强制增加讨论回合，也不会默认在阶段一同时生成正式意见
 
 ### `reference-validation-report`
 
