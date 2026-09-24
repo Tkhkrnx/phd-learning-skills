@@ -77,6 +77,22 @@ class PaperNoteWorkflowTests(unittest.TestCase):
         self.assertEqual(validate_note_text(complete, "reading", "DSpark")["status"], "passed")
         self.assertNotIn("遗漏与纠偏", complete)
 
+        nested_problem = (
+            "# DSpark\n## What is the problem?\n"
+            "### 背景\nDSpark serves speculative decoding workloads with variable acceptance rates.\n"
+            "### 问题\nThe verifier wastes target-model work when draft acceptance is low.\n"
+            + "\n".join(f"## {heading}\nDSpark evidence is in §3.1 and Figure 2." for heading in READING_HEADINGS[1:])
+        )
+        self.assertEqual(validate_note_text(nested_problem, "reading", "DSpark")["status"], "passed")
+
+        without_evidence_map = complete.replace("## Experimental Setup and Figure/Table Map", "## Evidence")
+        report = validate_note_text(without_evidence_map, "reading", "DSpark")
+        self.assertEqual(report["status"], "failed")
+        self.assertTrue(any("Experimental Setup and Figure/Table Map" in error for error in report["errors"]))
+        out_of_order = "# DSpark\n" + "\n".join(reversed(sections))
+        report = validate_note_text(out_of_order, "reading", "DSpark")
+        self.assertTrue(any("prescribed presentation order" in error for error in report["errors"]))
+
     def test_quality_gate_rejects_wrong_frontmatter_paper_id(self):
         sections = []
         for heading in READING_HEADINGS:
@@ -87,10 +103,12 @@ class PaperNoteWorkflowTests(unittest.TestCase):
         self.assertTrue(any("paper_id mismatch" in error for error in report["errors"]))
 
     def test_review_outputs_have_distinct_shapes_and_no_private_correction(self):
-        analysis_sections = [
-            f"## {index}. {heading}\nAgents as Edges 的这一判断见正文 §3.2 与 Table 2；影响和修改建议在此说明。"
-            for index, heading in enumerate(REVIEW_ANALYSIS_HEADINGS, 1)
-        ]
+        analysis_sections = []
+        for heading in REVIEW_ANALYSIS_HEADINGS:
+            level = "###" if heading == "Experimental Setup and Figure/Table Map" else "##"
+            analysis_sections.append(
+                f"{level} {heading}\nAgents as Edges 的这一判断见正文 §3.2 与 Table 2；影响和修改建议在此说明。"
+            )
         analysis = "# Review Analysis: Agents as Edges\n" + "\n".join(analysis_sections)
         analysis += "\nWeak Accept：主要是组合式创新。"
         formal_sections = [
@@ -102,6 +120,8 @@ class PaperNoteWorkflowTests(unittest.TestCase):
         self.assertEqual(validate_note_text(analysis, "review-analysis", "Agents as Edges")["status"], "passed")
         self.assertEqual(validate_note_text(formal, "review", "Agents as Edges")["status"], "passed")
         self.assertEqual(validate_review_pair(analysis, formal)["status"], "passed")
+        analysis_without_map = analysis.replace("### Experimental Setup and Figure/Table Map", "### Evidence")
+        self.assertEqual(validate_note_text(analysis_without_map, "review-analysis", "Agents as Edges")["status"], "failed")
         self.assertEqual(validate_note_text(analysis, "review", "Agents as Edges")["status"], "failed")
         formal += "\n## 你当前审稿笔记的遗漏与纠偏\n原审稿笔记漏了一个问题。"
         self.assertEqual(validate_note_text(formal, "review", "Agents as Edges")["status"], "failed")
@@ -119,6 +139,14 @@ class PaperNoteWorkflowTests(unittest.TestCase):
             )["status"],
             "passed",
         )
+
+    def test_pair_gate_accepts_kdd_six_as_weak_accept(self):
+        analysis = "## Overall Assessment\nRating 6: Marginally above acceptance threshold（对应 Weak Accept）。"
+        formal = "## Overall Recommendation\nRating: 6 — Marginally above acceptance threshold."
+        report = validate_review_pair(analysis, formal)
+        self.assertEqual(report["status"], "passed")
+        self.assertEqual(report["analysis_recommendation"], "weak accept")
+        self.assertEqual(report["formal_recommendation"], "weak accept")
 
     def test_no_note_mode_does_not_allow_invented_prior_view(self):
         sections = [
