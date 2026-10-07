@@ -23,6 +23,16 @@ class ExplicitSkillPolicyTests(unittest.TestCase):
         self.assertEqual([], missing)
         self.assertEqual([], changed)
 
+    def test_research_file_output_reference_is_packaged_and_explicit_only(self):
+        relative_reference = "../shared/expert-skill-references/seven_question_research_outputs.md"
+        for skill_name in ("research-problem-formulation", "research-method-design"):
+            skill_root = ROOT / skill_name
+            skill_text = (skill_root / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn(f"]({relative_reference})", skill_text)
+            self.assertTrue((skill_root / relative_reference).is_file())
+            policy = yaml.safe_load((skill_root / "agents" / "openai.yaml").read_text(encoding="utf-8"))
+            self.assertFalse(policy["policy"]["allow_implicit_invocation"])
+
     def test_enforcement_preserves_bodies_and_protects_optional_skills_and_commands(self):
         manifest = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as tmp:

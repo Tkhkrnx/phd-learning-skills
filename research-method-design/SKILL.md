@@ -39,3 +39,5 @@ Lead with sourced candidate principles, causal mappings, and serious alternative
 ## Completion
 
 Finish when the method addresses the evidence-derived root challenges through a causal path, feasible carrier, mapped assumptions and costs, a serious simpler alternative, a kill criterion, and a discriminating experiment—and the user can explain or challenge the decisive design logic. When execution is requested, preserve these decisions and continue under the normal implementation-and-verification loop.
+
+For a converged project research task or an explicit file-output request, use [the seven-question output format](../shared/expert-skill-references/seven_question_research_outputs.md). Complete Questions 4–7 in the same `写作指南` that holds the confirmed problem, then finish its chapter and figure-to-conclusion guidance. Also write a separate `实验计划` that expands Question 6 into verifiable experiments and AI-executable work slices. Preserve the existing research and collaboration workflow; file creation is an output of a settled method, not an additional method-selection step.
