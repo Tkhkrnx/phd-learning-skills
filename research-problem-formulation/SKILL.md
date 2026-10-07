@@ -37,3 +37,5 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 ## Completion
 
 Finish only when the user can defend an abstract-level, paper-ready account of: **what the problem is**, **why it matters**, and **why existing work still fails**. The problem itself must be a declarative condition or limitation, not a how-to question or solution objective. Include the evidence boundary and a condition that would narrow or invalidate the framing. If the user asks to move into method design, writing, experiments, or implementation, hand off the confirmed state and continue as normal execution or another explicitly requested Skill.
+
+For a converged project research task or an explicit file-output request, use [the seven-question output format](../shared/expert-skill-references/seven_question_research_outputs.md) after the first three answers stabilize. Create or update the project's single `写作指南` with Questions 1–3, the supported chapter and figure guidance, and clearly unresolved Questions 4–7. This file output does not replace the evidence search or user collaboration above; early exploratory and conversation-only turns remain live-first.

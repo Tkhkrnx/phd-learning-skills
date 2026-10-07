@@ -14,7 +14,7 @@ The policy deployment also protects the installed `cs-paper-submission-check`, `
 
 The user does not need to remember an exact identifier. “Use the research-method skill”, “调用问题定义那个技能”, “用需求分析 skill”, and “用教学技能” are valid when they also identify the task. By contrast, “find a method”, “judge whether this is an academic problem”, “analyze this requirement”, and “teach me this concept” are ordinary requests and must not activate a skill. A generic “use a suitable skill” is ambiguous and must not be resolved from task semantics.
 
-Authorization covers follow-up interaction within the stated task, so the user need not repeat it every round. It expires on completion, a task change, or a pivot to normal writing, coding, synchronization, debugging, review, experiment execution, or delivery. It never transfers automatically to another skill.
+Authorization covers follow-up interaction and the Skill's agreed deliverables within the stated task, so the user need not repeat it every round. It expires on completion, a task change, or a pivot to executing an established plan. A new primary Skill needs a new explicit request; a bounded supporting Skill may be used within the authorized goal as described below.
 
 ## Expert-Facing Collaboration Skills
 
@@ -27,13 +27,13 @@ These four skills are designed to solve real work while improving the user's own
 
 They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires an explicit request to use a recognizable kind of skill for the stated task; exact identifiers are optional, but the underlying collaboration request alone is not authorization. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
 
-The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. The Skill asks for a focused reaction only when a user-owned decision or missing observation could materially change the result. Candidate conclusions remain provisional while such uncertainty is open; otherwise the agent proceeds. Stage names, statuses, and lifecycle markers stay internal. If the user pivots to direct execution, the Skill preserves confirmed decisions and exits silently.
+The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. Evidence and focused discussion let the user correct the framing, compare assumptions and trade-offs, or apply a concept. Consequential collaboration must include the user's reasoning; yes/no approval alone does not establish convergence. When the supplied reasoning already resolves the decision, no extra interaction round is required. Stage names, statuses, and lifecycle markers stay internal. If the user pivots to direct execution, the Skill preserves confirmed decisions and exits silently.
 
 The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage and presents only decision-changing evidence.
 
-Explicit authorization applies to the primary skill, not to every internal dependency. During that same authorized goal, the primary skill may invoke a bounded supporting skill when needed—for example, method design may call `topic-paper-finder` for academic candidate discovery. The primary skill keeps ownership of the conversation and integrates the result; the supporting skill does not start an independent goal or lifecycle. Switching the primary expert role or starting a different task still requires a new explicit skill request.
+The research Skills also preserve the converged discussion in project files; see the seven-question research outputs below.
 
-Trigger examples:
+Explicit authorization applies to the primary skill, not to every internal dependency. During that same authorized goal, the primary skill may invoke a bounded supporting skill when needed—for example, method design may call `topic-paper-finder` for academic candidate discovery. The primary skill keeps ownership of the conversation and integrates the result; the supporting skill does not start an independent goal or lifecycle. Switching the primary expert role or starting a different task still requires a new explicit skill request.
 
 Evidence-led collaboration starts with source investigation and accessible explanation, then uses focused user discussion to revise the actual account. Method design follows the problem through existing-method failures, core challenges, transferable principles, adapted elements, an integrated solution and discriminating evidence. The research target remains systems/architecture/LLM inference and serving; inspiration can cross disciplines and the resulting method need not be a new system mechanism. Three challenges are common, never a quota.
 
@@ -94,9 +94,27 @@ The design blueprint lives in [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_C
 
 The LLM inference layer framework used by the research skills lives in [shared/expert-skill-references/llm_inference_three_layer_framework.md](./shared/expert-skill-references/llm_inference_three_layer_framework.md).
 
+### Seven-question research outputs
+
+After evidence work and user discussion converge, both research Skills maintain one project `写作指南`:
+
+| Question | Responsible Skill |
+| --- | --- |
+| 1. 问题是什么？ | `research-problem-formulation`: background and a declarative problem |
+| 2. 为什么重要？ | `research-problem-formulation`: consequences and motivation evidence |
+| 3. 现有工作为什么失败？ | `research-problem-formulation`: closest work and the remaining gap |
+| 4. 核心思想是什么？ | `research-method-design` |
+| 5. 怎么设计？ | `research-method-design` |
+| 6. 实验计划是什么？ | `research-method-design` |
+| 7. 要得到什么结论？ | `research-method-design`: intended conclusions and their evidence requirements |
+
+The guide then explains what to write in each chapter from Abstract through Conclusion, which figures/tables to produce, and which conclusion each would support. Method design also writes a separate `实验计划` expanding Question 6 into experiments, execution dependencies, artifacts, validation, and stop conditions. Problem formulation leaves unresolved method and result sections visibly open. Early exploration and conversation-only requests remain in the conversation.
+
+These files record what the Skills establish through their existing investigation and collaboration workflows. Existing guides are not required inputs. Reformatting the two existing projects was a format demonstration; it does not replace those workflows. See [the output contract](shared/expert-skill-references/seven_question_research_outputs.md). A later explicitly invoked systems/HPC writing Skill can use the guide's confirmed claims and evidence to write the paper.
+
 ## Systems and HPC Paper-Writing Skills
 
-- `systems-paper-writing`: structure, draft, revise, and audit systems papers for venues such as OSDI, SOSP, EuroSys, ATC, and NSDI. It enforces a problem → mechanism → evidence argument chain.
+- `systems-paper-writing`: structure, draft, revise, and audit systems papers for venues such as OSDI, SOSP, EuroSys, ATC, and NSDI. It connects the problem and prior-work gap to the paper's actual insight, method, mechanism, system, or empirical finding and its evidence; a new mechanism is not required.
 - `hpc-paper-writing`: structure, draft, revise, and audit HPC papers for venues such as SC, PPoPP, ICS, and HPDC. It enforces a profiling → optimization → hardware-limit evidence chain.
 
 Each skill includes the supplied source guide as a local reference so detailed writing and submission checks remain available without external access.
@@ -130,6 +148,8 @@ The discovery and analysis tools can be used separately:
 
 - `PAPERQUAY_DATA_DIR`
 - `PHD_PAPER_SUBMISSION_DIR`
+
+`PAPERQUAY_DATA_DIR` is a compatibility configuration name for the download directory; it does not make PaperQuay a required note source.
 
 ## Dependency
 
@@ -218,6 +238,8 @@ Synchronize the four expert skills, the evidence-oriented paper finder, and thei
 .\shared\scripts\sync_expert_skills.ps1
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
+
+The reading/review-note family uses `shared/scripts/sync_paper_note_skills.ps1`; apply the explicit policy sync afterward. Remote CLI deployment is separate from these local scripts and must verify the copied files and dependency paths on the destination.
 
 Codex uses `allow_implicit_invocation: false` for every protected task Skill. Short descriptions state only the discriminating capability; the narrow alias router handles explicit plain-language requests. Optional external Skills and migrated command adapters keep their upstream bodies, while deployed copies receive explicit-only metadata and a short description prefix for clients that do not honor Codex metadata. Restart an already-open client or start a new task after deployment if its Skill catalog was loaded before the update.
 
