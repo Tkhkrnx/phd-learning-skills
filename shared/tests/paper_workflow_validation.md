@@ -38,3 +38,11 @@ Use the same reconstruction quality for review analysis, but retain its five rev
 - The local example is `outputs/batchgen-skill-check/BatchGen-quality-sample.pptx`; private build/validation files stay under `work/batchgen-skill-check/`. These ignored example files are not published with the Skill. This is a representative same-paper content/render exercise, not an independent model forward-run or a whole new-paper evaluation.
 
 For broader behavioral testing, provide a different paper plus a partial deck to a fresh model under the new Skill. Inspect the actual note/deck against the source and user contract. A static contract validator cannot replace that check, and this three-page sample does not establish uniform quality across other papers.
+
+## Bundled default template
+
+The user explicitly supplied `2026-10-9-BatchGen.pptx` as the default reference. It is packaged unchanged as `paper-presentation-builder/assets/batchgen-default.pptx`; its SHA-256 is `0174ef4078587173b3f88c96a306c759b8b00c05ad7ee12a68cafbbde225773c`. The packaged manifest records the 20 reference pages and dimensions, not a required output count for future talks. This source matches the thread's `structure-fixed` output by hash.
+
+The template-selection tests check actual PPTX packages: a new user template wins over both an existing deck and the default; otherwise an existing deck keeps its design; otherwise the bundled reference is selected. Missing/corrupt input must fail instead of silently selecting another design. Relocated installation paths and manifest/hash mismatches are also exercised, along with preview packaging. New-paper content must replace the example paper's text, diagrams, data and conclusions.
+
+Validation of this addition covers template selection, packaged assets, relocated local sync, and rendering the retained reference. It does not constitute a fresh-model generation test on a different paper, nor a native PowerPoint compatibility test. The source reference is retained, not rewritten to make it pass a renderer's design suggestions.

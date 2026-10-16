@@ -2,6 +2,8 @@
 
 ## Inputs and preservation
 
+Use the template selected by the entrypoint's precedence, including the packaged default when no template or existing work was supplied. A PPT supplied only as content is not automatically a style override. When the default is selected, follow [default-template usage](default-template.md): it is a full reference deck with old paper content to replace, not an empty deck or a fixed slide-count contract.
+
 Inspect the paper and the supplied note/deck. The user's latest discussion judgment sets emphasis and intended review position, while the paper checks factual claims. A partial note or an old-paper template can contain gaps or stale material. Classify source pages as protected completed work, editable current work, or old content to replace. Do not infer that every existing page is finished or that every page may be redesigned.
 
 Keep a private working map with original/output display-page numbers, slide role, author section/figure/algorithm, content to retain/replace, and the expected explanation. Use display order from the presentation relationships, not a file name such as `slide10.xml`. If splitting inserts pages, update the map while retaining the logical question numbering and ownership of subexperiments.

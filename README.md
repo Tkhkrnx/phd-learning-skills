@@ -1,259 +1,366 @@
 # PhD Learning Skills
 
-This repository now contains three skill families:
+一套用于系统、体系结构和大模型推理研究的个人 Skill：和你一起把问题想清楚、查资料、选方法，也帮助读论文、做汇报、写论文和检查引用。
 
-1. expert-facing PhD collaboration skills
-2. paper discovery, note-building, and validation workflow skills
-3. systems and HPC paper-writing skills
+Skill 不是换一个更强的模型，而是给当前 AI 一套针对特定工作的做事规则。这里尤其重视两件事：**先查证据，不凭印象下结论；涉及研究和理解时，让你参与判断，而不是 AI 自己定案。**
 
-## Explicit Invocation Policy
+仓库包含 **13 个工作 Skill**，以及一个负责识别中文叫法的路由器。日常使用看这页；安装、脚本和维护命令看 [快速开始](QUICKSTART.md)。
 
-Every task skill in this repository disables Codex implicit invocation through `agents/openai.yaml`. This uses the documented [`policy.allow_implicit_invocation`](https://developers.openai.com/codex/skills) control. The only implicitly discoverable component is `explicit-skill-router`, whose sole job is to recognize a meta-level request to use a skill and route a plain-language label to the protected target.
+## 怎么调用
 
-The policy deployment also protects the installed `cs-paper-submission-check`, `planning-with-files`, and `scipilot-figure-skill` copies when present, plus the planning command aliases. Those optional skills retain their own source bodies; the deployment guard adds explicit-only metadata and, on non-Codex mirrors, an explicit-use-only description prefix.
+直接说“用某类 skill，帮我做某件事”，不必记住英文目录名。例如：
 
-The user does not need to remember an exact identifier. “Use the research-method skill”, “调用问题定义那个技能”, “用需求分析 skill”, and “用教学技能” are valid when they also identify the task. By contrast, “find a method”, “judge whether this is an academic problem”, “analyze this requirement”, and “teach me this concept” are ordinary requests and must not activate a skill. A generic “use a suitable skill” is ambiguous and must not be resolved from task semantics.
+> 用问题定义的 skill，帮我判断这个现象能不能成为研究问题。
 
-Authorization covers follow-up interaction and the Skill's agreed deliverables within the stated task, so the user need not repeat it every round. It expires on completion, a task change, or a pivot to executing an established plan. A new primary Skill needs a new explicit request; a bounded supporting Skill may be used within the authorized goal as described below.
+> 用做PPT的 skill，按这份模板补齐论文汇报，前五页不要动。
 
-## Expert-Facing Collaboration Skills
+本仓库的工作 Skill **只在你明确要求使用时进入**。“帮我分析需求”“解释这段代码”“继续跑实验”都是普通请求，不应该因此自动调用这些 Skill。只说“用个合适的 skill”而没有说明种类时，应先问清楚，不能自行猜。
 
-These four skills are designed to solve real work while improving the user's own research, engineering, and learning ability:
+同一件事的后续讨论不用每轮重复授权。主 Skill 可以在这个目标内借助必要的辅助 Skill，例如研究方法借助论文搜索；你也可以单独调用论文搜索。换主 Skill、换任务，或开始执行已经定好的方案时，不沿用之前的协作授权。
 
-- `research-problem-formulation`
-- `research-method-design`
-- `engineering-task-decomposition`
-- `targeted-knowledge-closure`
+## 我现在该用哪个
 
-They are user-facing collaboration protocols, not agent-only planning or execution checklists. Activation requires an explicit request to use a recognizable kind of skill for the stated task; exact identifiers are optional, but the underlying collaboration request alone is not authorization. Direct writing, reviewing, coding, synchronization, debugging, experiment execution, or plan execution must bypass this family.
+| 你现在要做什么 | 可以这样叫它 | 仓库里的名字 |
+| --- | --- | --- |
+| 有一个现象或想法，想判断研究问题是否成立 | 问题定义 | [research-problem-formulation](#research-problem-formulation) |
+| 问题已明确，想找、比较和设计解决方法 | 研究方法 | [research-method-design](#research-method-design) |
+| 需求或系统没弄清，想看代码后再决定怎么改 | 需求分析 | [engineering-task-decomposition](#engineering-task-decomposition) |
+| 有个概念没理解，想真正学会并用起来 | 教学 | [targeted-knowledge-closure](#targeted-knowledge-closure) |
+| 围绕一个具体问题查论文 | 论文搜索 | [topic-paper-finder](#topic-paper-finder) |
+| 按固定研究方向做一轮论文推荐 | 每周论文雷达 | [weekly-paper-radar](#weekly-paper-radar) |
+| 找自己 Obsidian 里已有的笔记 | 笔记搜索 | [vault-note-finder](#vault-note-finder) |
+| 读懂一篇论文，整理成能支撑 PPT 的笔记 | 阅读笔记 | [reading-note-builder](#reading-note-builder) |
+| 分析论文优缺点，或整理正式审稿意见 | 审稿笔记 | [review-note-builder](#review-note-builder) |
+| 制作、补齐或修改论文汇报 PPT | 做PPT | [paper-presentation-builder](#paper-presentation-builder) |
+| 写作、修改自己的系统论文 | 系统论文写作 | [systems-paper-writing](#systems-paper-writing) |
+| 写作、修改自己的高性能计算论文 | HPC 论文写作 | [hpc-paper-writing](#hpc-paper-writing) |
+| 核实参考文献，生成验证报告 | 参考文献验证 | [reference-validation-report](#reference-validation-report) |
 
-The expert may lead with a complete candidate problem statement, several feasible methods, a system model, or a worked explanation. Evidence and focused discussion let the user correct the framing, compare assumptions and trade-offs, or apply a concept. Consequential collaboration must include the user's reasoning; yes/no approval alone does not establish convergence. When the supplied reasoning already resolves the decision, no extra interaction round is required. Stage names, statuses, and lifecycle markers stay internal. If the user pivots to direct execution, the Skill preserves confirmed decisions and exits silently.
+以下例子里的论文名、需求和路径都只是示例；使用时换成你的材料。
 
-The two research skills are evidence-first. `research-problem-formulation` treats the first framing as a search hypothesis and cannot freeze reality, importance, or unresolved status until a query portfolio, decisive primary sources, closest solution families, counterevidence, and material blind spots have been checked. `research-method-design` searches by the root challenge's structural signature across the same field, adjacent systems areas, distant analogies, implementation artifacts, and negative evidence before ranking methods. The agent performs retrieval and triage and presents only decision-changing evidence.
+## 研究、工程与学习
 
-The research Skills also preserve the converged discussion in project files; see the seven-question research outputs below.
+这四个 Skill 不是 AI 私下拆任务的工具，而是与你协作的专家。AI 负责调查、整理和解释；你通过讨论现象、比较取舍、纠正理解或应用概念参与其中。不是每轮都必须问问题，但关键判断不能只靠一句“你同意吗”就算共同想清楚了。
 
-Explicit authorization applies to the primary skill, not to every internal dependency. During that same authorized goal, the primary skill may invoke a bounded supporting skill when needed—for example, method design may call `topic-paper-finder` for academic candidate discovery. The primary skill keeps ownership of the conversation and integrates the result; the supporting skill does not start an independent goal or lifecycle. Switching the primary expert role or starting a different task still requires a new explicit skill request.
+### research-problem-formulation
 
-Evidence-led collaboration starts with source investigation and accessible explanation, then uses focused user discussion to revise the actual account. Method design follows the problem through existing-method failures, core challenges, transferable principles, adapted elements, an integrated solution and discriminating evidence. The research target remains systems/architecture/LLM inference and serving; inspiration can cross disciplines and the resulting method need not be a new system mechanism. Three challenges are common, never a quota.
+**问题定义：弄清楚到底有什么问题，以及它是不是一个成立的研究问题。**
 
-Preserve the user's requested headings, order, language and source wording during delivery. Abstract-level background and problem definitions should be concise paper-quality paragraphs. Formatting and handoffs must not silently change the agreed research claim or its evidence status.
+- **什么时候用：** 你有一个现象、直觉或方案设想，但还不确定它是否真实、重要、已经被解决，或是否有值得研究的挑战。
+- **给它什么：** 现象和使用场景；已有观察、测量、论文或直觉。有材料就给，没有也可以从调查开始。
+- **它怎么做：** 先找最接近的工作和反证，再与你讨论现象、原因与限制。不会把“我还没搜到”当成“没人做过”，也可以得出“当前动机不成立”或“证据还不够”的结论。
+- **你会得到：** 问题是什么、为什么重要、现有工作为什么仍没解决。收敛后可写进项目《写作指南》的前三问。
 
-| User intent | Behavior |
-|---|---|
-| "请用需求分析的 skill 把这个需求弄清楚，先别写代码" | `engineering-task-decomposition` |
-| "用问题定义那个技能判断这个研究想法是否构成学术问题" | `research-problem-formulation` |
-| "问题已经明确，请用研究方法的 skill 带我找一个可辩护的解决方法" | `research-method-design` |
-| "用教学 skill 带我真正弄懂这个概率" | `targeted-knowledge-closure` |
-| "帮我分析一下这个需求，先别写代码" | no skill; analyze normally |
-| "这个问题已经明确，带我找一个解决方法" | no skill; assist normally |
-| "说明一下 PR9 做了什么，我先了解后再审阅" | no expert collaboration skill; explain the concrete artifact directly |
-| "继续修复 replay，并按冻结方案收集结果" | no research-method skill; execute the established method normally |
-| "按已经确认的方案同步实验计划、论文和代码" | no expert collaboration skill; execute normally |
+问题本身必须是**陈述句**，不是预先塞入方案的求解问句。“人在水下不能自然呼吸”是在描述问题；“如何设计一个好的呼吸机”是在寻求方案。写成陈述句还不够，是否构成学术问题仍要靠证据判断。
 
-They are intentionally expert-role skills, not generic templates:
+**调用例子：**
 
-- `research-problem-formulation`
-  - acts like an LLM inference systems domain expert
-  - searches seminal/current literature, closest work, failure cases, and counterevidence before concluding
-  - converges on:
-    - what the problem is
-    - why it matters
-    - why existing work still fails
-- `research-method-design`
-  - acts like a systems-method and experiment-design expert
-  - activates only after the research problem is stable and the user explicitly asks to discover, compare, or defend solution directions
-  - searches papers, repositories, documentation, engineering evidence, and structurally analogous mechanisms beyond the target field
-  - converges on:
-    - root challenge and boundary conditions
-    - causal mechanism and feasible system carrier
-    - transferable principles from relevant or cross-domain work
-    - alternatives, trade-offs, assumptions, and system costs
-    - kill criterion
-    - first discriminating experiment
-- `engineering-task-decomposition`
-  - acts like a senior engineer or architect
-  - resolves material requirement and system-boundary uncertainty before a consequential handoff
-  - converges on:
-    - real requirement, non-goals, and acceptance evidence
-    - real codebase and runtime understanding
-    - best current implementation path and rejected alternatives
-    - first reversible execution slice
-    - validation, observability, and rollback
-- `targeted-knowledge-closure`
-  - acts like a subject-matter teacher with scaffolding discipline
-  - adapts through explanation, correction, and transfer only as far as the live learning goal requires
-  - converges on:
-    - accurate mental model and repaired prerequisites
-    - user reconstruction in their own words
-    - discrimination from near-miss concepts
-    - small transfer into the live task
-    - reduced scaffolding on the next similar case
+> 用问题定义的 skill，帮我判断“Agent 多轮调用中反复重算上下文”是不是一个值得研究的问题。先查最接近的工作，再和我讨论，不要直接替我定一个方案。
 
-The design blueprint lives in [AGENT_COLLABORATION_SKILL_BLUEPRINT.md](./AGENT_COLLABORATION_SKILL_BLUEPRINT.md).
+完整规则见 [SKILL.md](research-problem-formulation/SKILL.md)。
 
-The LLM inference layer framework used by the research skills lives in [shared/expert-skill-references/llm_inference_three_layer_framework.md](./shared/expert-skill-references/llm_inference_three_layer_framework.md).
+### research-method-design
 
-### Seven-question research outputs
+**研究方法：针对已经明确的问题，找出值得尝试的解法和验证办法。**
 
-After evidence work and user discussion converge, both research Skills maintain one project `写作指南`:
+- **什么时候用：** 已经知道要解决什么、已有方法在哪里失效，但还没有确定采用什么研究方法。
+- **给它什么：** 已确认的问题、现有工作缺口、关键约束，以及已有数据、代码或资源条件。
+- **它怎么做：** 从失效原因提炼核心挑战，搜索论文、仓库、文档和工程经验；也寻找其他领域中结构相似的问题，解释哪些原则能迁移、哪些不能。不会只把几篇同方向论文拼起来，也不强迫每个课题都提出一个新系统。
+- **你会得到：** 几个可行方向、推荐理由、简单替代方案、关键假设与代价，以及什么实验结果会说明方案走不通。讨论收敛后，补齐《写作指南》后四问，另写一份可执行的《实验计划》。
 
-| Question | Responsible Skill |
+核心链条是：问题 → 现有方法为什么失败 → 根源挑战 → 有针对性的解法 → 整体方案 → 怎样验证。挑战数量由问题决定，不为了凑数强写三个。
+
+**调用例子：**
+
+> 用研究方法的 skill，针对我们已确认的状态重算问题找几种可行方案。除了本领域论文，也找能迁移的相似机制，比较额外开销和失败条件；先讨论方法，不要直接开始跑实验。
+
+已经定好方案后修 replay、跑实验、同步文档，不需要继续使用这个 Skill。
+
+完整规则见 [SKILL.md](research-method-design/SKILL.md)。
+
+### engineering-task-decomposition
+
+**需求分析：结合真实代码，把“想要什么”和“该怎么改”弄清楚。**
+
+- **什么时候用：** 需求模糊、对系统理解不完整，或者改动牵涉多个模块，直接写代码容易做偏。
+- **给它什么：** 最终目标、真实使用场景、仓库位置，以及已知限制和不想改的部分。
+- **它怎么做：** 看相关代码、接口、配置和测试，讲清数据怎么走、状态归谁管、改动影响谁；与你确认目标、非目标和成功标准，再比较实现路径。
+- **你会得到：** 真实需求、相关系统结构、实施建议和第一步可验证的小改动，包括怎样测试、观察和回退。不会把“建了工具、统计表或 Issue”当成需求已经满足。
+
+**调用例子：**
+
+> 用需求分析的 skill，帮我弄清“运行中切换模型”这个需求。先看真实代码，和我厘清要保留哪些状态、怎样算切换成功，再拆出第一步，暂时别写代码。
+
+如果你同时授权实现，且目标与路径已清楚，它可以结束需求协作，转入正常编码和验证，不必反复访谈。
+
+完整规则见 [SKILL.md](engineering-task-decomposition/SKILL.md)。
+
+### targeted-knowledge-closure
+
+**教学：补上卡住当前任务的知识，让你能自己解释和应用。**
+
+- **什么时候用：** 一个概念、公式、机制或前置知识影响了你理解论文、代码或研究问题。
+- **给它什么：** 想学什么、卡在哪里，以及相关原文、公式或代码；可以说明已有基础。
+- **它怎么做：** 先补必要背景，讲清关键关系，再用例子、推理或小应用发现具体误解，并逐渐减少提示。
+- **你会得到：** 能用于当前任务的理解，而不只是定义或背诵。不机械地在结尾追加“复述一下”，也不把“懂了吗——懂了”视为学会。
+
+**调用例子：**
+
+> 用教学 skill 带我理解 coroutine 的暂停和恢复。结合这段代码讲，让我试着判断下一步会执行哪里，再指出我理解错的地方。
+
+仅仅要求“解释这次 PR 改了什么”不等于要进入教学流程。
+
+完整规则见 [SKILL.md](targeted-knowledge-closure/SKILL.md)。
+
+### 两个研究 Skill 共用的文件
+
+问题定义和研究方法不是各写一套互相矛盾的材料，而是共同维护一份项目《写作指南》：
+
+| 七问 | 谁负责 |
 | --- | --- |
-| 1. 问题是什么？ | `research-problem-formulation`: background and a declarative problem |
-| 2. 为什么重要？ | `research-problem-formulation`: consequences and motivation evidence |
-| 3. 现有工作为什么失败？ | `research-problem-formulation`: closest work and the remaining gap |
-| 4. 核心思想是什么？ | `research-method-design` |
-| 5. 怎么设计？ | `research-method-design` |
-| 6. 实验计划是什么？ | `research-method-design` |
-| 7. 要得到什么结论？ | `research-method-design`: intended conclusions and their evidence requirements |
+| 1. 问题是什么？ | 问题定义：背景与陈述句形式的问题 |
+| 2. 为什么重要？ | 问题定义：损失、价值和动机证据 |
+| 3. 现有工作为什么失败？ | 问题定义：最接近工作及未解决的缺口 |
+| 4. 核心思想是什么？ | 研究方法 |
+| 5. 怎么设计？ | 研究方法 |
+| 6. 实验计划是什么？ | 研究方法 |
+| 7. 要得到什么结论？ | 研究方法：待验证的结论及所需证据 |
 
-The guide then explains what to write in each chapter from Abstract through Conclusion, which figures/tables to produce, and which conclusion each would support. Method design also writes a separate `实验计划` expanding Question 6 into experiments, execution dependencies, artifacts, validation, and stop conditions. Problem formulation leaves unresolved method and result sections visibly open. Early exploration and conversation-only requests remain in the conversation.
+七问后面接逐章写作建议：从摘要到结论，每章写什么、注意什么、需要哪些图表、各自支撑什么结论。研究方法另写《实验计划》，把实验展开成 AI 可以执行的步骤、输入、产物、检查和停止条件。
 
-These files record what the Skills establish through their existing investigation and collaboration workflows. Existing guides are not required inputs. Reformatting the two existing projects was a format demonstration; it does not replace those workflows. See [the output contract](shared/expert-skill-references/seven_question_research_outputs.md). A later explicitly invoked systems/HPC writing Skill can use the guide's confirmed claims and evidence to write the paper.
+这些文件记录调查与讨论达成的结果，不要求你先有旧指南。未确定的方法保留未确定，预期结论不能写成已测得结果；早期探索或只要求对话时，不提前生成一堆文件。后续可以明确调用系统或 HPC 写作 Skill，沿用这些已确认的内容。
 
-## Systems and HPC Paper-Writing Skills
+详细格式见 [七问研究文件约定](shared/expert-skill-references/seven_question_research_outputs.md)。
 
-- `systems-paper-writing`: structure, draft, revise, and audit systems papers for venues such as OSDI, SOSP, EuroSys, ATC, and NSDI. It connects the problem and prior-work gap to the paper's actual insight, method, mechanism, system, or empirical finding and its evidence; a new mechanism is not required.
-- `hpc-paper-writing`: structure, draft, revise, and audit HPC papers for venues such as SC, PPoPP, ICS, and HPDC. It enforces a profiling → optimization → hardware-limit evidence chain.
+## 查论文与找已有笔记
 
-Each skill includes the supplied source guide as a local reference so detailed writing and submission checks remain available without external access.
+### topic-paper-finder
 
-## Paper Workflow Skills
+**论文搜索：围绕当前问题找相关工作，并说明为什么值得看。**
 
-The existing paper workflow family remains in the repository:
+- **什么时候用：** 想找最接近的研究、检查问题是否已解决，或寻找方法启发。可以单独调用，不必先进入问题定义或研究方法。
+- **给它什么：** 研究问题或主题、想查清的疑问，以及年份、会议、下载需求等限制。
+- **它怎么做：** 组合查询、合并去重，整理候选论文；关键判断要打开原文，不能只看标题和摘要。说明贡献、适用假设、与你问题的关系，而不是只列论文名。
+- **你会得到：** 有理由的论文清单、来源链接；需要下载时说明哪些成功、保存在哪、哪些还需手动补充。脚本的候选 JSON 不等于最终研究结论。
 
-- `weekly-paper-radar`
-- `topic-paper-finder`
-- `vault-note-finder`
-- `reading-note-builder`
-- `review-note-builder`
-- `paper-presentation-builder`
-- `reference-validation-report`
+| 检索方式 | 用途 | 默认范围 |
+| --- | --- | --- |
+| `study` | 围绕固定研究方向学习 | 近三年，按既有方向和会议策略筛选 |
+| `problem-boundary` | 判断问题边界、找最接近工作与反证 | 不默认限制年份、会议或固定方向分类 |
+| `mechanism-inspiration` | 找结构相似的学术方法启发 | 不默认限制年份、会议或固定方向分类 |
 
-The discovery and analysis tools can be used separately:
+你明确给出的限制优先。论文搜索主要找学术资料；代码、官方文档、Issue 和工程文章由研究方法流程按需另外调查。
 
-1. search papers
-2. download PDFs into the local paper directory when possible
-3. read the paper directly; optionally add a Typora/Markdown note and presentation
-4. build a seven-question speaking note, or use the review workflow in two stages: a presentation-ready analysis note first, then a formal reviewer report after the presentation and discussion
-5. explicitly use `paper-presentation-builder` to create or complete the talk deck from the paper and optional analysis/template
-6. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
+**调用例子：**
 
-## Default PDF Directory
+> 用论文搜索的 skill，找“推理状态跨请求复用”最接近的工作，经典和最新论文都要。说明它们解决了什么、限制是什么，以及是否已经解决了我这个问题。
 
-默认 PDF 下载目录：
+完整规则见 [SKILL.md](topic-paper-finder/SKILL.md)。
 
-- `~/Documents/PHR/Intellistream/papers/read`
+### weekly-paper-radar
 
-可用环境变量覆盖：
+**每周论文雷达：按固定研究方向做一轮阅读推荐。**
 
-- `PAPERQUAY_DATA_DIR`
-- `PHD_PAPER_SUBMISSION_DIR`
+- **什么时候用：** 没有一个很窄的查询，想知道自己的研究方向近期有哪些值得读的论文。
+- **给它什么：** 可以直接使用已有方向配置，也可以说明本轮关注点和是否下载 PDF。
+- **它怎么做：** 按配置覆盖近三年的三个方向：状态感知编排与资源治理、硬件感知内存管理与语义一致性、长上下文与 MoE 的状态复用推理。筛选时检查已有笔记，避免反复推荐读过的内容。
+- **你会得到：** 通常从约 20 篇候选中选出约 10 篇推荐、4 篇精读重点，并说明理由；相关性不足时不凑数。
 
-`PAPERQUAY_DATA_DIR` is a compatibility configuration name for the download directory; it does not make PaperQuay a required note source.
+**调用例子：**
 
-## Dependency
+> 用每周论文雷达 skill，按我的三个研究方向整理一轮，给出推荐理由和精读重点，能下载的 PDF 放到本地。
 
-`reading-note-builder` 与 `review-note-builder` 不依赖 PaperQuay、MinerU 或 Obsidian。论文 PDF/全文 Markdown 是事实依据；用户 Markdown 笔记和 PPT 都是可选材料。PaperQuay 仍可用于个人阅读与旧资料定位，不再是这两个 Skill 的入口。
+名字叫“每周”，但**调用一次只执行一轮，不会自动创建每周任务**。定时运行需要另外明确安排。
 
-本地资料清单脚本接受 `--paper`、可选 `--note` 和 `--pptx`；最终文稿由当前模型完成，并对照论文、PPT 和用户最新判断审读。阅读笔记的前五问形成“问题—重要性—现有工作缺口—核心想法—设计”的讲述链，实验设置与图表目的/结论另列证据地图，第六问整理写作和内容细节，第七问总结证据支持的结论。审稿分析采用不同的五问：“问题定义—重要性—现有工作—核心想法—实验是否支撑结论”；在每一问中都要写出评审判断，实验设置与图表证据地图放在第五问内，第六问检查写作、术语与展示细节，最后给整体判断。
+完整规则见 [SKILL.md](weekly-paper-radar/SKILL.md)，研究方向见 [配置](weekly-paper-radar/radar_config.yaml)。
 
-`review-note-builder` 分两阶段运行。第一阶段只生成可直接用于准备 PPT 的分析笔记；第二阶段在用户汇报和讨论后，使用其 PPT、讨论结论及用户修改过的分析笔记生成正式审稿意见。阶段之间由用户自行推进，不强制插入讨论或确认回合。
+### vault-note-finder
 
-本仓库不再负责旧式 `paper-ingest` / `paper-translate` 流水线。
+**笔记搜索：找你已经在 Obsidian 里记过的内容。**
 
-## Paper-Workflow Skill Details
+- **什么时候用：** 记得以前看过某篇论文或某个概念，但忘了笔记在哪里。
+- **给它什么：** 论文名、关键词或概念，以及已配置或明确提供的 Obsidian 笔记库位置。
+- **它怎么做：** 同时查文件名和 Markdown 正文，优先呈现正式阅读、审稿笔记等相关结果。
+- **你会得到：** 匹配笔记的本地路径和相关内容。这是查自己的笔记，不是上网查论文。
 
-### `weekly-paper-radar`
+**调用例子：**
 
-- 面向近 3 年论文做每周雷达搜索
-- 覆盖 3 个固定研究方向
-- 优先官方会议页面，再走聚合恢复链路
-- 只产出机器可读候选池，最终推荐由调用 skill 的主模型在对话里给出
+> 用笔记搜索 skill，在我的 Obsidian 里找以前关于 KV cache 分层管理的阅读笔记，告诉我文件在哪、哪些内容和当前问题相关。
 
-### `topic-paper-finder`
+完整规则见 [SKILL.md](vault-note-finder/SKILL.md)。
 
-- 提供 `study`、`problem-boundary`、`mechanism-inspiration` 三种模式
-- `study` 保留近三年、固定 taxonomy 和 venue 策略；两个证据模式默认不限制年份、venue 或现有 taxonomy
-- 支持重复 `--query` 构造查询组合、跨查询去重并记录 `matched_queries`
-- 证据模式在可用时合并 Semantic Scholar、OpenAlex、DBLP 和 arXiv，并记录来源覆盖与失败
-- 搜索目标论文并可选下载 PDF
-- 学习模式做 vault 重复抑制；证据模式保留已有笔记对应论文并标注，避免丢掉关键 prior work
-- 返回结构化 JSON，由主模型直接在对话里总结结果
-- 只负责学术候选发现；关键结论仍需打开原文，仓库、文档、issue、博客等由方法设计流程另行检索
+## 读论文、审稿与做汇报
 
-### `vault-note-finder`
+这三个 Skill 都以论文核实事实。没有现成笔记也可以开始；Markdown/Typora 笔记、PPT 和讨论结论是可选材料，不是必备前置步骤。
 
-- 在 Obsidian vault 内搜索已有阅读笔记、审稿笔记和相关草稿
-- 优先把正式 Reading / Review Notes 排到前面
+你最新的讨论或导师纠正决定整理重点和已确认立场，PPT 提供目标表达深度；但与论文事实不一致时，要核对并指出，不能为了迎合材料而写错原文。
 
-### `reading-note-builder`
+### reading-note-builder
 
-- 从论文本身出发，以七问组织可支撑 PPT 讲述的增强笔记；Markdown 笔记和 PPT 可选
-- 前五问遵循问题定义和方法设计的推理要求；实验设置适度展开，并将每个相关图表映射到实验目的和它支持的结论
-- 第六问检查写作、术语、方程、表格、引用和交叉引用，区分影响论证/汇报的主要问题与次要润色；第七问收束证据支持的结论
-- 只纠正用户实际表达过的误解，不强制生成“遗漏与纠偏”章节
-- 按作者的问题/挑战层次与原文顺序穿插图表、算法和正文结果；先解释图的读法与因果关系，再给结论，不能只留图表索引或组件名
+**阅读笔记：把论文真正讲清楚，整理成足以支撑 PPT 的材料。**
 
-### `paper-presentation-builder`
+- **什么时候用：** 准备精读、读书报告或组会汇报，想理解作者的问题、方法和证据，而不是得到一段泛泛摘要。
+- **给它什么：** 论文 PDF 或全文 Markdown；已有笔记、参考 PPT、老师纠正可一并提供，笔记不完整也没关系。
+- **它怎么做：** 按作者实际的问题、挑战和设计层次讲解，用原文术语解释机制；相关图表、算法和正文结果放在该讲的位置，不只列组件名或图号。
+- **你会得到：** 新的 Markdown 阅读笔记，保留原始材料，不自动生成 PPT。
 
-- Create or revise a paper-reading/review deck using the paper, optional notes, and the user's template. Invoke it with “用做PPT的 skill…” or “用论文汇报技能…”. Ordinary PPT requests do not activate this personal Skill.
-- Preserve completed slides, template hierarchy and experiment-question numbering. Explain the authors' designs and evidence with concise on-slide points, including important algorithm steps and text-only results.
-- Follow the current presentation tool's authoring and rendering workflow as an implementation dependency. Keep a private source/page map; respect the user's notes, citations, page-count and figure-splitting choices.
-- `paper-presentation-builder/scripts/audit_deck.py` checks declared slide count, protected pages, notes, stale text and required headings. Rendered-page and source-interpretation checks remain necessary.
+笔记按以下内容组织：
 
-### `review-note-builder`
+1. 问题是什么：背景 + 陈述句形式的问题。
+2. 为什么重要：作者的理由、动机实验或其他证据。
+3. 现有工作为什么失败：整理相关方法的能力、优势与具体缺口，适合用表比较。
+4. 核心思想是什么：为什么这个思路能针对前面的困难起作用。
+5. 怎么设计：讲清关键机制、流程及必要算法。
+6. 写作、术语与展示细节：区分影响理解或论证的问题与次要润色。
+7. 总结与启发：论文证据支持了什么，以及哪些认识可以迁移。
 
-- 阶段一按系统论文五问评审：问题定义、重要性、现有工作、核心想法、实验是否支撑结论；各问都须明确写出评审意见，而不只是复述论文
-- 实验设置和图表证据地图放在第五问中；第六问检查写作、术语、表格、引用与交叉引用，并把影响接收判断的问题和次要修订分开
-- 提供最终 PPT 时，笔记需达到足以重建其中问题、论证、方法和证据的表达深度；同时补上 PPT 漏掉但有证据支持的评审意见
-- 阶段二在用户汇报和讨论后，读取 PPT、讨论/导师结论及用户修改过的分析笔记，生成正式审稿意见
-- 最新讨论结论决定评审重点和立场，论文原文核验事实；保留原文术语、因果和证据限定，对已确认缺陷、说明不足、待验证解释和可选增强分别措辞
-- 阶段由用户推进，Skill 不强制增加讨论回合，也不会默认在阶段一同时生成正式意见
+在第五问与第六问之间，另列实验设置和图表证据：说明硬件、模型、负载、基线、配置与指标；每个相关图表写清**实验为了验证什么、得出什么结论**。需要时解释坐标、图例和比较关系，不用逐图抄正文。
 
-### `reference-validation-report`
+**调用例子：**
 
-- verifies bibliography entries against DOI/Crossref, arXiv, and official publisher or venue sources
-- produces an evidence-backed Chinese PDF report and never marks unresolved items as confirmed
-- supports standard `.bib + .bbl + .tex`, Elsevier-style `.bbl`, and inline `thebibliography` inputs
+> 用阅读笔记 skill 整理这篇 BatchGen 论文。我没有现成笔记；按作者的问题和设计层次讲清楚，关键图表和算法都解释到能准备组会 PPT 的程度，保留原文术语。
 
-## Output Contract
+完整规则见 [SKILL.md](reading-note-builder/SKILL.md)。
 
-`weekly-paper-radar` 和 `topic-paper-finder` 都遵循同一个约定：
+### review-note-builder
 
-- 脚本只产出结构化 JSON
-- 最终推荐或搜索结论由 Codex/Claude 在对话里直接告诉用户
-- 回答时应显式总结：
-  - 成功下载了哪些 PDF
-  - 实际写入的本地论文目录是什么
-  - 哪些论文仍需用户手动补链
+**审稿笔记：先做有依据的论文分析，再按你的最终判断整理正式评审。**
 
-## Validation
+- **什么时候用：** 需要评估论文的优势与缺陷，准备审稿汇报，或者把汇报讨论后的意见整理成可提交的评审。
+- **给它什么：** 分析阶段提供论文，可附笔记和 PPT；正式评审阶段提供最新 PPT、讨论结论、修改过的分析笔记，以及会议字段、语言和评分档位。
+- **它怎么做：** 严格但公平地核对全文、图表和可用附录。五问是检查项，不是五个必须找出的缺点；成立就说成立。批评要说明依据、影响和最小必要改进，不能把推测写成已证实缺陷。
+- **你会得到：** 当前阶段对应的独立文件。分析笔记和正式意见应保持事实、优缺点与推荐结论一致。
 
-The redesign validation checklist and paired activation/bypass cases for the expert-facing skills live in:
+**阶段一：分析笔记，服务于准备 PPT。**
 
-- [shared/tests/expert_skill_validation.md](./shared/tests/expert_skill_validation.md)
-- [shared/tests/paper_workflow_validation.md](./shared/tests/paper_workflow_validation.md) records the source-led note/PPT regression cases and the limits of their validation.
+1. 问题定义清不清楚？
+2. 为什么重要，理由能不能说服人？
+3. 现有工作真的没解决好吗？
+4. 核心思想是否合理，设计是否对准问题？
+5. 实验是否支撑结论？在这里整理实验设置、图表证据和关键遗漏。
+6. 写作、术语与展示细节：把影响接收判断的主要问题与次要修订分开。
 
-Run the static contract and regression-case validator with:
+每问都要有明确评审判断，不只是复述作者内容；最后给整体评价。
 
-```powershell
-python shared\tests\validate_expert_skills.py
-python shared\tests\validate_explicit_skill_policy.py
-```
+> 用审稿笔记 skill，先生成这篇论文的分析笔记。按五问评审并单独检查写作细节，能支持我的 PPT 汇报；没有实质问题的地方不要硬挑缺点。
 
-Synchronize the four expert skills, the evidence-oriented paper finder, and their shared dependency closure to both local Codex skill roots, global Claude Code, and both Obsidian Claudian mirrors with:
+**阶段二：正式审稿意见，服务于提交。**
 
-```powershell
-.\shared\scripts\sync_expert_skills.ps1
-.\shared\scripts\sync_explicit_skill_policy.ps1
-```
+通常在汇报和讨论后，由你明确推进；不会在生成分析笔记时自动再写一份正式评审。正式意见按会议实际字段组织，例如总结、优势、缺陷、作者问题和推荐结论；评分必须使用你提供的实际档位。
 
-The reading/review-note and paper-presentation family uses `shared/scripts/sync_paper_note_skills.ps1`; apply the explicit policy sync afterward. Remote CLI deployment is separate from these local scripts and must verify the copied files and dependency paths on the destination.
+> 用审稿笔记 skill，根据最新 PPT、导师讨论结果和我修改过的分析笔记，生成正式英文评审。总体意见是方法创新有限、其他方面基本成立；评分和字段按我提供的会议表单来，给我能直接复制的版本。
 
-Codex uses `allow_implicit_invocation: false` for every protected task Skill. Short descriptions state only the discriminating capability; the narrow alias router handles explicit plain-language requests. Optional external Skills and migrated command adapters keep their upstream bodies, while deployed copies receive explicit-only metadata and a short description prefix for clients that do not honor Codex metadata. Restart an already-open client or start a new task after deployment if its Skill catalog was loaded before the update.
+如果你直接要求正式评审，也按这个目标处理，但不能编造尚未发生的汇报或讨论结论。
 
-## Quickstart
+完整规则见 [SKILL.md](review-note-builder/SKILL.md)。
 
-For commands and workflow examples, see [QUICKSTART.md](./QUICKSTART.md).
+### paper-presentation-builder
+
+**论文汇报 PPT：把论文内容做成讲得清楚、符合你模板的幻灯片。**
+
+- **什么时候用：** 从论文开始做汇报，或继续补齐、修改已有的半成品 PPT。主要面向论文阅读和审稿汇报，不是通用商业演示。
+- **给它什么：** 论文，以及可选的模板、已有 PPT 或阅读/审稿笔记。没给模板时，默认使用内置的 BatchGen 汇报模板；给了新模板就按新的来。继续修改已有稿件时保留它自己的版式，除非你要求换模板。
+- **它怎么做：** 先区分已完成页和待替换的旧模板内容，再按作者逻辑组织精炼正文。图、算法和因果关系要在页面上讲得清楚，不能靠隐藏备注补全。
+- **你会得到：** 新的或修订后的 PPT 文件，保留源文件。修改页要逐页渲染检查，并对照原文检查解释是否准确。
+
+**调用例子：**
+
+> 用做PPT的 skill，按这份模板补齐 BatchGen 汇报。第 1–5 页已经做好，不要动；保留实验问题编号，正文精炼但讲清图意，不要备注。如果一页放不下，先按我的拆页要求处理。
+
+临时问一句“这个机制是什么意思”不等于要求新增一页。自带的检查脚本能查页数、受保护页、备注和旧文字，但不能代替实际看页面和核对论文。当前环境还需要有可用的 PPT 制作与渲染工具。
+
+默认模板来自你指定的 `2026-10-9-BatchGen.pptx`，完整参考稿随 Skill 安装。它保留实际版式和讲解深度，制作新论文时要替换旧论文内容，不固定输出 20 页。模板选择与参考页说明见 [默认模板用法](paper-presentation-builder/references/default-template.md)。
+
+完整规则见 [SKILL.md](paper-presentation-builder/SKILL.md)。
+
+### 三种问题组织别混用
+
+| 用途 | 最后几问关注什么 |
+| --- | --- |
+| 设计自己的研究 | 核心思想、怎么设计、实验计划、要得到什么结论 |
+| 阅读别人的论文 | 核心思想、怎么设计、写作细节、已有结论与启发；另列实验设置和图表 |
+| 审稿分析 | 核心思想是否合理、实验是否支撑结论、写作细节；每问都给评审判断 |
+
+研究指南中的“要得到什么结论”是待验证目标；阅读笔记总结的是作者已经拿出了什么证据。不能互相替代。
+
+## 写自己的论文与核实引用
+
+### systems-paper-writing
+
+**系统论文写作：把真实研究贡献和证据写成有说服力的系统论文。**
+
+- **什么时候用：** 为 OSDI、SOSP、EuroSys、ATC、NSDI 等系统会议组织论文、修改章节，或检查论证缺口。
+- **给它什么：** 当前稿件、已确认的研究问题与术语、方法和实验结果。有七问《写作指南》时可以直接提供，不要求重新定义问题。
+- **它怎么做：** 连接问题、重要性、现有工作缺口、实际贡献与证据。贡献可以是洞察、方法、机制、系统或实证发现，不强迫每篇论文都有新机制。
+- **你会得到：** 按请求交付提纲、章节修改、图表建议或论证检查，说明每项主张由哪些实验支持、还缺什么证据；不会把预期结果写成已完成结果。
+
+**调用例子：**
+
+> 用系统论文写作 skill，基于已经确认的写作指南和实验结果重写 Introduction。保留我们的问题表述，讲清现有工作缺口与贡献，不新增尚未验证的主张。
+
+完整规则见 [SKILL.md](systems-paper-writing/SKILL.md)。
+
+### hpc-paper-writing
+
+**HPC 论文写作：把性能瓶颈、优化方法和硬件证据连成一条可信的论证。**
+
+- **什么时候用：** 为 SC、PPoPP、ICS、HPDC 等高性能计算会议写作、修改或检查论文。
+- **给它什么：** 稿件、应用场景、硬件与软件配置、profiling、性能和扩展性结果，以及适用时的硬件上限分析。
+- **它怎么做：** 解释瓶颈在哪里、优化为什么有效、提升来自哪里，检查比较是否公平，区分局部内核收益与端到端收益；按课题检查强弱扩展、绝对性能和适用限制。
+- **你会得到：** 章节或提纲、性能图表组织、主张与证据对应关系，以及影响结论的缺口，不把一组加速比当作全部论证。
+
+**调用例子：**
+
+> 用 HPC 论文写作 skill，根据这份 profiling 和多卡实验，帮我组织性能分析章节，说明主要瓶颈、优化为什么有效，以及扩展性在哪里受限。
+
+完整规则见 [SKILL.md](hpc-paper-writing/SKILL.md)。
+
+### reference-validation-report
+
+**参考文献验证：核实引用条目，生成有来源记录的中文报告。**
+
+- **什么时候用：** 投稿或交稿前，想检查参考文献是否真实，题名、作者、年份、DOI 等是否对应。
+- **给它什么：** LaTeX 项目中实际存在的 `.tex`、`.bib` 或 `.bbl`。支持 Elsevier 风格和正文内嵌参考文献，不要求凑齐不存在的文件。
+- **它怎么做：** 对照 DOI/Crossref、arXiv、出版方或会议官方来源，把已确认、待核实、缺失和冲突分开。没查到不能写成“已通过”；用户人工核实与工具核实也分别标明。
+- **你会得到：** 结构化核验记录、HTML 和中文 PDF 报告。它检查文献条目真实性，不替代对“引用是否支持这句话”的全文论证审查。
+
+**调用例子：**
+
+> 用参考文献验证 skill，检查这个 LaTeX 项目的引用是否真实、题名作者年份是否一致，生成中文 PDF 报告。未核实的条目明确列出来，不要默认通过。
+
+完整规则见 [SKILL.md](reference-validation-report/SKILL.md)。
+
+## 常见搭配
+
+这些是可选择的工作链，不是每次必须从头跑完。切换主 Skill 时明确说要用哪个；同一目标内必要的辅助调用不必逐项授权。
+
+- **做自己的研究：** 问题定义 → 研究方法 → 写作指南与实验计划 → 正常执行实验 → 系统/HPC 论文写作。
+- **准备读书报告：** 论文搜索 → 阅读笔记 → 论文汇报 PPT。已有论文或笔记时，直接从需要的一步开始。
+- **完成审稿：** 审稿分析笔记 → 制作 PPT、汇报讨论 → 根据最新结论生成正式意见。
+- **补知识：** 在卡住的地方明确调用教学，不必把整个研究任务改成课程。
+
+## 路由器、安装和维护
+
+### explicit-skill-router
+
+它不是第 14 位工作专家，而是一个“听懂你在叫谁”的入口。你说“用需求分析的 skill”，它按 [中文与英文别名表](explicit-skill-router/aliases.yaml) 找到对应目录；普通工作请求则不进入这套工作流。日常无需手动调用路由器。
+
+所有 13 个工作 Skill 的 `agents/openai.yaml` 都关闭了隐式调用；不识别该配置的客户端还需部署对应的显式调用保护。实际是否生效取决于客户端已加载的配置，不能只凭 README 宣称运行时已验证。规则见 [路由器说明](explicit-skill-router/SKILL.md)。
+
+### 安装前知道这几件事
+
+- 这份仓库是源文件，安装副本要包含相关 Skill 和共享依赖，不能只拷贝一个 `SKILL.md`。
+- 本地脚本使用 Python 3.11+ 和 [requirements.txt](requirements.txt)；论文检索还需可用网络，PPT 和 PDF 报告另需可用的制作、渲染工具。安装 Python 依赖不代表所有能力都已就绪。
+- 阅读与审稿笔记不强制依赖 PaperQuay、MinerU 或 Obsidian。只有查 Obsidian 笔记才需要对应笔记库。
+- 默认 PDF 目录为 `~/Documents/PHR/Intellistream/papers/read`。可用 `PAPERQUAY_DATA_DIR` 或 `PHD_PAPER_SUBMISSION_DIR` 配置；前者是兼容变量名，不表示必须使用 PaperQuay。
+- 本地同步脚本和远程 CLI 部署是两件事。已打开的客户端或会话可能缓存旧目录，更新后需重新发现 Skill；不能用文件同步成功代替真实调用测试。
+
+具体命令、同步范围和验证入口见 [QUICKSTART.md](QUICKSTART.md)。
+
+### 维护者入口
+
+- [共享协作约定](AGENT_COLLABORATION_SKILL_BLUEPRINT.md)：修改四个协作 Skill 的共同规则时看。
+- [研究证据获取规范](shared/expert-skill-references/research_evidence_acquisition.md)：修改检索与证据规则时看。
+- [协作 Skill 验证案例](shared/tests/expert_skill_validation.md)与[笔记/PPT 回归案例](shared/tests/paper_workflow_validation.md)：查看应达到的行为及已验证范围。
+
+`cs-paper-submission-check`、`planning-with-files`、`scipilot-figure-skill` 是可选外部 Skill，不属于本仓库维护的 13 个工作 Skill；策略同步会在它们已安装时施加显式调用保护，不代表本仓库提供或重写其主体。
