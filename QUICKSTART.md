@@ -101,7 +101,7 @@ python reading-note-builder\scripts\build_reading_note.py --paper <paper.pdf> --
 python review-note-builder\scripts\build_review_note.py --paper <paper.pdf> --pptx <optional-review.pptx> --note <optional-draft.md>
 ```
 
-脚本输出来源清单；主模型先写五问加书写细节的分析笔记，再基于同一组已核实判断撰写包含 Summary、Strengths、Weaknesses、Comments for Rebuttal 等部分的正式审稿意见。交付前分别检查两份文件，并配对核对推荐结论：
+脚本输出来源清单。第一阶段写五问加书写细节的分析笔记；用户汇报和讨论后，第二阶段再按最新 PPT、讨论结论与修改后的分析写正式审稿意见。用户自行推进阶段。分别交付相应文件，并在正式审稿阶段配对核对推荐结论：
 
 ```powershell
 python shared\obsidian\note_quality.py --kind review-analysis --path <analysis.md> --expected-title <paper-title>
@@ -114,6 +114,21 @@ python shared\obsidian\note_quality.py --kind review --path <formal-review.md> -
 .\shared\scripts\sync_paper_note_skills.ps1
 python -m unittest discover -s tests -v
 ```
+
+## Paper Presentation Builder
+
+```text
+用做PPT的 skill，按我这份模板把论文汇报补齐。第 1–5 页已经做好，保留原样，正文要能讲清图，不要备注。
+用论文汇报技能，把这篇论文做成组会 PPT，按作者的问题、挑战、设计和实验顺序讲。
+```
+
+有阅读/审稿笔记时一并提供；没有笔记也可以从论文开始。制作会核对模板、完整页面、页数与问题编号，并通过当前环境的演示文稿工具完成。只读结构检查示例：
+
+```powershell
+python paper-presentation-builder/scripts/audit_deck.py --deck result.pptx --source original.pptx --preserve 1:1 --preserve 10:14 --expected-count 20 --no-notes --forbid-text OldPaperName --require-text "问题二"
+```
+
+页码为实际显示顺序；按真实编辑合同提供参数。该脚本不代替原文核对和逐页渲染检查。使用与阅读/审稿笔记相同的同步脚本，再执行 `sync_explicit_skill_policy.ps1`。
 
 ## Vault Note Search
 

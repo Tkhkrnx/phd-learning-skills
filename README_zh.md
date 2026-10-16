@@ -141,6 +141,7 @@
 - `vault-note-finder`
 - `reading-note-builder`
 - `review-note-builder`
+- `paper-presentation-builder`
 - `reference-validation-report`
 
 其中 `topic-paper-finder` 有三种检索模式：`study` 保留近三年与固定 taxonomy；`problem-boundary` 和 `mechanism-inspiration` 默认不受年份、venue 或 taxonomy 限制，并支持多个 `--query` 组成证据组合。它只产生学术候选池，关键判断仍需检查原文；代码仓库、官方文档、issue、benchmark、工程文章和博客由方法设计流程使用相应工具另行检索。
@@ -151,11 +152,22 @@
 2. 下载 PDF 到本地论文目录
 3. 直接阅读论文；如果已有 Typora/Markdown 笔记或汇报 PPT，一并提供
 4. 阅读论文时生成可支撑 PPT 讲述的七问笔记；审稿工作分两阶段：先生成可直接用于准备 PPT 的分析笔记，汇报和讨论后再根据 PPT、讨论结论及用户修改过的分析笔记生成正式审稿意见
-5. 核验 LaTeX 参考文献，并生成中文参考文献验证报告 PDF
+5. 明确调用论文汇报 PPT Skill，根据论文、分析笔记及可选模板生成或补齐 PPT
+6. 核验 LaTeX 参考文献，并生成中文参考文献验证报告 PDF
 
 阅读与审稿 Skill 不再要求 PaperQuay ID、MinerU 缓存或已有笔记。阅读笔记前五问按“问题—重要性—现有工作缺口—核心想法—设计”形成讲述主线，实验设置和图表证据另列，第六问整理写作与内容细节，第七问总结证据支持的结论。审稿分析使用不同的五问：“问题定义—重要性—现有工作—核心想法—实验是否支撑结论”，每一问都要写出评审判断；实验设置与图表证据地图放在第五问内，第六问检查写作、术语与展示细节，并区分影响接收判断的问题和次要修订，最后给整体判断。
 
 审稿 Skill 第一阶段只生成 PPT 准备分析笔记；第二阶段在用户汇报和讨论后，使用其 PPT、讨论或导师意见、以及用户修改过的分析笔记生成正式审稿意见。阶段之间由用户自行推进，不强制插入与模型的讨论或确认回合。最新讨论结论决定评审立场和重点，论文原文负责核实事实；正式意见须保持优势、缺陷、证据强度和推荐结论一致。所有产物均保留源文件，不凭空编造用户曾有的误解。
+
+笔记的图表、算法和正文结果按作者的论证层次穿插讲解：先理解作者的问题/挑战，再解释相应设计、图中状态与流程、实验比较和结论。保留原有技术术语，用易懂语言讲清其作用；图表索引不能代替解释。实验设置区分模型/硬件、数据集/应用负载、基线、配置和指标，避免混列。相关工作优先按原文分类整理成“类别、代表方法、优势、核心缺陷”表，并逐行核对。
+
+### `paper-presentation-builder`
+
+可说“用做PPT的 skill 按我的模板补齐论文汇报”或“用论文汇报技能做这篇文章的 PPT”。只要求做 PPT 而未明确使用 Skill 时，按普通请求执行。
+
+它支持从论文直接制作，也支持基于阅读/审稿分析及半成品 PPT 继续完成。先核对已完成页、旧模板内容、页数、问题编号、备注和引用要求；正文用精炼要点把图意、算法与因果讲清楚，并沿用作者层次和用户版式。临时答疑不会自动变成新幻灯片，也不自动授权扩页或拆图。
+
+制作与渲染使用当前环境的演示文稿工具。自带只读检查脚本 `paper-presentation-builder/scripts/audit_deck.py`，可核对页数、受保护页、备注、旧论文文字和必要标题；实际解释质量和版式仍须对照原文与渲染页检查。
 
 ### `reference-validation-report`
 
@@ -168,6 +180,7 @@
 Expert Skill 的验证要求与案例见：
 
 - [shared/tests/expert_skill_validation.md](./shared/tests/expert_skill_validation.md)
+- [论文笔记与 PPT 回归案例](./shared/tests/paper_workflow_validation.md)：记录本次线程暴露的问题、预期行为及实际验证范围。
 
 静态协议与回归用例验证：
 
@@ -183,7 +196,7 @@ python shared\tests\validate_explicit_skill_policy.py
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
-阅读/审稿笔记使用 `shared/scripts/sync_paper_note_skills.ps1` 同步，之后再执行显式策略同步。上述脚本负责本地镜像；远程 CLI 另行部署并核验文件与依赖路径。
+阅读/审稿笔记和论文汇报 PPT 使用 `shared/scripts/sync_paper_note_skills.ps1` 同步，之后再执行显式策略同步。上述脚本负责本地镜像；远程 CLI 另行部署并核验文件与依赖路径。
 
 Codex 对所有受保护任务 Skill 设置 `allow_implicit_invocation: false`；不识别该元数据的客户端通过部署描述前缀和窄别名路由约束显式调用。若客户端或会话在部署前已经加载 Skill 目录，请重启客户端或新建会话使目录重新发现。
 

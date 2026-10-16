@@ -128,6 +128,7 @@ The existing paper workflow family remains in the repository:
 - `vault-note-finder`
 - `reading-note-builder`
 - `review-note-builder`
+- `paper-presentation-builder`
 - `reference-validation-report`
 
 The discovery and analysis tools can be used separately:
@@ -136,7 +137,8 @@ The discovery and analysis tools can be used separately:
 2. download PDFs into the local paper directory when possible
 3. read the paper directly; optionally add a Typora/Markdown note and presentation
 4. build a seven-question speaking note, or use the review workflow in two stages: a presentation-ready analysis note first, then a formal reviewer report after the presentation and discussion
-5. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
+5. explicitly use `paper-presentation-builder` to create or complete the talk deck from the paper and optional analysis/template
+6. verify LaTeX references against authoritative sources and generate a Chinese PDF validation report
 
 ## Default PDF Directory
 
@@ -192,6 +194,14 @@ The discovery and analysis tools can be used separately:
 - 前五问遵循问题定义和方法设计的推理要求；实验设置适度展开，并将每个相关图表映射到实验目的和它支持的结论
 - 第六问检查写作、术语、方程、表格、引用和交叉引用，区分影响论证/汇报的主要问题与次要润色；第七问收束证据支持的结论
 - 只纠正用户实际表达过的误解，不强制生成“遗漏与纠偏”章节
+- 按作者的问题/挑战层次与原文顺序穿插图表、算法和正文结果；先解释图的读法与因果关系，再给结论，不能只留图表索引或组件名
+
+### `paper-presentation-builder`
+
+- Create or revise a paper-reading/review deck using the paper, optional notes, and the user's template. Invoke it with “用做PPT的 skill…” or “用论文汇报技能…”. Ordinary PPT requests do not activate this personal Skill.
+- Preserve completed slides, template hierarchy and experiment-question numbering. Explain the authors' designs and evidence with concise on-slide points, including important algorithm steps and text-only results.
+- Follow the current presentation tool's authoring and rendering workflow as an implementation dependency. Keep a private source/page map; respect the user's notes, citations, page-count and figure-splitting choices.
+- `paper-presentation-builder/scripts/audit_deck.py` checks declared slide count, protected pages, notes, stale text and required headings. Rendered-page and source-interpretation checks remain necessary.
 
 ### `review-note-builder`
 
@@ -224,6 +234,7 @@ The discovery and analysis tools can be used separately:
 The redesign validation checklist and paired activation/bypass cases for the expert-facing skills live in:
 
 - [shared/tests/expert_skill_validation.md](./shared/tests/expert_skill_validation.md)
+- [shared/tests/paper_workflow_validation.md](./shared/tests/paper_workflow_validation.md) records the source-led note/PPT regression cases and the limits of their validation.
 
 Run the static contract and regression-case validator with:
 
@@ -239,7 +250,7 @@ Synchronize the four expert skills, the evidence-oriented paper finder, and thei
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
-The reading/review-note family uses `shared/scripts/sync_paper_note_skills.ps1`; apply the explicit policy sync afterward. Remote CLI deployment is separate from these local scripts and must verify the copied files and dependency paths on the destination.
+The reading/review-note and paper-presentation family uses `shared/scripts/sync_paper_note_skills.ps1`; apply the explicit policy sync afterward. Remote CLI deployment is separate from these local scripts and must verify the copied files and dependency paths on the destination.
 
 Codex uses `allow_implicit_invocation: false` for every protected task Skill. Short descriptions state only the discriminating capability; the narrow alias router handles explicit plain-language requests. Optional external Skills and migrated command adapters keep their upstream bodies, while deployed copies receive explicit-only metadata and a short description prefix for clients that do not honor Codex metadata. Restart an already-open client or start a new task after deployment if its Skill catalog was loaded before the update.
 
