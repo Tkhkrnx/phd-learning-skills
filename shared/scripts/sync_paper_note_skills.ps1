@@ -27,7 +27,12 @@ $requiredPaths = @(
     "paper-presentation-builder\SKILL.md",
     "paper-presentation-builder\agents\openai.yaml",
     "paper-presentation-builder\scripts\audit_deck.py",
+    "paper-presentation-builder\scripts\resolve_template.py",
     "paper-presentation-builder\references\paper-talk-workflow.md",
+    "paper-presentation-builder\references\default-template.md",
+    "paper-presentation-builder\assets\batchgen-default.pptx",
+    "paper-presentation-builder\assets\batchgen-template.json",
+    "paper-presentation-builder\assets\batchgen-preview.png",
     "shared\expert-skill-references\paper_explanation.md",
     "shared\__init__.py",
     "shared\paper_note_materials.py"

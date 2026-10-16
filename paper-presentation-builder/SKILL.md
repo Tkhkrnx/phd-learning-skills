@@ -9,6 +9,8 @@ Produce the requested paper-talk PPT with concise explanatory points, source-fai
 
 ## Establish the slide contract
 
+Choose the template before authoring: a newly supplied template overrides the bundled default; when continuing an existing deck, preserve that deck unless the user requests a different template. For a new talk without a supplied template, use [the bundled BatchGen reference](assets/batchgen-default.pptx), not a generic theme or a request for another template. Read [default-template usage](references/default-template.md) when taking this fallback. `scripts/resolve_template.py` selects and validates the applicable PPTX without modifying it.
+
 Read [paper-talk workflow](references/paper-talk-workflow.md) and [source-grounded explanation](../shared/expert-skill-references/paper_explanation.md). Inspect the supplied deck's actual slides before editing. Record which pages are finished, which contain old template content, the title/problem numbering and order, slide dimensions, repeated elements, and any slide-count, notes, citation, or figure-splitting instructions. Infer these from the supplied request and files; ask only if a consequential ambiguity remains.
 
 Use the user's latest framing and corrections, while checking facts against the paper. Preserve finished pages and edit the requested remainder in a new file. Keep an original-to-output page map if pages move. A request to explain a figure is read-only unless the user also requests changes.

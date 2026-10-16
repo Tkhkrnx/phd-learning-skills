@@ -1,137 +1,123 @@
-# Quickstart
+# 快速开始：安装、脚本与维护
 
-## Requirements
+每个 Skill 是什么、什么时候用、如何用中文调用，见 [README](README.md)。本页只讲技术操作。
 
-- Python 3.11+
-- 论文 PDF 或全文 Markdown；PaperQuay、笔记和 PPT 均为可选材料
+## 1. 准备环境
 
-以下命令默认在仓库根目录执行：
+本地 Python 脚本需要 Python 3.11+。以下命令在仓库根目录的 PowerShell 执行：
 
 ```powershell
-pip install -r requirements.txt
-$env:PYTHONPATH="."
+python -m pip install -r requirements.txt
+$env:PYTHONPATH = "."
 ```
 
-## Expert Collaboration Skills
+检索需要可用网络及对应服务配置；PPT 制作、PDF 报告还需要当前环境具备相应工具。这两条命令不会替你安装所有制作与渲染工具。
 
-必须明确说“使用某类 skill/技能处理某件事”才进入 skill；不必记住英文全名，自然语言类别即可：
+## 2. 安装与更新的区别
+
+新环境应将要用的 Skill **完整目录**、`explicit-skill-router` 以及所需 `shared` 依赖放到同一 Skill 根目录下，保持相对结构，例如：
 
 ```text
-用问题定义的 skill 带我判断这个现象能否成为研究问题。
-这个研究问题已经明确了，请用研究方法的 skill 先给我几个可行方案，再带我比较和 defend。
-调用需求分析那个技能，带我读懂相关架构并选择第一执行切片。
-用教学 skill 帮我真正弄懂 chunked prefill，并让我做一次迁移判断。
+<skills-root>/
+  research-problem-formulation/
+    SKILL.md
+    agents/
+    references/
+  ...其他需要的 Skill 完整目录...
+  explicit-skill-router/
+  shared/
 ```
 
-以下语义虽然分别对应四类能力，但没有明确要求“使用 skill”，因此必须按普通请求处理，不能触发：
+不要只复制入口文件，也不要以为安装一个搜索 Skill 就不需要它引用的共享搜索代码和配置。首次整套安装时，可携带本仓库的全部 13 个工作 Skill 目录、路由器与 `shared`，再按机器调整路径和配置。
 
-```text
-帮我分析一下这个需求，先澄清真实需求和验收标准，不要立即写代码。
-我有一个研究想法，帮我判断它究竟是否构成学术问题。
-这个研究问题已经明确了，但我不知道有什么好办法解决，带我一起设计。
-这个概率是什么意思？请带我理解并让我用自己的话讲回来。
-```
+下面三个 PowerShell 脚本是**已有环境的分组同步工具，不是三个各自完整的全仓库安装器**：
 
-AI 可以先给完整候选问题、若干方案、系统模型或示范讲解。只有仍缺少会改变结论的用户观察、意图或取舍时，才需要聚焦互动；信息充分时继续推进。进入执行、设计冻结或知识迁移前，应消除足以逆转下一步的关键不确定性，并明确剩余风险。
+| 脚本 | 同步什么 |
+| --- | --- |
+| `sync_expert_skills.ps1` | 四个协作 Skill、论文搜索及共享研究/搜索依赖 |
+| `sync_paper_note_skills.ps1` | 阅读笔记、审稿笔记、论文 PPT、内置 BatchGen 模板及共享材料处理依赖 |
+| `sync_explicit_skill_policy.ps1` | 全部工作 Skill 的入口、引用文档、显式调用配置与路由器；不包办所有脚本、配置依赖 |
 
-问题定义和方法设计必须先获取证据。问题定义会先把候选表述当成检索假设，覆盖最接近工作和反证后再判断；方法设计会按根源挑战的结构特征同时搜索本领域、相邻领域、远距离类比和真实实现证据。搜索失败或覆盖不足时只能给临时判断，不能宣称“没人做过”或“这个方案最好”。
-
-只需对顶层主 skill 做一次明确授权。同一目标内，主 skill 可以受限调用必要的辅助 skill，例如研究方法 skill 调用论文搜索 skill；辅助结果必须返回主 skill，由主 skill 继续和你交互。另起目标、切换主专家角色或进入普通执行不继承这项授权。
-
-普通工作请求不会因为任务复杂或领域相关而触发这四个 skill。例如下面的请求应直接执行：
-
-```text
-按已经确认的方案同步实验计划、写作指南、论文和代码。
-继续修复 action replay，并按冻结的实验方案收集结果。
-修复这个 bug 并跑测试。
-审阅这篇论文并给出修改意见。
-解释这段代码在做什么。
-```
-
-一次显式授权可持续覆盖同一协作中的追问和回答，不必每轮重复。若切换到直接执行、换任务或协作已经完成，授权立即失效，skill 应静默退出且不能在以后自行恢复；切换到另一个 skill 也必须重新明确提出。
-
-具体工作产物的说明不是教学流程。比如“说明一下 PR9 做了什么，我先了解后再审阅”应直接回答；只有用户要学习某个概念、原理、关系或机制，并明确希望自己复述或应用时，才进入 `targeted-knowledge-closure`。即使正确进入 skill，阶段名和运行状态也只在内部维护，不显示机器协议行。
-
-修改这四个 skill 或其文献证据后端后，同步并验证五处安装副本：
+按修改范围选择，策略同步放在最后：
 
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1
+.\shared\scripts\sync_paper_note_skills.ps1
 .\shared\scripts\sync_explicit_skill_policy.ps1
+```
+
+默认目标为当前用户的 `.codex/skills`、`.agents/skills`、`.claude/skills`，以及 Obsidian 笔记库中的 `.codex/skills` 和 `.claude/skills`。默认笔记库是 `~/Documents/PHR/obsidian_phr`；可用 `-VaultRoot` 或 `-TargetRoots` 指定实际位置。同步会覆盖这些包的安装副本，**先改仓库源文件，不要把安装目录当作唯一源头**。
+
+这些脚本只处理本地目标。服务器 CLI 需另行部署依赖并检查 Linux 路径；本地成功不代表远程完成。客户端更新后可能要重启或新建会话才能重新加载。
+
+## 3. 直接运行论文检索脚本
+
+Skill 的自然语言调用不要求你手动跑命令。以下用于调试或复用工具：脚本输出候选 JSON，最终筛选、解读和关键原文核查仍由模型完成。
+
+```powershell
+# 固定方向的一轮雷达搜索，不会创建定时任务
+python weekly-paper-radar\scripts\weekly_radar.py --candidate-pool-total 20 --weekly-target 10 --deep-read-target 4 --download-pdf
+
+# 学习检索：默认近三年和既有研究方向
+python topic-paper-finder\scripts\topic_finder.py --mode study --query "hardware aware llm serving" --limit 5 --download-pdf
+
+# 问题边界：默认不限年份、会议和固定方向分类
+python topic-paper-finder\scripts\topic_finder.py --mode problem-boundary --query "state reuse tail latency agent inference" --query "context reuse overhead negative results"
+
+# 机制启发：默认不限年份、会议和固定方向分类
+python topic-paper-finder\scripts\topic_finder.py --mode mechanism-inspiration --query "reversible resource activation delayed feedback control" --query "adaptive caching pressure tail latency"
+
+# 查已有 Obsidian 笔记，不是上网查论文
+python vault-note-finder\scripts\find_notes.py --query "DSPARK"
+```
+
+方向和来源配置见 [radar_config.yaml](weekly-paper-radar/radar_config.yaml) 与 [finder_config.yaml](topic-paper-finder/finder_config.yaml)。
+
+下载后应报告实际文件目录与成功/失败状态，不把“找到链接”当作“PDF 已下载”。默认目录与兼容环境变量见 [README](README.md#安装前知道这几件事)。
+
+## 4. 笔记材料清单与 PPT 检查
+
+以下路径为示例，替换后执行。材料清单脚本不负责独立生成最终分析笔记：
+
+```powershell
+python reading-note-builder\scripts\build_reading_note.py --paper "C:\papers\paper.pdf"
+python review-note-builder\scripts\build_review_note.py --paper "C:\papers\paper.pdf" --pptx "C:\papers\review.pptx" --note "C:\papers\draft.md"
+```
+
+两者都接受 `--paper`、可选 `--note` 和 `--pptx`。模型需读取全文并核对相关图表，不能把清单或幻灯片文本抽取结果当作已经理解了论文。
+
+分析与正式评审可分别检查结构，并配对核对结论：
+
+```powershell
+python shared\obsidian\note_quality.py --kind review-analysis --path "C:\papers\analysis.md" --expected-title "Paper Title"
+python shared\obsidian\note_quality.py --kind review --path "C:\papers\formal-review.md" --companion "C:\papers\analysis.md" --expected-title "Paper Title"
+```
+
+PPT 的只读检查示例：
+
+```powershell
+# 新模板优先；继续已有稿件则沿用原稿；都没有时使用内置 BatchGen 模板
+python paper-presentation-builder\scripts\resolve_template.py
+python paper-presentation-builder\scripts\resolve_template.py --template "C:\papers\my-template.pptx"
+python paper-presentation-builder\scripts\resolve_template.py --existing-deck "C:\papers\draft.pptx"
+
+python paper-presentation-builder\scripts\audit_deck.py --deck "C:\papers\result.pptx" --source "C:\papers\original.pptx" --preserve 1:1 --preserve 10:14 --expected-count 20 --no-notes --forbid-text OldPaperName --require-text "问题二"
+```
+
+`--preserve 10:14` 表示源文件第 10 页对应输出第 14 页，页码按实际显示顺序。只按真实编辑要求传参数；结构检查通过不等于原文解释正确或页面排版合格，仍需渲染查看。
+
+参考文献报告的输入方式和运行命令见 [commands.md](reference-validation-report/references/commands.md)。其中命令按该 Skill 目录写出，运行前先进入对应目录；只传项目实际存在的文献输入。
+
+## 5. 修改后验证
+
+修改 Skill 行为、路由、脚本或依赖后，运行相关检查：
+
+```powershell
 python shared\tests\validate_expert_skills.py
 python shared\tests\validate_explicit_skill_policy.py
-```
-
-## Weekly Radar
-
-```powershell
-python weekly-paper-radar\scripts\weekly_radar.py --candidate-pool-total 20 --weekly-target 10 --deep-read-target 4 --download-pdf
-```
-
-## Topic Search
-
-近三年 taxonomy-aligned 学习检索：
-
-```powershell
-python topic-paper-finder\scripts\topic_finder.py --mode study --query "hardware aware llm serving" --limit 5 --download-pdf
-```
-
-问题边界检索默认不设年份、venue 和 taxonomy 限制，可重复给查询：
-
-```powershell
-python topic-paper-finder\scripts\topic_finder.py --mode problem-boundary --query "state reuse tail latency agent inference" --query "context reuse overhead negative results"
-```
-
-跨领域机制启发检索：
-
-```powershell
-python topic-paper-finder\scripts\topic_finder.py --mode mechanism-inspiration --query "reversible resource activation delayed feedback control" --query "adaptive caching pressure tail latency"
-```
-
-## Reading Note Builder
-
-```powershell
-python reading-note-builder\scripts\build_reading_note.py --paper <paper.pdf> --note <optional-note.md> --pptx <optional-slides.pptx>
-```
-
-没有笔记或 PPT 时只传 `--paper`。脚本输出来源清单；主模型核对论文后生成七问讲述笔记。
-
-## Review Note Builder
-
-```powershell
-python review-note-builder\scripts\build_review_note.py --paper <paper.pdf> --pptx <optional-review.pptx> --note <optional-draft.md>
-```
-
-脚本输出来源清单。第一阶段写五问加书写细节的分析笔记；用户汇报和讨论后，第二阶段再按最新 PPT、讨论结论与修改后的分析写正式审稿意见。用户自行推进阶段。分别交付相应文件，并在正式审稿阶段配对核对推荐结论：
-
-```powershell
-python shared\obsidian\note_quality.py --kind review-analysis --path <analysis.md> --expected-title <paper-title>
-python shared\obsidian\note_quality.py --kind review --path <formal-review.md> --companion <analysis.md> --expected-title <paper-title>
-```
-
-修改 reading/review builder 或其共享依赖后，同步并验证五处安装副本：
-
-```powershell
-.\shared\scripts\sync_paper_note_skills.ps1
 python -m unittest discover -s tests -v
 ```
 
-## Paper Presentation Builder
+再同步对应安装副本并核对哈希。纯 README 修改不改变安装包，无需因此覆盖本地或服务器 Skill。
 
-```text
-用做PPT的 skill，按我这份模板把论文汇报补齐。第 1–5 页已经做好，保留原样，正文要能讲清图，不要备注。
-用论文汇报技能，把这篇论文做成组会 PPT，按作者的问题、挑战、设计和实验顺序讲。
-```
-
-有阅读/审稿笔记时一并提供；没有笔记也可以从论文开始。制作会核对模板、完整页面、页数与问题编号，并通过当前环境的演示文稿工具完成。只读结构检查示例：
-
-```powershell
-python paper-presentation-builder/scripts/audit_deck.py --deck result.pptx --source original.pptx --preserve 1:1 --preserve 10:14 --expected-count 20 --no-notes --forbid-text OldPaperName --require-text "问题二"
-```
-
-页码为实际显示顺序；按真实编辑合同提供参数。该脚本不代替原文核对和逐页渲染检查。使用与阅读/审稿笔记相同的同步脚本，再执行 `sync_explicit_skill_policy.ps1`。
-
-## Vault Note Search
-
-```powershell
-python vault-note-finder\scripts\find_notes.py --query "DSPARK"
-```
+检查通过应准确说明范围：静态规则通过、夹具测试通过、安装文件一致、模型实际行为通过是不同结论，不能互相代替。行为案例和证据范围见 [协作验证](shared/tests/expert_skill_validation.md) 与 [笔记/PPT 验证](shared/tests/paper_workflow_validation.md)。

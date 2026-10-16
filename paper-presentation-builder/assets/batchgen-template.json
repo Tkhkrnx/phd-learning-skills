@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "reference_file": "batchgen-default.pptx",
+  "preview_file": "batchgen-preview.png",
+  "source_filename": "2026-10-9-BatchGen.pptx",
+  "source_thread": "codex://threads/01a11747-074a-7581-8014-d1042de233ad",
+  "sha256": "0174ef4078587173b3f88c96a306c759b8b00c05ad7ee12a68cafbbde225773c",
+  "slide_count": 20,
+  "slide_size_emu": [12192000, 6858000],
+  "contains_example_content": true,
+  "reference_pages": {
+    "cover": [1],
+    "problem": [2],
+    "motivation": [3],
+    "prior_work": [4],
+    "key_idea": [5],
+    "design": [6, 7, 8, 9, 10, 11, 12],
+    "experimental_setup": [13],
+    "results": [14, 15, 16, 17, 18, 19],
+    "takeaway": [20]
+  }
+}
