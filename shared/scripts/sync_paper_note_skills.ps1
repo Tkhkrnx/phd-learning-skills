@@ -24,6 +24,11 @@ $requiredPaths = @(
     "review-note-builder\SKILL.md",
     "review-note-builder\agents\openai.yaml",
     "review-note-builder\scripts\build_review_note.py",
+    "paper-presentation-builder\SKILL.md",
+    "paper-presentation-builder\agents\openai.yaml",
+    "paper-presentation-builder\scripts\audit_deck.py",
+    "paper-presentation-builder\references\paper-talk-workflow.md",
+    "shared\expert-skill-references\paper_explanation.md",
     "shared\__init__.py",
     "shared\paper_note_materials.py"
 )
@@ -31,6 +36,11 @@ $requiredPaths += @(
     "reading-note-builder\references\seven-question-reading.md",
     "review-note-builder\references\five-question-review.md",
     "review-note-builder\references\formal-review.md"
+)
+$requiredPaths += @(
+    "explicit-skill-router\SKILL.md",
+    "explicit-skill-router\aliases.yaml",
+    "explicit-skill-router\agents\openai.yaml"
 )
 $requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "shared\obsidian") -File -Filter "*.py" |
     ForEach-Object { "shared\obsidian\$($_.Name)" }

@@ -75,6 +75,16 @@ skills:
       - 审稿笔记
       - 论文审稿笔记
       - paperquay 审稿笔记
+  paper-presentation-builder:
+    labels:
+      - paper presentation builder
+      - paper presentation
+      - paper talk
+      - 做ppt
+      - ppt制作
+      - 论文ppt
+      - 论文汇报
+      - 汇报ppt
   systems-paper-writing:
     labels:
       - systems paper writing

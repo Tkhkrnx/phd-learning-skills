@@ -26,6 +26,7 @@ $protectedSkillNames = @(
     "vault-note-finder",
     "reading-note-builder",
     "review-note-builder",
+    "paper-presentation-builder",
     "systems-paper-writing",
     "hpc-paper-writing",
     "reference-validation-report"

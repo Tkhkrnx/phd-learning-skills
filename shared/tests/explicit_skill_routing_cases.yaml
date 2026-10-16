@@ -1,5 +1,28 @@
 version: 2
 cases:
+  - id: route-paper-ppt-alias
+    user_prompt: "用做PPT的 skill 按我的模板补齐论文汇报。"
+    expected: paper-presentation-builder
+  - id: route-paper-talk-alias
+    user_prompt: "请用论文汇报技能把这份分析做成 PPT。"
+    expected: paper-presentation-builder
+  - id: bypass-ppt-semantic
+    user_prompt: "按我的模板把剩下的 PPT 做完。"
+    expected: none
+    forbidden_support:
+      - paper-presentation-builder
+  - id: bypass-note-to-ppt-pivot
+    active_skill: reading-note-builder
+    active_scope: "生成 BatchGen 阅读笔记"
+    user_prompt: "笔记可以了，现在把剩下的 PPT 做完。"
+    expected: none
+    forbidden_support:
+      - paper-presentation-builder
+  - id: allow-explicit-note-to-ppt
+    active_skill: reading-note-builder
+    active_scope: "生成 BatchGen 阅读笔记"
+    user_prompt: "笔记可以了，现在用论文PPT的 skill 补齐汇报。"
+    expected: paper-presentation-builder
   - id: route-problem-alias
     user_prompt: "请用问题定义的 skill 判断这个 Agent 调度想法是否构成学术问题。"
     expected: research-problem-formulation
