@@ -12,6 +12,7 @@ if (-not $TargetRoots) {
         (Join-Path $env:USERPROFILE ".agents\skills"),
         (Join-Path $env:USERPROFILE ".claude\skills"),
         (Join-Path $VaultRoot ".codex\skills"),
+        (Join-Path $VaultRoot ".agents\skills"),
         (Join-Path $VaultRoot ".claude\skills")
     )
 }
@@ -34,6 +35,7 @@ $requiredPaths = @(
     "paper-presentation-builder\assets\batchgen-template.json",
     "paper-presentation-builder\assets\batchgen-preview.png",
     "shared\expert-skill-references\paper_explanation.md",
+    "shared\expert-skill-references\note_storage.md",
     "shared\__init__.py",
     "shared\paper_note_materials.py"
 )

@@ -13,7 +13,10 @@ from shared.obsidian.note_quality import (
     validate_note_text,
     validate_review_pair,
 )
-from shared.obsidian.vault_paths import build_note_stem, formal_reading_path, formal_review_path
+from shared.obsidian.vault_paths import (
+    build_note_stem, formal_reading_path, formal_review_path,
+    review_analysis_path, formal_review_report_path,
+)
 from shared.paper_note_materials import collect_materials
 from shared.paperquay.paper_matcher import PaperMatcher
 from shared.paperquay.source_validation import validate_source_alignment
@@ -66,6 +69,22 @@ class PaperNoteWorkflowTests(unittest.TestCase):
                 {"full_md_path": str(wrong)},
             )
             self.assertEqual(report["status"], "failed")
+
+    def test_review_stages_have_distinct_vault_destinations_without_moving_legacy_notes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vault = Path(tmp)
+            legacy = formal_review_path("SwitchAct: Dynamic Execution Routing", vault)
+            legacy.parent.mkdir(parents=True)
+            legacy.write_text("Existing user analysis", encoding="utf-8")
+            analysis = review_analysis_path("SwitchAct: Dynamic Execution Routing", vault)
+            report = formal_review_report_path("SwitchAct: Dynamic Execution Routing", vault)
+            self.assertEqual({"enhanced.md", "analysis.md", "formal-review.md"},
+                             {legacy.name, analysis.name, report.name})
+            self.assertEqual(legacy.parent, analysis.parent)
+            self.assertEqual(analysis.parent, report.parent)
+            self.assertFalse(analysis.exists())
+            self.assertFalse(report.exists())
+            self.assertEqual("Existing user analysis", legacy.read_text(encoding="utf-8"))
 
     def test_quality_gate_rejects_scaffold_and_accepts_concise_seven_questions(self):
         scaffold = "\n".join(f"## {heading}\n写作提示：todo" for heading in READING_HEADINGS)

@@ -54,4 +54,13 @@ def formal_reading_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str |
 
 
 def formal_review_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
+    # Legacy enhanced review notes may contain analysis, not a final venue report.
     return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Review" / "enhanced.md"
+
+
+def review_analysis_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Review" / "analysis.md"
+
+
+def formal_review_report_path(title: str, vault: Path = DEFAULT_VAULT, paper_id: str | None = None, note_id: str | None = None) -> Path:
+    return paper_note_root(title, vault, paper_id=paper_id, note_id=note_id) / "Review" / "formal-review.md"

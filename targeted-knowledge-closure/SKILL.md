@@ -35,3 +35,5 @@ Explain the minimum necessary background before testing. Use the user's reasonin
 ## Completion
 
 Finish when observable user reasoning or application shows a correct working model for the requested task, the user can distinguish the decisive near-miss when relevant, and no remaining misconception is likely to cause a wrong application. State any material unresolved gap without manufacturing extra exercises.
+
+If the user requests a learning/closure note, save it to the verified Obsidian vault under `Learning/<topic>/`, following [note storage](../shared/expert-skill-references/note_storage.md). Check whether existing notes already contain the explanation or exercise; do not duplicate a lesson merely because a file or mtime differs. Historical imports need a reviewed keep/merge/skip list and user confirmation. This does not require generating a note for every teaching conversation; an explicit destination or no-save request wins.

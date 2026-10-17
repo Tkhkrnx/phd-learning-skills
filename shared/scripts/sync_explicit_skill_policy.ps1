@@ -12,6 +12,7 @@ if (-not $TargetRoots) {
         (Join-Path $env:USERPROFILE ".agents\skills"),
         (Join-Path $env:USERPROFILE ".claude\skills"),
         (Join-Path $VaultRoot ".codex\skills"),
+        (Join-Path $VaultRoot ".agents\skills"),
         (Join-Path $VaultRoot ".claude\skills")
     )
 }
