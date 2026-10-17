@@ -46,7 +46,7 @@ $env:PYTHONPATH = "."
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
-默认目标为当前用户的 `.codex/skills`、`.agents/skills`、`.claude/skills`，以及 Obsidian 笔记库中的 `.codex/skills` 和 `.claude/skills`。默认笔记库是 `~/Documents/PHR/obsidian_phr`；可用 `-VaultRoot` 或 `-TargetRoots` 指定实际位置。同步会覆盖这些包的安装副本，**先改仓库源文件，不要把安装目录当作唯一源头**。
+默认目标为当前用户的 `.codex/skills`、`.agents/skills`、`.claude/skills`，以及 Obsidian 笔记库中的 `.codex/skills`、`.agents/skills` 和 `.claude/skills`，共六处。默认笔记库是 `~/Documents/PHR/obsidian_phr`；可用 `-VaultRoot` 或 `-TargetRoots` 指定实际位置。同步会覆盖这些包的安装副本，**先改仓库源文件，不要把安装目录当作唯一源头**。
 
 这些脚本只处理本地目标。服务器 CLI 需另行部署依赖并检查 Linux 路径；本地成功不代表远程完成。客户端更新后可能要重启或新建会话才能重新加载。
 
@@ -85,6 +85,14 @@ python review-note-builder\scripts\build_review_note.py --paper "C:\papers\paper
 ```
 
 两者都接受 `--paper`、可选 `--note` 和 `--pptx`。模型需读取全文并核对相关图表，不能把清单或幻灯片文本抽取结果当作已经理解了论文。
+
+历史笔记入库前，先搜索并阅读同论文同用途的已有笔记，提交保留/补充/跳过清单，确认后再保存。可用只读比较工具定位仅存储差异：
+
+```powershell
+python -m shared.obsidian.note_dedup --candidate "C:\papers\draft.md" --existing "C:\vault\Research\Papers\Paper\Reading\enhanced.md"
+```
+
+工具保留 frontmatter 与修改时间供核对，比较正文及本地图片字节；不把 mtime 当定稿依据，不自动判断语义吸收，也不写入、覆盖或删除文件。实验数字、评分、结论、引用和代码差异必须进一步审阅。
 
 分析与正式评审可分别检查结构，并配对核对结论：
 
