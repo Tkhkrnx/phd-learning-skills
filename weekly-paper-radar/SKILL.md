@@ -41,11 +41,11 @@ Rules:
 - Treat output coverage and result quality separately. If the script fills the requested count with weakly related papers, that still requires manual review and possible taxonomy/source refinement.
 - If no PDF is available, report that clearly so the user can search manually.
 - Treat these PDF states as semantically different:
-  - `downloaded`: PDF already saved to PaperQuay.
+  - `downloaded`: PDF saved in the configured local submission directory; no PaperQuay application is required.
   - `publisher_blocked_or_login_required`: official DOI/ACM path exists but current environment cannot fetch it automatically.
   - `listing_page_only`: the official venue page exposes title/authors but no stable per-paper PDF link.
   - `pdf_not_found_manual_search_needed`: the page looked paper-specific, but no trustworthy PDF link was resolved.
-- Do not ingest into Obsidian directly; the downstream reading flow stays in PaperQuay first.
+- This search round does not create or bulk-import Obsidian notes. A separately requested reading-note workflow may use the downloaded PDF directly and follows the current note-storage convention; it does not require PaperQuay.
 
 Default command:
 

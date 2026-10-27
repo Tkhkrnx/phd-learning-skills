@@ -118,6 +118,8 @@ For each skill:
 
 These scripts validate structure and fixture coverage only. They do not execute prompts, evaluate model answers, or establish a behavioral pass. Report actual forward-test outcomes separately, including model/session, supplied evidence, user correction, observed response and untested boundaries. Use `collaboration_forward_cases.md` for focused multi-turn evaluations without exposing reviewer criteria to the tested model.
 
+For regressions found in the October research sessions, use [recent usage cases](recent_usage_regression.md): scope revision and abstract prose, explanation of actual prior-method failure, principle-led transfer, and explicitly appointed expert collaboration. Keep raw private transcripts and full fresh responses local; record the actual outcome separately from the case specification. These cases supplement the original four-Skill workflow rather than replacing its acceptance conditions.
+
 Run:
 
 ```powershell

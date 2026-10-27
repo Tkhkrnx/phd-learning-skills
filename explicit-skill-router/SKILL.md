@@ -27,4 +27,6 @@ An active primary Skill may load a supporting Skill without another user request
 
 Do not use supporting work to change the primary research or engineering objective. Writing, coding, synchronization, debugging, experiment execution, publishing, and other delivery work are normal execution unless the user explicitly invokes another Skill.
 
+An explicitly appointed expert conversation partner may answer and challenge within the authorized research goal. That assignment is not authorization to create or message additional peers, switch primary Skills, invent user preferences, or treat peer agreement as the human user's approval.
+
 Keep router paths, identifiers, and lifecycle mechanics internal unless the user asks for diagnostics.

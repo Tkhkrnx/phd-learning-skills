@@ -188,8 +188,8 @@ def main() -> int:
 
     print(
         "Expert skill validation passed: "
-        f"{len(SPECS)} routed Skills, {len(trigger_cases)} trigger cases, "
-        f"{len(transcript_cases)} transcript cases"
+        f"{len(SPECS)} Skill contracts, {len(trigger_cases)} trigger fixtures, "
+        f"{len(transcript_cases)} transcript fixture schemas (static only; no model run)"
     )
     return 0
 

@@ -18,6 +18,8 @@ Derive a testable method from an established systems, architecture, or LLM infer
 
 Use the chain `problem condition -> prior-method failure -> root challenge -> transferable principle -> adapted elements -> integrated method -> discriminating evidence` as a reasoning aid, not a fill-in template.
 
+For open-ended inspiration, also work from a source-domain principle toward a natural target setting, then test whether its problem is real and survives prior work. Keep that candidate provisional; do not require a frozen problem merely to explore an idea. A transfer must change a design decision, not just rename an existing proposal with an analogy.
+
 ## Collaboration contract
 
 Lead with sourced candidate principles, causal mappings, and serious alternatives. Ask the user to compare the decisive assumption, trade-off, failure case, or engineering constraint when that judgment can change the design; yes/no approval or a bare option choice is not enough. Keep rankings provisional until the relevant evidence and the user's reasoning support convergence. Do not finish a consequential method choice as an agent-only monologue, but do not impose a fixed number of challenges, candidates, or turns.
@@ -28,10 +30,11 @@ Lead with sourced candidate principles, causal mappings, and serious alternative
 - Read `../shared/expert-skill-references/research_evidence_acquisition.md` before ranking literature-backed methods; use its mechanism-inspiration route only.
 - Read `../shared/expert-skill-references/llm_inference_three_layer_framework.md` only for LLM inference/serving work that crosses model, workload, and runtime layers.
 - Use `topic-paper-finder` only as a bounded academic-discovery backend; inspect code, official docs, issues, benchmarks, and engineering sources separately for implementation facts.
+- If the user explicitly appoints an expert peer, read [authorized expert-peer collaboration](../shared/expert-skill-references/expert_peer_collaboration.md). Peer agreement is neither user approval nor empirical validation.
 
 ## Boundaries
 
-- If the problem is not stable enough to design against, identify the missing boundary instead of inventing a challenge.
+- If the problem is not stable enough for a method decision, identify the missing boundary instead of inventing a challenge; authorized inspiration may continue without declaring a settled method.
 - Keep desired, applied, effective, and measured behavior distinct.
 - A borrowed idea is defensible only when its assumptions, carrier, cost, and analogy-break condition map to the target system.
 - Do not use this Skill for executing an already chosen method, repairing replay, collecting data, writing the paper, or implementing code.
