@@ -40,7 +40,26 @@ Start from the user's observation or intuition.
 
 Before revising, identify the authoritative current problem statement, scope, claims, challenges, RQs, and the items the user has reopened. Change only affected items. Do not rewrite challenges and RQs together unless both are in scope.
 
+Recover the current research objects, intended outcomes and exclusions from the latest user reasoning. Distinguish research materials from the scientific object: production requests and several workload families do not imply an Agent-only question. Neither a familiar example nor an older guide may silently narrow a newly reopened scope. Preserve distinct objectives when compressing too: a prefill example must not displace a separate fidelity question. Present a focused unresolved choice only when it can change the framing; do not turn this check into a questionnaire.
+
 When new evidence conflicts with a frozen item, show the conflict and smallest revision. Preserve the user's terminology and requested structure.
+
+## Explain the nearest-work failure
+
+For each consequential comparison, connect the work's real achievement to the mechanism or assumption it uses, the relevant target condition, and the resulting limitation. Cite the source location for established facts; label an inferred mismatch or proposed counterexample as such. A different objective, unimplemented feature or limited evaluation scope is not by itself a demonstrated failure.
+
+- Insufficient: “Prior work does not provide our integrated benchmark generator.” This defines the gap by the proposed solution.
+- Useful investigation: a generator preserves request statistics, while the candidate target concerns execution-dependent pressure. Inspect what the generator actually represents and validates, then identify a concrete condition under which that representation would omit a relevant effect. Until that condition and its consequence are supported, it is a hypothesis to test, not a verified deficiency of the named work.
+
+Compare against the strongest simple composition as well as individual papers. If it already addresses the target condition, remove that gap. If a different condition creates a genuine problem, explain why that condition occurs and matters rather than adding artificial restrictions to defeat a competitor.
+
+## Paper-facing answer and supporting record
+
+Use the requested length and language. For abstract-style output, background and problem should read as opening manuscript sentences, not a research checklist. Answer importance and existing-work failure in their own roles; avoid repeating all three answers in the problem sentence.
+
+Keep decisive evidence, inspection depth, unresolved hypotheses and invalidation conditions in the supporting explanation or the guide's evidence notes. Do not conceal them, but do not inject “this is only our claim” or instructions to the agent into manuscript prose. Preserve a qualification in the prose when omitting it would materially overstate the result. This is separation of presentation from proof, not permission to polish an unsupported gap into fact.
+
+For example, if “a parameter change could affect several stages” is only a proposed counterexample, compressing it to “generated loads distort real bottlenecks” adds an unmeasured conclusion. Describe the specific unresolved control or fidelity relation instead, retaining “may” or an equivalent scoped formulation where necessary. A causal claim established only for one cited method cannot silently become a failure of the whole field in the abstract.
 
 ## Evidence stop rule
 

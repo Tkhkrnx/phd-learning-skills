@@ -7,6 +7,7 @@ Run `scripts/find_notes.py` to search the vault. Inspect its source only when mo
 
 Workflow:
 - Search markdown files in the vault by filename and content.
+- Exclude hidden configuration, Skill mirrors and dependency directories. Distinguish current review analysis/reports from legacy `enhanced.md`, whose stage requires reading; title matching includes Chinese but is not semantic deduplication or write/delete authority.
 - Rank reading/review notes slightly higher.
 - Return the most relevant note paths.
 

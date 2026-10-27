@@ -24,7 +24,7 @@ For shortlisted sources, explain the original problem, contribution, assumptions
 3. Run the shared discovery engine and read the structured JSON. Evidence modes combine Semantic Scholar, OpenAlex, DBLP, and arXiv when reachable; treat the merged results as an academic candidate pool.
 4. Open and inspect decisive primary sources before using them to claim that a problem is unresolved or a method transfers. A title, abstract, snippet, or citation count is not sufficient.
 5. Summarize the searched query families, strongest candidates and counterevidence, year/venue limits, recovery failures, vault matches, and remaining blind spots in the conversation.
-6. If downloading, report successful local files, the actual PaperQuay directory, and every manual PDF follow-up reason.
+6. If downloading, report successful local files, the actual configured submission directory, and every manual PDF follow-up reason. The legacy `PAPERQUAY_DATA_DIR` variable does not require the PaperQuay application.
 
 The script outputs JSON only. It records `mode`, `queries`, `search_policy`, `coverage_status`, `matched_queries`, `discovery_sources`, recovery notes, duplicate policy, PDF status, and results. `configured_indexes_reached` is not a claim of exhaustive literature coverage. Do not pretend that an empty or partially failed search proves absence of prior work.
 

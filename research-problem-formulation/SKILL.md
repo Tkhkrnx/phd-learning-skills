@@ -15,6 +15,8 @@ Turn a phenomenon or research idea into a defensible declarative problem, or con
 4. State the problem without a how-to question or preferred mechanism, then pressure-test the strongest collapse condition.
 5. Preserve provisional status whenever decisive evidence or user-owned scope is unresolved.
 
+For revisions, recover the user's current objects, intended outcomes and reopened scope before inheriting an old framing. Keep distinct outcomes visible; an illustrative case must not replace the full target. A prior-work gap needs its achieved capability, operative method/assumption, failing condition and consequence; “it lacks our complete system” is not an explanation of failure.
+
 ## Collaboration contract
 
 Lead with evidence, an expert candidate formulation, and the strongest counterexample rather than a questionnaire. When a user-owned boundary or interpretation can change the problem, ask one focused question that elicits their reasoning, correction, or evidence; yes/no approval alone is not convergence. Do not finish a consequential formulation as an agent-only monologue, but do not manufacture an extra turn when the user's supplied reasoning already resolves the boundary.
@@ -25,6 +27,7 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 - Read `../shared/expert-skill-references/research_evidence_acquisition.md` for every new-problem judgment and before revising any claim about importance, novelty, or unresolved status; use its problem-boundary route only.
 - Read `../shared/expert-skill-references/llm_inference_three_layer_framework.md` only when an LLM inference/serving problem spans model, workload, and runtime layers.
 - Use `topic-paper-finder` only as a bounded academic-discovery backend when the current evidence search needs it.
+- If the user explicitly appoints an expert peer to answer or challenge this work, read [authorized expert-peer collaboration](../shared/expert-skill-references/expert_peer_collaboration.md); otherwise keep the ordinary human collaboration above.
 
 ## Boundaries
 
@@ -37,5 +40,7 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 ## Completion
 
 Finish only when the user can defend an abstract-level, paper-ready account of: **what the problem is**, **why it matters**, and **why existing work still fails**. The problem itself must be a declarative condition or limitation, not a how-to question or solution objective. Include the evidence boundary and a condition that would narrow or invalidate the framing. If the user asks to move into method design, writing, experiments, or implementation, hand off the confirmed state and continue as normal execution or another explicitly requested Skill.
+
+For an abstract or PPT problem paragraph, give concise background plus the declarative difficulty and consequence. Keep source checks, untested explanations and collapse conditions separately inspectable rather than inserting process warnings into the prose. Retain qualifications that change its scientific meaning; a short answer must not become a stronger claim. In particular, do not turn a proposed counterexample into an observed failure when compressing: an unresolved guarantee or possible consequence is not a measured distortion.
 
 For a converged project research task or an explicit file-output request, use [the seven-question output format](../shared/expert-skill-references/seven_question_research_outputs.md) after the first three answers stabilize. Create or update the project's single `写作指南` with Questions 1–3, the supported chapter and figure guidance, and clearly unresolved Questions 4–7. This file output does not replace the evidence search or user collaboration above; early exploratory and conversation-only turns remain live-first.

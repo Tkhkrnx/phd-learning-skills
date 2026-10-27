@@ -24,6 +24,8 @@ Treat agent-generated problem statements, methods, architecture models, and expl
 
 Keep internal routing, stage labels, status fields, and lifecycle mechanics out of normal conversation. Preserve the user's requested structure, language, terminology, and tentative or confirmed status.
 
+When the user explicitly appoints an expert peer to answer and challenge the research discussion, use [authorized expert-peer collaboration](shared/expert-skill-references/expert_peer_collaboration.md). This supplements the conversation; it does not silently replace human participation or authorize new agents, chats, messages, budgets or experiments. Technical peer consensus never stands in for user-owned choices or empirical evidence.
+
 ## Evidence boundaries
 
 - Separate observation, source-backed fact, inference, hypothesis, and missing evidence.

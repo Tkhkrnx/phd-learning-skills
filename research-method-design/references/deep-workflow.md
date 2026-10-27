@@ -18,7 +18,14 @@ For each serious candidate, record:
 - latency, memory, complexity, transition, and maintenance costs;
 - the condition under which the analogy breaks.
 
-Search same-field work first, then adjacent systems and structurally similar distant fields when they add a different causal lever. Repositories, docs, issues, benchmarks, and engineering articles establish implementation facts; they do not independently prove academic novelty.
+Use either entry route, according to the request:
+
+- **Problem-led:** derive a structural obstacle from the agreed problem and closest failures, then search same-field, adjacent and distant principles that address it.
+- **Principle-led:** when the user seeks inspiration, understand a source-domain problem and mechanism first, then locate a naturally occurring analogous condition in the target research direction. Establish its importance and nearest-work boundary before promoting it to a research problem or a settled method.
+
+Same-field work calibrates prior capability; it is not an endless prerequisite that crowds out the requested cross-domain exploration. For a useful transfer, show the source problem and why its mechanism works, a concrete target example, assumptions that survive or break, and the target design decision changed by that reasoning. If deleting the source-domain label leaves an unchanged proposal, the analogy has not yet contributed a design.
+
+Repositories, docs, issues, benchmarks, and engineering articles establish implementation facts; they do not independently prove academic novelty. If the user asks to understand a collection of principles, deliver that explanation rather than forcing every principle into a mature paper topic.
 
 ## 3. Fact gate
 
@@ -39,3 +46,9 @@ Combine only compatible elements. Check shared state, interfaces, resource costs
 For data reuse or measurement work, inspect raw fields and collection code, missingness, confounding, and generalization limits. A logged proxy is not automatically the claimed quantity. For runtime mechanisms, distinguish selected, applied, effective, and measured outcomes.
 
 Finish with the integrated causal chain, alternative, costs, kill criterion, first experiment, and the residual uncertainty most likely to change the design.
+
+## Search progress and constructive revision
+
+After a search round, identify what evidence changed the problem, mechanism or ranking. A larger bibliography, more rejected topics or peer agreement is not by itself progress toward a usable method. If searches repeat known objections, consolidate and change the structural query or derivation rather than running the same search loop. This ends a search round, not an explicitly requested continuing investigation.
+
+When a close method appears, distinguish full coverage, a supported residual condition, and an opportunity requiring a different mechanism. Explain the best defensible adaptation or why it fails; do not fabricate a gap to satisfy a topic count. Keep a small implementation optimization labeled as such instead of inflating it into a new architecture. Simple mechanisms remain valuable when their problem, insight and evidence justify them.

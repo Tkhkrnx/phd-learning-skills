@@ -45,6 +45,8 @@ Then search several lanes:
 
 Cross-domain observation is a hypothesis source, not design proof. For every borrowed idea, record the transferable principle, original assumptions, target-system mapping, carrier, cost model, and the condition that breaks the analogy.
 
+The search may also start from a source-domain principle when the user requests broad inspiration. Understand its original problem, mechanism and worked example before locating a natural target condition; then apply the same problem-boundary tests. This route does not authorize inventing a target workload or treating a proposed analogy as an established problem. A successful transfer explains which target design choice the source reasoning changes, beyond an after-the-fact resemblance.
+
 Return a challenge-to-evidence account: existing approach and failure -> challenge -> candidate source principle -> adaptation -> trade-off -> test. Include competing explanations and simpler alternatives. Explain these relationships before asking the user to choose. Compose the selected elements only after examining interactions and incompatible assumptions; citation diversity alone does not produce a coherent solution.
 
 ## Query Portfolio
@@ -77,6 +79,8 @@ Keep evidence, inference, and hypothesis separate. A blog or repository can esta
 
 Mark source inspection depth (full text, abstract/snippet only, inaccessible) and the exact section or artifact behind decisive claims. Separate source-established limitations from agent-inferred gaps and untested user observations. Do not recycle a familiar citation set when the research object changes. Source collection must reduce uncertainty in the current problem, not merely increase the bibliography.
 
+For a closest-work failure claim, preserve the chain `actual capability -> method/assumption -> relevant condition -> limitation and consequence`, with the evidence status of each link. Absence of the proposed integrated system is not itself failure evidence. Check the strongest practical composition before presenting a residual gap.
+
 ## Coverage and Stop Rule
 
 Do not stop because an arbitrary paper count was reached. Stop a search round when one of these holds:
@@ -87,6 +91,8 @@ Do not stop because an arbitrary paper count was reached. Stop a search round wh
 - further search is blocked, in which case the blocked coverage and resulting uncertainty are explicit.
 
 Never claim to have found "all papers." State the searched query families, source types, time/venue limits if any, and remaining blind spots. Reopen search whenever the user changes the problem object, condition, metric, root challenge, or mechanism family.
+
+Before another round, consolidate which evidence changed a boundary or design and which question remains decisive. Repeated source lists or rejections without a changed inference should trigger a different query or constructive adaptation, not be reported as increasingly mature topics. Respect an authorized ongoing goal while avoiding repeated searches that add no decision-relevant evidence.
 
 ## Collaboration Boundary
 

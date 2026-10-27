@@ -33,6 +33,15 @@ class ExplicitSkillPolicyTests(unittest.TestCase):
             policy = yaml.safe_load((skill_root / "agents" / "openai.yaml").read_text(encoding="utf-8"))
             self.assertFalse(policy["policy"]["allow_implicit_invocation"])
 
+    def test_peer_reference_is_routed_only_by_explicit_assignment_and_packaged(self):
+        relative = "../shared/expert-skill-references/expert_peer_collaboration.md"
+        for name in ("research-problem-formulation", "research-method-design"):
+            skill = ROOT / name
+            self.assertIn(f"]({relative})", (skill / "SKILL.md").read_text(encoding="utf-8"))
+            self.assertTrue((skill / relative).is_file())
+        sync = (ROOT / "shared/scripts/sync_expert_skills.ps1").read_text(encoding="utf-8")
+        self.assertIn('"shared\\expert-skill-references"', sync)
+
     def test_enforcement_preserves_bodies_and_protects_optional_skills_and_commands(self):
         manifest = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as tmp:
