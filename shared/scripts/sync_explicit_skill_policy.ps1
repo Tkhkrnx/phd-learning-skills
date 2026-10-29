@@ -30,7 +30,8 @@ $protectedSkillNames = @(
     "paper-presentation-builder",
     "systems-paper-writing",
     "hpc-paper-writing",
-    "reference-validation-report"
+    "reference-validation-report",
+    "nature-academic-search"
 )
 
 $sourceRootPath = (Resolve-Path -LiteralPath $SourceRoot).Path

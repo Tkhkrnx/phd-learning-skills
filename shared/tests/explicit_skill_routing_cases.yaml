@@ -1,5 +1,27 @@
 version: 2
 cases:
+  - id: route-academic-metadata-search
+    user_prompt: "用学术检索 skill 查来源并导出 bib。"
+    expected: nature-academic-search
+  - id: route-engineering-implementation
+    user_prompt: "用工程开发 skill 实现这个已确认需求，并跑完相关测试。"
+    expected: engineering-task-decomposition
+  - id: route-material-course
+    user_prompt: "用课程学习 skill 带我学这一章，记录练习供下次继续。"
+    expected: targeted-knowledge-closure
+  - id: reference-report-bounded-discovery
+    active_skill: reference-validation-report
+    active_scope: "查找缺失来源并生成引用核验报告"
+    user_prompt: "这些条目缺 DOI，先查齐能查到的元数据，再继续报告。"
+    expected: reference-validation-report
+    expected_support:
+      - nature-academic-search
+  - id: bypass-ordinary-export-request
+    user_prompt: "把这份文献清单导出 bib，不需要报告。"
+    expected: none
+    forbidden_support:
+      - reference-validation-report
+      - nature-academic-search
   - id: route-paper-ppt-alias
     user_prompt: "用做PPT的 skill 按我的模板补齐论文汇报。"
     expected: paper-presentation-builder

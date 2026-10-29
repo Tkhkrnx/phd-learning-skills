@@ -39,6 +39,8 @@ $requiredPaths = @(
 )
 $requiredPaths += $skillNames | ForEach-Object { "$_\SKILL.md" }
 $requiredPaths += $skillNames | ForEach-Object { "$_\agents\openai.yaml" }
+$requiredPaths += Get-ChildItem -LiteralPath (Join-Path $sourceRootPath "targeted-knowledge-closure\scripts") -File -Filter "*.py" |
+    ForEach-Object { "targeted-knowledge-closure\scripts\$($_.Name)" }
 $requiredPaths += foreach ($skillName in $skillNames) {
     $referenceRoot = Join-Path $sourceRootPath "$skillName\references"
     if (Test-Path -LiteralPath $referenceRoot -PathType Container) {

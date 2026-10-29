@@ -212,6 +212,7 @@ def render_html(
     metadata_issue_count: int = 0,
     critical_issue_count: int = 0,
     advisory_issue_count: int = 0,
+    input_scope: str = "rendered-manuscript-bibliography",
 ) -> str:
     confirmed = sum(1 for e in entries if e.status == "confirmed")
     pending = sum(1 for e in entries if e.status == "pending")
@@ -224,6 +225,12 @@ def render_html(
         summary = f"本文共核验 {total} 篇参考文献，当前未发现未找到条目。"
     else:
         summary = f"本文共核验 {total} 篇参考文献，其中通过 {confirmed} 篇、存疑 {pending} 篇、未找到 {missing} 篇。"
+
+    if input_scope == "bibliography-only":
+        if confirmed == total:
+            summary = f"本次清单共 {total} 篇，均已确认存在；未核查正文引用覆盖与论据支撑。"
+        else:
+            summary = f"本次清单核验 {total} 篇，通过 {confirmed} 篇、存疑 {pending} 篇、未找到 {missing} 篇；未核查正文引用覆盖与论据支撑。"
 
     if no_metadata_errors and critical_issue_count == 0 and advisory_issue_count == 0:
         metadata_text = "未发现文献真实但著录存在明显错误的情况。"
@@ -470,6 +477,7 @@ def main() -> int:
         metadata_issue_count=metadata_issue_count,
         critical_issue_count=critical_issue_count,
         advisory_issue_count=advisory_issue_count,
+        input_scope=verification_meta.get("input_scope", "rendered-manuscript-bibliography"),
     )
     write_text(html_path, html_content)
     render_pdf(html_path, pdf_path)

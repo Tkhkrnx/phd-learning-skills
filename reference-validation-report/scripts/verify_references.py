@@ -71,6 +71,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--verification-date", default=str(date.today()))
     parser.add_argument("--output", required=True)
     parser.add_argument("--sleep-ms", type=int, default=150)
+    parser.add_argument("--bibliography-only", action="store_true", help="Verify every entry in the supplied .bib without requiring a compiled manuscript bibliography.")
     return parser.parse_args()
 
 
@@ -284,7 +285,7 @@ def parse_bib_entry(entry_text: str) -> tuple[str, str, dict[str, str]] | None:
     return key, entry_type, {k: strip_latex(v) for k, v in fields.items()}
 
 
-def load_local_entries(project_dir: Path, bib_name: str, bbl_name: str, tex_name: str) -> tuple[list[LocalEntry], str | None]:
+def load_local_entries(project_dir: Path, bib_name: str, bbl_name: str, tex_name: str, *, bibliography_only: bool = False) -> tuple[list[LocalEntry], str | None]:
     bib_path = project_dir / bib_name
     bbl_path = project_dir / bbl_name
     tex_path = project_dir / tex_name
@@ -299,6 +300,14 @@ def load_local_entries(project_dir: Path, bib_name: str, bbl_name: str, tex_name
                 bib_map[key] = (entry_type, fields)
 
     tex_text = tex_path.read_text(encoding="utf-8", errors="ignore") if tex_path.exists() else ""
+    if bibliography_only:
+        if not bib_map:
+            raise ValueError("Bibliography-only mode requires a nonempty parseable .bib file.")
+        entries = []
+        for key, (entry_type, fields) in bib_map.items():
+            text = ". ".join(fields[name] for name in ("author", "title", "journal", "booktitle", "year", "doi", "url") if fields.get(name))
+            entries.append(LocalEntry(key=key, entry_type=entry_type, fields=fields, bibliography_text=text))
+        return entries, extract_title_from_tex(tex_text)
     pairs = split_bbl_entries(bbl_path.read_text(encoding="utf-8", errors="ignore")) if bbl_path.exists() else []
     if not pairs and tex_text:
         pairs = split_inline_tex_entries(tex_text)
@@ -764,7 +773,7 @@ class Verifier:
 def main() -> int:
     args = parse_args()
     project_dir = Path(args.project_dir).resolve()
-    entries, inferred_title = load_local_entries(project_dir, args.bib, args.bbl, args.tex)
+    entries, inferred_title = load_local_entries(project_dir, args.bib, args.bbl, args.tex, bibliography_only=args.bibliography_only)
     verifier = Verifier(sleep_ms=args.sleep_ms)
 
     out_entries: list[dict[str, Any]] = []
@@ -807,6 +816,7 @@ def main() -> int:
             print(f"Verified {idx}/{len(entries)}: {entry.key} -> {result['status']}", flush=True)
 
     data = {
+        "input_scope": "bibliography-only" if args.bibliography_only else "rendered-manuscript-bibliography",
         "paper_title": args.paper_title or inferred_title or "",
         "venue": args.venue,
         "verification_date": args.verification_date,

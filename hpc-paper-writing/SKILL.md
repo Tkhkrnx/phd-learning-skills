@@ -11,6 +11,8 @@ description: Write or revise an HPC paper for venues such as SC, PPoPP, ICS, or 
 
 ## 工作流
 
+按任务加载[共用写作与修订流程](../shared/writing/paper-writing-workflow.md)：贡献/结构修改先梳理论证，引用疑问查原文支撑，单纯润色只做表达检查，审稿修订维护意见到修改和验证的对应关系。硬件、精度、测量范围和失败案例不得在润色时消失。
+
 1. 明确论文对象、目标 venue、硬件/编程模型、问题规模、对比对象和当前材料（提纲、稿件、结果或 profiler trace）。根据指南的四种 HPC 论文类型确定叙事重心。
 2. 建立 claim–evidence 表：每个贡献或性能结论必须对应问题证据、优化机制、测量指标和图/表。删除或降级无法由证据支撑的 claim。
 3. 构建 motivation：用 profiling breakdown、瓶颈归因、peak-efficiency gap 与 scaling bottleneck 量化优化空间。让每个优化点可追溯到一个已测瓶颈。

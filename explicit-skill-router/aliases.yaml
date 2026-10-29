@@ -30,6 +30,9 @@ skills:
       - 需求澄清
       - 系统理解
       - 架构分析
+      - 工程开发
+      - vibe coding
+      - 工程调试
   targeted-knowledge-closure:
     labels:
       - targeted knowledge closure
@@ -40,6 +43,9 @@ skills:
       - 知识学习
       - 概念学习
       - 带我学会
+      - 材料驱动学习
+      - 课程学习
+      - 练习复习
   topic-paper-finder:
     labels:
       - topic paper finder
@@ -97,6 +103,12 @@ skills:
       - high performance computing paper writing
       - hpc 论文写作
       - 高性能计算论文写作
+  nature-academic-search:
+    labels:
+      - nature academic search
+      - 学术检索
+      - 学术文献导出
+      - 引文检索
   reference-validation-report:
     labels:
       - reference validation report

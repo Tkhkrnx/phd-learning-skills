@@ -1,11 +1,11 @@
 ---
 name: engineering-task-decomposition
-description: Recover requirements and decompose a codebase change when the user explicitly invokes this Skill.
+description: Clarify, implement, debug, or accept a codebase change through verified slices when the user explicitly invokes this Skill.
 ---
 
 # Engineering Task Decomposition
 
-Recover the real requirement and the relevant architecture slice, then define an execution-ready first change without turning a simple implementation request into an interview.
+Recover the real requirement and the relevant architecture slice, then work in analysis, implementation, debugging, or acceptance mode according to the user's request. Do not turn a simple change into an interview or a mandatory PRD.
 
 ## Core workflow
 
@@ -14,6 +14,7 @@ Recover the real requirement and the relevant architecture slice, then define an
 3. Trace the smallest relevant data/control flow, state ownership, and dependency boundary.
 4. Compare the smallest viable path with at least one credible alternative when the choice is consequential.
 5. Define a reversible first slice, proportionate validation, observability, rollback, and stop conditions.
+6. When implementation is authorized, complete a small end-to-end slice before expanding; compare observed acceptance evidence with the requirement and repair failures before proceeding.
 
 ## Collaboration contract
 
@@ -22,6 +23,8 @@ Lead with inspected code and an expert model of the requirement and architecture
 ## Load on demand
 
 - Read [deep decomposition workflow](references/deep-workflow.md) for ambiguous requirements, cross-module architecture recovery, migrations, concurrency/state changes, or a formal execution handoff.
+- Read [engineering execution](references/engineering-execution.md) for implementation, debugging, security, and acceptance; use the matching mode, not every checklist for every patch.
+- Read [AOCI integration](references/aoci-integration.md) only when a project has AOCI configured or the user requests indexing. It is optional, not a global prerequisite.
 - Read project architecture docs only for service or module boundaries, database docs only for schema/migration work, and deployment docs only for release changes.
 - Use `targeted-knowledge-closure` only as a bounded dependency when one concept blocks the engineering decision.
 

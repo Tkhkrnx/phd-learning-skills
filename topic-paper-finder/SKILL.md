@@ -30,6 +30,8 @@ The script outputs JSON only. It records `mode`, `queries`, `search_policy`, `co
 
 ## Source Boundary
 
+For cross-source metadata enrichment, exact DOI lookup, or selected BibTeX/RIS export, use [academic search](../nature-academic-search/SKILL.md) as a bounded supporting stage. It reuses the shared clients; it does not replace this skill's research-intent modes or imply that candidates passed reference validation.
+
 This skill covers academic candidate discovery. For method design, search repositories, official documentation, issues, pull requests, benchmarks, engineering articles, and technical blogs with the available web and code tools. Use those sources for implementation facts or inspiration, not as sole proof of academic novelty.
 
 When `research-problem-formulation` or `research-method-design` is already authorized and delegates a bounded candidate-discovery subtask, that active primary authorization is sufficient for this supporting use. Act only as its internal academic evidence backend. Return the candidate pool, coverage, failures, and blind spots to the primary skill; do not open a second collaboration loop, emit a separate lifecycle marker, or replace the active skill's user interaction.

@@ -11,6 +11,8 @@ description: Write or revise a systems paper for venues such as OSDI, SOSP, Euro
 
 ## 工作流
 
+按任务加载[共用写作与修订流程](../shared/writing/paper-writing-workflow.md)：贡献/结构修改先梳理论证，引用疑问查原文支撑，单纯润色只做表达检查，审稿修订维护意见到修改和验证的对应关系。不要每次全套运行，也不要让风格规则改写证据强度。
+
 1. 明确系统对象、目标 venue、核心问题、最接近工作、已有实现/数据与论文 claim。先识别论文的真实贡献形态，再把 problem statement、核心贡献和预期证据各压缩成一句可检查的话。
 2. 建立 claim–evidence 表：每条 contribution 映射到 motivation 数据、关键设计决策、对应的实验问题和图/表。先暴露没有证据的 claim，再决定补实验、缩小范围或改写。
 3. 构造 Introduction 的叙事弧线：重要性与量化事实 → existing approaches → 缺口/失败原因 → 核心 insight 或发现 → 工作概览 → 可验证贡献 → 结果预览。避免从背景直接跳到方案。

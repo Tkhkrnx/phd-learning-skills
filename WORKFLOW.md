@@ -1,65 +1,35 @@
 # Workflow
 
-## 1. Weekly Discovery
+These are optional chains, not a mandatory all-in-one pipeline. Personal skills retain explicit invocation; an authorized primary may use a bounded supporting stage for the same goal. Ordinary tasks remain ordinary assistance.
 
-`weekly-paper-radar` 负责例行搜索。它围绕两个固定研究方向展开：
+## Research discovery
 
-- `State-Centric Runtime Design`
-- `Hardware-Conscious Execution`
+`weekly-paper-radar` uses the current taxonomy/configuration for recurring-direction discovery. `topic-paper-finder` supports study, problem-boundary, and mechanism-inspiration modes; the last two have no implicit recent-year, venue, or fixed-topic filter. Primary-source inspection is required for decisive novelty or transfer claims. Downloads, candidate discovery, and actual reading are distinct outcomes.
 
-每个方向都会进一步拆成多个子方向，用短查询逐条搜索，而不是把 topic、subtopic、venue 一次性拼成一个长 query。
+`nature-academic-search` supplies cross-source metadata, DOI lookup, provenance/conflict-aware merging, and selected BibTeX/RIS export using shared clients. Use it before `reference-validation-report` when sources must first be found or prepared. A complete existing bibliography skips discovery. A real citation is not proof of claim support.
 
-搜索顺序是：
+## Reading and judgment
 
-1. 官方会议 / 出版源页面
-2. 聚合源兜底
-3. vault 去重
-4. 可选 PDF 下载
+The original PDF remains the primary source. Use AI for background, difficult figures/derivations, checking interpretations, and organizing evidence, not as proof that the learner has read or mastered the paper. There is no separate mandatory AI-understanding skill.
 
-## 2. Focused Search
+`reading-note-builder` accepts a paper plus optional notes/PPT. `review-note-builder` separates analysis from a user-requested formal review. They can reuse relevant existing notes, but verify important claims and disagreements against the original source; rendered/extracted material is not automatically inspected evidence. PaperQuay and MinerU caches are optional existing materials, not prerequisites.
 
-`topic-paper-finder` 负责临时专题搜索。
+Canonical paths remain `Research/Papers/<paper>/Reading/enhanced.md`, `Review/analysis.md`, and `Review/formal-review.md`. `vault-note-finder` searches useful notes while excluding installation/configuration mirrors. Preserve existing user judgments and follow the approved keep/merge/skip process for historical imports.
 
-它的预期用法不是要求用户一开始就给出完全精确的字段，而是先把模糊需求压成这些条件：
+## Learning
 
-- 主题 / 问题
-- 可能子方向
-- 关键词
-- venue 或 venue tier
-- 年份范围
-- 是否想顺手下载 PDF
+`targeted-knowledge-closure` keeps the teaching name and supports concept repair, material-driven chapters/courses, solving, practice/review, and research learning. Diagnose prerequisite dependencies, ground explanations in inspected sources, adapt hints and examples to actual learner reasoning, and fade toward independent application.
 
-然后走与 `weekly-paper-radar` 相同的 discovery 底座。
+Persist learning state only when requested: goals, source version, path, exercise bank, actual attempts, error types, and resume point. A local review date is not a background reminder. DeepTutor provides optional app/RAG/book/media functionality only after its separate runtime and providers are configured; local skill instructions are not a replacement for that software.
 
-## 3. Reading In PaperQuay
+## Engineering
 
-发现到的论文先进入 PaperQuay 阅读。
+`engineering-task-decomposition` covers analysis, authorized implementation, debugging, and acceptance. Use relevant code, explicit outcomes, a small end-to-end slice, evidence-driven debugging, appropriate security boundaries, and the edit-run-inspect-fix-revalidate loop. AOCI is an optional project index; do not inject it globally or trust stale index prose over source code.
 
-正式输入层不是旧 Obsidian 资产目录，而是：
+## Manuscript and revision
 
-- `paperquay-notes.sqlite`
-- `paperquay-library.sqlite`
-- `.mineru-cache/document-xxxx/full.md`
-- `.mineru-cache/document-xxxx/content_list_v2.json`
+Systems/HPC writing retain their domain-specific evidence requirements. Shared checks cover contribution/section logic, source-claim support, natural direct expression, and reviewer-concern -> manuscript change -> evidence/verification tracking. Style improvements must preserve conditions, adverse results, numbers, and epistemic strength. A real DOI, a valid matrix, or a passing unit test does not establish scientific correctness.
 
-## 4. Formal Note Building
+## Deployment and acceptance
 
-`reading-note-builder` 和 `review-note-builder` 会把：
-
-- PaperQuay 原始笔记
-- 论文正文缓存
-- 映射诊断信息
-
-重新收束成证据包，再由当前运行 skill 的主模型完成正式写作。
-
-其中：
-
-- 阅读笔记强调“先校正你的原笔记，再补导师七问空缺”。
-- 审稿笔记强调“先完成七问式增强理解，再转成严格 review 结构”。
-- 两者都要求结论能回指正文证据。
-
-## 5. Vault Search
-
-`vault-note-finder` 是搜索流程的重复抑制层。
-
-它的目标不是简单全文检索，而是优先返回 `Research/Papers/<short-name>/Reading/enhanced.md` 与 `Review/enhanced.md`，再返回需要保留的 `Support/original.md`。`writer_prompt.md`、evidence JSON 和日志位于 Vault 外的工作目录，不参与知识库搜索。
+Edit this canonical repository first. Run relevant unit tests, skill/routing validators, script smoke tests, and actual bounded tool checks; report their evidence levels separately. Synchronize the complete affected packages/dependencies into the six configured local roots with matching hashes. Restart or open a new client session when required for discovery. Local deployment does not configure a server or prove that each client has executed the new workflow.

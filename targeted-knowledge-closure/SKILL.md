@@ -1,19 +1,19 @@
 ---
 name: targeted-knowledge-closure
-description: Teach a specific concept to usable transfer when the user explicitly invokes this Skill.
+description: Tutor from papers, textbooks, code, or notes with adaptive lessons and practice when the user explicitly invokes this Skill.
 ---
 
 # Targeted Knowledge Closure
 
-Repair the smallest concept, prerequisite, or relation blocking the user's current work, then help them apply it accurately.
+Teach from the user's materials and current reasoning. Repair the smallest concept blocking a task, or build a material-grounded learning path when a chapter, course, or research topic is requested. Preserve the existing teaching aliases.
 
 ## Core workflow
 
-1. Identify the target concept and the smallest missing prerequisite or misconception.
-2. Choose the lightest useful representation: definition, intuitive model, actor-state-sequence trace, worked example, contrast, code, equation, or diagram.
-3. Explain the decisive relation and map any analogy back to the real objects and its limits.
-4. Observe the user's restatement, prediction, example, or live-task application; correct the specific mismatch without restarting the whole tutorial.
-5. Fade scaffolding once the user can use the concept in the live task.
+1. Recover the requested outcome, material/version, relevant page/section/code location, and evidence of the learner's current model. Diagnose before choosing depth, but orient a beginner before testing.
+2. Choose concept repair, guided chapter/course, problem solving, practice/review, or research learning. For a larger goal, map prerequisite dependencies and start at the first actual gap; do not impose a course on a small question.
+3. Ground explanations and exercises in inspected material. Separate source claims, explanatory analogies, deductions, and unverified hypotheses. Check equations and original figures rather than treating extracted text as complete visual evidence.
+4. Use progressive hints, a worked example when helpful, and an independent nearby application. Observe the user's prediction, derivation, implementation, or explanation and correct the specific mismatch.
+5. Adapt the next step and fade scaffolding. With requested durable learning, preserve goals, sources, path, attempts, error types, and next review in a resumable session; never record AI-generated answers as learner mastery.
 
 ## Collaboration contract
 
@@ -21,7 +21,9 @@ Explain the minimum necessary background before testing. Use the user's reasonin
 
 ## Load on demand
 
-- Read [deep teaching workflow](references/deep-workflow.md) when confusion persists, several prerequisites interact, or the user requests guided practice and transfer checks.
+- Read [deep teaching workflow](references/deep-workflow.md) for diagnosis, solving, guided practice, and transfer checks.
+- Read [material-grounded learning](references/material-learning.md) for chapters/courses, multi-source synthesis, exercises, durable progress, and resuming. Use `scripts/learning_session.py` for persistent records, source-drift checks, and Markdown export, not for judging understanding.
+- Read [DeepTutor integration](references/deeptutor-backend.md) only for a knowledge base, living book, audio/video, or the standalone learning app. These require an installed/configured runtime; prompt instructions are not equivalent capabilities.
 - Verify source code or current documentation only for niche, implementation-specific, or change-prone facts.
 - When delegated by another authorized Skill, repair only the blocking concept and return control to the parent goal.
 
@@ -34,6 +36,6 @@ Explain the minimum necessary background before testing. Use the user's reasonin
 
 ## Completion
 
-Finish when observable user reasoning or application shows a correct working model for the requested task, the user can distinguish the decisive near-miss when relevant, and no remaining misconception is likely to cause a wrong application. State any material unresolved gap without manufacturing extra exercises.
+Finish when observable user reasoning or application supports the requested learning outcome, or report the remaining gap and exact resume point. For a direct explanation or worked-solution request, deliver it without withholding answers; mark mastery as unassessed unless observable user reasoning supports it. Do not infer whole-topic mastery from one correct answer. State any material unresolved gap without manufacturing extra exercises.
 
 If the user requests a learning/closure note, save it to the verified Obsidian vault under `Learning/<topic>/`, following [note storage](../shared/expert-skill-references/note_storage.md). Check whether existing notes already contain the explanation or exercise; do not duplicate a lesson merely because a file or mtime differs. Historical imports need a reviewed keep/merge/skip list and user confirmation. This does not require generating a note for every teaching conversation; an explicit destination or no-save request wins.

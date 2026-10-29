@@ -18,6 +18,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--verification-date", default=str(date.today()))
     parser.add_argument("--output-dir")
     parser.add_argument("--output-prefix", default="reference_validation_report_final")
+    parser.add_argument("--bibliography-only", action="store_true", help="Verify a supplied .bib collection rather than rendered manuscript citations.")
     parser.add_argument(
         "--manual-audited-all-confirmed",
         action="store_true",
@@ -35,6 +36,8 @@ def main() -> int:
     script_dir = Path(__file__).resolve().parent
 
     if args.manual_audited_all_confirmed:
+        if args.bibliography_only:
+            raise ValueError("Bibliography-only mode requires per-entry verification; manual all-confirmed mode is not supported.")
         report_cmd = [
             sys.executable,
             str(script_dir / "generate_reference_validation_report.py"),
@@ -83,6 +86,8 @@ def main() -> int:
     ]
     if args.paper_title:
         verify_cmd.extend(["--paper-title", args.paper_title])
+    if args.bibliography_only:
+        verify_cmd.append("--bibliography-only")
     subprocess.run(verify_cmd, check=True)
 
     report_cmd = [
@@ -107,6 +112,8 @@ def main() -> int:
     ]
     if args.paper_title:
         report_cmd.extend(["--paper-title", args.paper_title])
+    if args.bibliography_only:
+        report_cmd.extend(["--tool-text", "AI 自动参考文献完整性检测（文献清单）"])
     subprocess.run(report_cmd, check=True)
     print(f"Pipeline output dir: {output_dir}", flush=True)
     return 0

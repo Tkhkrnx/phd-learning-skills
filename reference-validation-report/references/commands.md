@@ -40,8 +40,17 @@ python scripts/run_reference_validation_pipeline.py `
 
 ## Supported local inputs
 
+- standalone `.bib` collections with explicit `--bibliography-only`; this validates every record, not just manuscript-cited entries;
 - standard `.bbl`;
 - Elsevier-style `\bibitem[...]{key}` `.bbl`;
 - inline `thebibliography` and `\bibitem` blocks in `.tex`.
 
 If the project omits an input, inspect the actual bibliography setup and pass only supported arguments. Do not fabricate placeholder files.
+
+For a discovery export without a compiled manuscript:
+
+```powershell
+python scripts/run_reference_validation_pipeline.py --project-dir "C:\papers\search" --bib "selected.bib" --bibliography-only --paper-title "Selected References" --output-dir "C:\papers\search\report"
+```
+
+The verification JSON records `input_scope`. Normal manuscript mode still requires a rendered `.bbl` or inline bibliography so uncited records are not silently counted. Bibliography-only mode does not support the manual all-confirmed shortcut.

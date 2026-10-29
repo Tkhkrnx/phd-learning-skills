@@ -10,6 +10,7 @@ Verify bibliography entries before generating the report. Never infer “no fabr
 ## Workflow
 
 1. Locate the relevant `.tex`, `.bib`, and `.bbl` inputs.
+   If sources are missing or the user requested search then reporting, use [academic search](../nature-academic-search/SKILL.md) for candidate discovery, selection, and bibliography export first. A complete existing bibliography skips this step. Search-only requests do not authorize an unsolicited report.
 2. Run `scripts/verify_references.py` and preserve the per-entry evidence status.
 3. Generate the report with `scripts/generate_reference_validation_report.py`, or use the combined pipeline.
 4. Render and inspect the first page plus at least one representative body page.
@@ -22,6 +23,7 @@ Prefer DOI/Crossref records, arXiv records, publisher pages, and official venue 
 - Say all references are confirmed only when every entry is `confirmed` or when the user explicitly attests that every entry was manually checked.
 - If any entry is `pending`, `missing`, or materially inconsistent, keep the conclusion conservative and surface it in the report.
 - Do not invent evidence links, normalize away a real metadata conflict, or mark an unverified entry as passed.
+- Bibliographic identity does not establish that a paper supports a manuscript claim. Keep claim-support checks and source locators separate; use the [writing workflow](../shared/writing/paper-writing-workflow.md) when such an audit is requested.
 
 ## Load on demand
 

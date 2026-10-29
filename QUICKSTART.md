@@ -28,14 +28,15 @@ $env:PYTHONPATH = "."
   shared/
 ```
 
-不要只复制入口文件，也不要以为安装一个搜索 Skill 就不需要它引用的共享搜索代码和配置。首次整套安装时，可携带本仓库的全部 13 个工作 Skill 目录、路由器与 `shared`，再按机器调整路径和配置。
+不要只复制入口文件，也不要以为安装一个搜索 Skill 就不需要它引用的共享搜索代码和配置。首次整套安装时，可携带本仓库的全部 14 个工作 Skill 目录、路由器与 `shared`，再按机器调整路径和配置。
 
-下面三个 PowerShell 脚本是**已有环境的分组同步工具，不是三个各自完整的全仓库安装器**：
+下面四个 PowerShell 脚本是**已有环境的分组同步工具，不是各自完整的全仓库安装器**：
 
 | 脚本 | 同步什么 |
 | --- | --- |
 | `sync_expert_skills.ps1` | 四个协作 Skill、论文搜索及共享研究/搜索依赖 |
 | `sync_paper_note_skills.ps1` | 阅读笔记、审稿笔记、论文 PPT、内置 BatchGen 模板及共享材料处理依赖 |
+| `sync_learning_research_tools.ps1` | 学术检索、教学、工程、两类写作、引用验证的完整目录及共享检索/写作工具 |
 | `sync_explicit_skill_policy.ps1` | 全部工作 Skill 的入口、引用文档、显式调用配置与路由器；不包办所有脚本、配置依赖 |
 
 按修改范围选择，策略同步放在最后：
@@ -43,6 +44,7 @@ $env:PYTHONPATH = "."
 ```powershell
 .\shared\scripts\sync_expert_skills.ps1
 .\shared\scripts\sync_paper_note_skills.ps1
+.\shared\scripts\sync_learning_research_tools.ps1
 .\shared\scripts\sync_explicit_skill_policy.ps1
 ```
 
