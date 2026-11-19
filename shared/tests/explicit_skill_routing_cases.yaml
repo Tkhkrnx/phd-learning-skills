@@ -125,6 +125,18 @@ cases:
     expected: none
     forbidden_support:
       - engineering-task-decomposition
+  - id: staged-goal-engineering-now-method-later
+    active_skill: engineering-task-decomposition
+    active_scope: "第二阶段用工程 Skill 核对字段；第五阶段用研究方法 Skill 比较算法"
+    user_prompt: "继续第二阶段，核对导入字段并修正页面。"
+    expected: engineering-task-decomposition
+    forbidden_support:
+      - research-method-design
+  - id: resume-explicitly-assigned-method-stage
+    active_skill: research-method-design
+    active_scope: "第五阶段用研究方法 Skill 比较两种负载分析算法"
+    user_prompt: "现在开始第五阶段，比较这两个算法的适用条件。"
+    expected: research-method-design
   - id: expire-on-task-switch
     active_skill: targeted-knowledge-closure
     active_scope: "学习条件概率"

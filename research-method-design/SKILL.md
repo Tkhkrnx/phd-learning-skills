@@ -16,6 +16,8 @@ Derive a testable method from an established systems, architecture, or LLM infer
 5. Compare the strongest simpler alternative and define evidence that would reject the proposed method.
 6. Synthesize compatible elements and choose the first discriminating experiment.
 
+For a measurement or data-analysis design, work one representative observation through the method in the first overview. Use the project's schema or sample when available. Show which records connect, the operation performed on them, and the decision the result supports. Identify any missing key or endpoint that changes the conclusion. Label illustrative inputs.
+
 Use the chain `problem condition -> prior-method failure -> root challenge -> transferable principle -> adapted elements -> integrated method -> discriminating evidence` as a reasoning aid, not a fill-in template.
 
 For open-ended inspiration, also work from a source-domain principle toward a natural target setting, then test whether its problem is real and survives prior work. Keep that candidate provisional; do not require a frozen problem merely to explore an idea. A transfer must change a design decision, not just rename an existing proposal with an analogy.
@@ -33,6 +35,8 @@ Lead with sourced candidate principles, causal mappings, and serious alternative
 - If the user explicitly appoints an expert peer, read [authorized expert-peer collaboration](../shared/expert-skill-references/expert_peer_collaboration.md). Peer agreement is neither user approval nor empirical validation.
 
 ## Boundaries
+
+Apply a persistent goal's stage-specific assignment when the current decision belongs to that stage. After method selection, its agreed fields, baselines and checks become inputs to implementation.
 
 - If the problem is not stable enough for a method decision, identify the missing boundary instead of inventing a challenge; authorized inspiration may continue without declaring a settled method.
 - Keep desired, applied, effective, and measured behavior distinct.

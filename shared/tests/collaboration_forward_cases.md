@@ -26,6 +26,24 @@ Follow-up:
 
 Reviewer criteria: failures precede challenges; no forced third challenge; source principles mapped to target assumptions; candidates remain provisional; correction changes copying assumptions and synthesis; considers lookup/metadata/lifetime or separation costs; no implementation or invented historical attribution.
 
+## November first-response cases
+
+### Long-conversation research synthesis (independent first response)
+
+Give the evaluator this condensed history in order. “Our system gets a service target and records of an unfamiliar workload. Its report must say under what conditions a behavior occurred and what effect it had. We have a case where an attempt failed and a retry succeeded. Seven teams are collecting papers and diagnostic criteria for later use. A replay study tested capacity estimates. A tracing study located execution bottlenecks. We have no comparison for this deployment.” Then ask: “Use the problem-formulation Skill to pull the project together for me. Once I understand it we can claim the seventh direction.”
+
+Inspect the **first** answer before giving any correction. Can a reader find a declarative difficulty that precedes diagnosis, the decision that depends on resolving it, and the surviving comparison with prior work? Record where the output template, illustration and later assignment ended up. If the user corrects the target, inspect how the revision changes all dependent answers. Score repair separately from first-response quality.
+
+Follow-up for the same conversation: “We already have per-attempt, retry and device records. Queueing and transfer both appear in a batch. We need to tell which one held up delivery. Keep local costs and unknown effects as discussed. Give me the whole compact argument, including our agreed idea.” Inspect all answers together for the corrected premise.
+
+Variation for a different project: a user cites a successful system as an example of exchanging quality for latency under load and asks for another opportunity. Check whether the candidate retains that trade-off when considering other adjustable resources. A follow-on about the cited system's recovery path needs its own motivation and evidence.
+
+### Measurement-method overview (independent first response)
+
+Give the method Skill two illustrative same-clock observations: transfer of K for A and J for B both end at 13 ms. The decode steps consuming K and J would otherwise be ready at 10 and 16 ms and actually start at 13 and 16 ms. Some other batches lack a membership key. Delivery times are absent. Ask for a paper-style overview of how to build the graph, associate the observations and analyze offloading.
+
+Inspect the proposed keys and edge, the operation on each row, the 3 ms and 0 ms local results under the stated dependency model, how unlinked rows enter coverage, and what additional evidence would support an end-to-end conclusion. Headings alone give no behavioral result.
+
 ## Engineering outcome versus artifact
 
 > 用需求分析 skill：我们有读取和统计脚本，目标是让同学发现有系统研究价值的负载规律。图表不是最终目标。我举缓存例子只说明深度，不规定研究缓存。先调查仓库相关材料再与我明确交付和验收，暂不写代码。
