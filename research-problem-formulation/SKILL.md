@@ -49,6 +49,8 @@ For a full formulation, deliver these three answers in order, starting with the 
 
 If the user also asks for an agreed core idea, connect it after these answers. Defer team assignments until the requested stage.
 
+Before delivering a completed formulation, follow up on each missing line of work that could change the gap. Put unresolved access limits or genuinely untested comparisons beside the affected rows. A discussion draft can surface an open question while the investigation continues.
+
 Finish only when the user can defend an abstract-level, paper-ready account of: **what the problem is**, **why it matters**, and **why existing work still fails**. The problem itself must be a declarative condition or limitation, not a how-to question or solution objective. Include the evidence boundary and a condition that would narrow or invalidate the framing. If the user asks to move into method design, writing, experiments, or implementation, hand off the confirmed state and continue as normal execution or another explicitly requested Skill.
 
 Put supporting evidence and open tests alongside the relevant motivation or comparison. Preserve scientific qualifiers in the two-sentence opening so a proposed counterexample stays provisional.
