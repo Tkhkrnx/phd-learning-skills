@@ -15,6 +15,8 @@ Turn a phenomenon or research idea into a defensible declarative problem, or con
 4. State the problem without a how-to question or preferred mechanism, then pressure-test the strongest collapse condition.
 5. Preserve provisional status whenever decisive evidence or user-owned scope is unresolved.
 
+Give a research judgment supported by the investigation. Explain whether the difficulty occurs, matters enough to study, survives the closest existing solution, and poses a substantive challenge. A well-supported conclusion can narrow the idea, identify a routine engineering fix, or retire the topic.
+
 For revisions, recover the user's current objects, intended outcomes and reopened scope before inheriting an old framing. Keep distinct outcomes visible; an illustrative case must not replace the full target. A prior-work gap needs its achieved capability, operative method/assumption, failing condition and consequence; “it lacks our complete system” is not an explanation of failure.
 
 ## Collaboration contract
@@ -43,7 +45,7 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 
 For a full formulation, deliver these three answers in order, starting with the first synthesis you share for discussion. An explicit request for one part narrows the response to that part.
 
-1. **What the problem is.** Write exactly two abstract-opening sentences. The first establishes the background and its practical setting. The second states the specific unresolved difficulty and its consequence in declarative form. Place illustrations and evidence in the later answers.
+1. **What the problem is.** Render two separately labeled paragraphs under Question 1, each with one abstract-opening sentence by default. In Chinese, put **背景：** before the sentence introducing the setting, actors and relevant operating conditions. After a blank line put **问题：** before the declarative sentence stating the unresolved difficulty and its consequence in that setting. Use equivalent labels for the requested language. For a detailed guide explicitly requested by the user, expand within those same two paragraphs. Place illustrations and evidence in the later answers.
 2. **Why it matters.** Explain who bears the cost, how it arises and what decision or outcome it changes. Ground the motivation in a measured result, a concrete case or a credible causal argument. Where a motivating experiment would clarify importance, propose the smallest informative comparison: workload, baseline, controlled change, metric and the observation that would weaken the motivation. Mark the design as proposed until measurements exist.
 3. **Why existing work still fails.** Investigate the relevant method families, nearest individual works and strongest counterexamples using the evidence guide. Present the findings in a comparison table. Give each row a named work and primary-source location, what the work achieves and how, the specific condition in our problem where a limitation matters, and its consequence with evidence status. Separate works whose mechanisms or limits differ. Summarize the residual gap and any material search blind spots below the table.
 

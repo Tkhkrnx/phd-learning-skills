@@ -12,7 +12,7 @@ Only when the user specifically requests reformatting an *existing, already appr
 
 Use these seven questions in this order and with these meanings:
 
-1. **问题是什么？** Open with two abstract-style sentences. The first gives the background. The second states the specific difficulty and its consequence in declarative form.
+1. **问题是什么？** Show two distinct paragraphs under this question. Label them **背景：** and **问题：** in Chinese. Use one abstract-style sentence per paragraph by default. Give the setting in the first and the specific difficulty and consequence in the second. When explicitly expanding an approved guide, retain both labels and the agreed detail.
 2. **为什么重要？** Explain who bears the cost and which decision or outcome it changes. Cite motivation evidence. Where a motivating experiment would clarify importance, describe the comparison, metric and what outcome would weaken the motivation. Mark the design as proposed until measured.
 3. **现有工作为什么失败？** Present the primary-source comparison as a table. Cover relevant method families and the closest works, their mechanisms and strengths, the specific limiting conditions and their consequences. Attach evidence to each row and identify unresolved comparisons.
 4. **核心思想是什么？** Derive the decisive insight from the surviving challenge. State why it could work, its assumptions, and the strongest simpler or competing principle. This may be a system mechanism, benchmark method, measurement principle, or analysis method.
