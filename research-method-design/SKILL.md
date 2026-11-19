@@ -16,6 +16,8 @@ Derive a testable method from an established systems, architecture, or LLM infer
 5. Compare the strongest simpler alternative and define evidence that would reject the proposed method.
 6. Synthesize compatible elements and choose the first discriminating experiment.
 
+When the user asks for options, walk the viable alternatives through the same concrete case. Explain what each would change, the challenge it addresses, its added cost and what evidence would favor it. Invite discussion of the trade-off that could change the choice. If only one candidate survives, explain how the strongest alternative was ruled out.
+
 For a measurement or data-analysis design, work one representative observation through the method in the first overview. Use the project's schema or sample when available. Show which records connect, the operation performed on them, and the decision the result supports. Identify any missing key or endpoint that changes the conclusion. Label illustrative inputs.
 
 Use the chain `problem condition -> prior-method failure -> root challenge -> transferable principle -> adapted elements -> integrated method -> discriminating evidence` as a reasoning aid, not a fill-in template.

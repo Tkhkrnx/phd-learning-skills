@@ -64,7 +64,7 @@ Compare against the strongest simple composition as well as individual papers. I
 
 Check the problem paragraph on its own. Remove any sentence describing what the team will investigate, build or return. What remains should explain an observable limitation or an unresolved distinction that matters. For instance, even with records of a retry, overlapping operations can leave its effect on dependent requests ambiguous. A requested diagnostic result belongs later with the system's output. Carry this placement through a shortened or corrected version.
 
-For full formulations, use the three-answer format in the entrypoint. Keep the abstract opening at two sentences. Give motivation and the literature table the space their evidence needs.
+For full formulations, use the three-answer format in the entrypoint. Present the opening as separate **背景：** and **问题：** paragraphs, one sentence each for the abstract-length version. Give motivation and the literature table the space their evidence needs.
 
 Keep decisive evidence, inspection depth, unresolved hypotheses and invalidation conditions in the supporting explanation or the guide's evidence notes. Do not conceal them, but do not inject “this is only our claim” or instructions to the agent into manuscript prose. Preserve a qualification in the prose when omitting it would materially overstate the result. This is separation of presentation from proof, not permission to polish an unsupported gap into fact.
 
