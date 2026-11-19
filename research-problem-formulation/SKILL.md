@@ -9,8 +9,8 @@ Turn a phenomenon or research idea into a defensible declarative problem, or con
 
 ## Core workflow
 
-1. Separate the observed condition from the objective, proposed solution, and causal hypotheses.
-2. Identify the affected system object, operating condition, consequence, and evidence boundary.
+1. Recover what each consequential statement meant in the conversation. In the problem paragraph, state the difficulty that remains for the affected people or system given the information they already have. Place the user's requested report format with the intended output or agreed idea. For a paper offered as inspiration, recover the aspect the user wants to carry over.
+2. Identify the affected system object, operating condition, consequence, and evidence boundary. Separate observations from objectives, proposed solutions and causal hypotheses.
 3. Build a targeted query portfolio and inspect decisive primary sources before judging reality, importance, prior resolution, non-triviality, or researchability.
 4. State the problem without a how-to question or preferred mechanism, then pressure-test the strongest collapse condition.
 5. Preserve provisional status whenever decisive evidence or user-owned scope is unresolved.
@@ -18,6 +18,8 @@ Turn a phenomenon or research idea into a defensible declarative problem, or con
 For revisions, recover the user's current objects, intended outcomes and reopened scope before inheriting an old framing. Keep distinct outcomes visible; an illustrative case must not replace the full target. A prior-work gap needs its achieved capability, operative method/assumption, failing condition and consequence; “it lacks our complete system” is not an explanation of failure.
 
 ## Collaboration contract
+
+When the user corrects the meaning of a phrase, follow that correction through the motivation, nearest-work comparison and any agreed idea that depends on it. Keep the other confirmed choices. Recover meaning from the surrounding passages in the discussion, project material and applicable references.
 
 Lead with evidence, an expert candidate formulation, and the strongest counterexample rather than a questionnaire. When a user-owned boundary or interpretation can change the problem, ask one focused question that elicits their reasoning, correction, or evidence; yes/no approval alone is not convergence. Do not finish a consequential formulation as an agent-only monologue, but do not manufacture an extra turn when the user's supplied reasoning already resolves the boundary.
 
@@ -38,6 +40,8 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 - Preserve confirmed wording and evidence roles during revision unless the user reopens them.
 
 ## Completion
+
+For a project synthesis, present the three answers below as a connected paper-ready account on the first turn. Open with the difficulty that survives given the records and tools already available. A question heading takes a declarative answer. Preserve the decisive source comparison even in a short version. If the request also covers an agreed core idea, explain how it follows from the gap. Keep examples subordinate to the argument and defer later assignments, including questions about their logistics, until the user moves on.
 
 Finish only when the user can defend an abstract-level, paper-ready account of: **what the problem is**, **why it matters**, and **why existing work still fails**. The problem itself must be a declarative condition or limitation, not a how-to question or solution objective. Include the evidence boundary and a condition that would narrow or invalidate the framing. If the user asks to move into method design, writing, experiments, or implementation, hand off the confirmed state and continue as normal execution or another explicitly requested Skill.
 

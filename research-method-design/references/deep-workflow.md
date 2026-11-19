@@ -29,6 +29,8 @@ Repositories, docs, issues, benchmarks, and engineering articles establish imple
 
 ## 3. Fact gate
 
+For a graph-based analysis, identify what a node represents, which recorded relationship licenses an edge, and how timestamps and units compare. In an offloading study, for example, compare a transfer that overlaps another wait with one that delays a dependent operation. Attribute an effect at final delivery only with downstream evidence or a matched intervention. Use the example that discriminates the explanations in the current project.
+
 Inspect the target hardware, runtime, code path, state ownership, and control scope. State what can change per request, batch, epoch, deployment, or not at all. Reject a mechanism whose carrier cannot produce the claimed effective behavior.
 
 ## 4. Alternatives and assumptions

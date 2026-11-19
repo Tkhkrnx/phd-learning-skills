@@ -21,6 +21,8 @@ Ordinary requests such as “analyze the requirement”, “find papers”, “e
 
 ## Scope
 
+For a persistent goal that names several Skills, apply each assignment to its specified decision and stage. A method-comparison stage uses its assigned research Skill when that comparison begins. Field checks, page edits and execution of the chosen comparison follow the implementation authority for the current stage.
+
 The authorization covers follow-ups within the same stated collaboration. It expires when that work completes, the task changes, or the user pivots to direct execution. A new primary Skill requires a new explicit request.
 
 An active primary Skill may load a supporting Skill without another user request only for a concrete dependency of the same goal. The supporting work must add no independent deliverable, external side effect, or broader permission; it returns its result to the primary Skill and then stops.
