@@ -6,7 +6,7 @@ This reference is mandatory for `research-problem-formulation` and `research-met
 
 Do not make a strong claim that a problem is real, important, unresolved, or method-worthy before searching for evidence capable of overturning that claim. An initial framing may guide search, but it stays provisional.
 
-Broad intake does not mean a literature dump. Search widely, inspect decisive sources, then show the user the small set of evidence that changes the boundary or decision.
+Search widely and inspect decisive sources. In a problem-formulation table, retain each method family or individual competitor whose capability changes the answer, even when the short narrative focuses on only a few. A collection of familiar papers does not establish coverage. Rebuild the search around the current question when its scope changes.
 
 If search is unavailable, primary sources cannot be inspected, or a material query family remains uncovered, disclose that limitation and do not freeze novelty, unresolved-status, or method-superiority claims.
 

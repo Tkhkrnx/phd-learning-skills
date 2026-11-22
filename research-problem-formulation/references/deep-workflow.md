@@ -40,7 +40,7 @@ Start from the user's observation or intuition.
 
 Before revising, identify the authoritative current problem statement, scope, claims, challenges, RQs, and the items the user has reopened. Change only affected items. Do not rewrite challenges and RQs together unless both are in scope.
 
-Recover the current research objects, intended outcomes and exclusions from the latest user reasoning. Distinguish research materials from the scientific object: production requests and several workload families do not imply an Agent-only question. Neither a familiar example nor an older guide may silently narrow a newly reopened scope. Preserve distinct objectives when compressing too: a prefill example must not displace a separate fidelity question. Present a focused unresolved choice only when it can change the framing; do not turn this check into a questionnaire.
+Recover the scientific object, intended outcomes and exclusions from the latest user reasoning. Identify which materials supply observations and which examples illustrate just one condition. Check that the problem statement still applies to the other intended settings. Present an unresolved choice only when it changes the framing.
 
 When new evidence conflicts with a frozen item, show the conflict and smallest revision. Preserve the user's terminology and requested structure.
 
@@ -48,27 +48,27 @@ When new evidence conflicts with a frozen item, show the conflict and smallest r
 
 Build the comparison from the search results. Follow the closest papers' references and later alternatives, check the decisive methods, evaluations and stated limitations, and include work that solves a candidate subproblem. Group by how the methods work. Give a direct competitor its own row whenever its capability changes the conclusion.
 
-| Method family and representative work | What it achieves and under which assumptions | Condition in our problem and remaining limitation | Consequence and supporting section, figure or artifact |
+| 类别 | 相关工作文章 | 已解决的问题与优势 | 为什么仍不足以解决本文问题 |
 | --- | --- | --- | --- |
 
-For an open comparison, identify the missing evidence in that row. End with the specific gap that survives comparison across the rows. Continue searching if a material family or a known strong alternative is still missing.
+Use an informative method name for each row. Order families by the question they can answer: same decision and goal, neighboring decision or component, then relevant foundations. Include simple compositions and solutions from other vocabularies if they could meet the same goal. Within a family attribute capabilities to the particular papers that demonstrate them. In the fourth column explain the missing input, assumption or unsupported decision and its consequence. For a background paper, explain which part it informs and which decision lies beyond its scope. If a result requires a new comparison, say precisely what is unknown after giving the substantive boundary. End with the gap that survives and investigate material coverage gaps.
 
 For each consequential comparison, connect the work's real achievement to the mechanism or assumption it uses, the relevant target condition, and the resulting limitation. Cite the source location for established facts; label an inferred mismatch or proposed counterexample as such. A different objective, unimplemented feature or limited evaluation scope is not by itself a demonstrated failure.
 
-- Insufficient: “Prior work does not provide our integrated benchmark generator.” This defines the gap by the proposed solution.
-- Useful investigation: a generator preserves request statistics, while the candidate target concerns execution-dependent pressure. Inspect what the generator actually represents and validates, then identify a concrete condition under which that representation would omit a relevant effect. Until that condition and its consequence are supported, it is a hypothesis to test, not a verified deficiency of the named work.
+- Insufficient: defining the literature gap as the absence of the implementation proposed by the team.
+- Useful investigation: extract the closest method's inputs, objective, operating assumptions and evaluated conditions from the original source. Apply them to the user's specific decision. Identify what can already be decided and exactly which ambiguity persists.
 
 Compare against the strongest simple composition as well as individual papers. If it already addresses the target condition, remove that gap. If a different condition creates a genuine problem, explain why that condition occurs and matters rather than adding artificial restrictions to defeat a competitor.
 
 ## Paper-facing answer and supporting record
 
-Check the problem paragraph on its own. Remove any sentence describing what the team will investigate, build or return. What remains should explain an observable limitation or an unresolved distinction that matters. For instance, even with records of a retry, overlapping operations can leave its effect on dependent requests ambiguous. A requested diagnostic result belongs later with the system's output. Carry this placement through a shortened or corrected version.
+Check the problem paragraph on its own. Remove any sentence describing what the team will investigate, build or return. What remains should explain the difficulty that exists in the current research setting and why it matters. Preserve that distinction when the user requests a shorter version.
 
 For full formulations, use the three-answer format in the entrypoint. Present the opening as separate **背景：** and **问题：** paragraphs, one sentence each for the abstract-length version. Give motivation and the literature table the space their evidence needs.
 
 Keep decisive evidence, inspection depth, unresolved hypotheses and invalidation conditions in the supporting explanation or the guide's evidence notes. Do not conceal them, but do not inject “this is only our claim” or instructions to the agent into manuscript prose. Preserve a qualification in the prose when omitting it would materially overstate the result. This is separation of presentation from proof, not permission to polish an unsupported gap into fact.
 
-For example, if “a parameter change could affect several stages” is only a proposed counterexample, compressing it to “generated loads distort real bottlenecks” adds an unmeasured conclusion. Describe the specific unresolved control or fidelity relation instead, retaining “may” or an equivalent scoped formulation where necessary. A causal claim established only for one cited method cannot silently become a failure of the whole field in the abstract.
+For a decision-sensitive motivation experiment, compare the available actions under the relevant conditions and measure the target outcome. If the interpretation depends on where the bottleneck is, check it independently, for example by selectively relieving the suspected bottleneck and measuring the end-to-end effect. A different action can win even when the same operation still limits performance. A mere change in the largest time share cannot establish either finding. Specify the observation that would show the extra information adds little. When shortening the answer, preserve which effects were measured, which were inferred and for which methods the evidence holds.
 
 ## Evidence stop rule
 
