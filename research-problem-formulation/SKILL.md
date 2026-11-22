@@ -7,9 +7,17 @@ description: Formulate and pressure-test a systems research problem when the use
 
 Turn a phenomenon or research idea into a defensible declarative problem, or conclude that the proposed problem is not established.
 
+## First full answer
+
+For a full formulation, deliver these three answers in order, starting with the first synthesis you share for discussion. An explicit request for one part narrows the response to that part.
+
+1. **What the problem is.** Render two separately labeled paragraphs under Question 1, each with one abstract-opening sentence by default. In Chinese, put **背景：** before the sentence introducing the setting, actors and relevant operating conditions. After a blank line put **问题：** before the declarative sentence stating the unresolved difficulty and its consequence in that setting. Use equivalent labels for the requested language. For a detailed guide explicitly requested by the user, expand within those same two paragraphs. Place illustrations and evidence in the later answers.
+2. **Why it matters.** Explain who bears the cost, how it arises and which decision or outcome changes. Ground importance in evidence, a concrete case or a credible causal argument. When proposing a motivating experiment, describe the comparison and target outcome in everyday language, including what would weaken the motivation. If the claim is that a factor changes which action works, compare the same viable actions across the relevant conditions and measure the cost of ignoring that factor. Label proposed tests as such. The best action in hindsight gives an upper bound. To claim that recognizing a feature actually helps, choose using only information available before the decision and evaluate on fresh cases.
+3. **Why existing work still fails.** Search across the approaches that could answer the current question, following primary sources and strong counterexamples. Organize by method, nearest competitors first, then adjacent approaches and useful background. Use four columns in Chinese: 类别 | 相关工作文章 | 已解决的问题与优势 | 为什么仍不足以解决本文问题. Give each category a short technical name. Use relevance tiers internally to order the rows. Put named papers and source locations in column two. In the last column name the specific part of our question left open and explain why, preserving the distinction between a documented limit and an inferred consequence. Give background work its actual role and credit a route that already solves the problem.
+
 ## Core workflow
 
-1. Recover what each consequential statement meant in the conversation. In the problem paragraph, state the difficulty that remains for the affected people or system given the information they already have. Place the user's requested report format with the intended output or agreed idea. For a paper offered as inspiration, recover the aspect the user wants to carry over.
+1. Recover what each consequential statement meant in the conversation. In the problem paragraph, state the difficulty that remains for the affected people or system given the information they already have. Place the user's requested report format with the intended output or agreed idea. For a paper offered as inspiration, recover the aspect the user wants to carry over. Preserve the scope of the current research question. Treat a deployment, dataset or motivating example as one instance unless the user makes it the research population.
 2. Identify the affected system object, operating condition, consequence, and evidence boundary. Separate observations from objectives, proposed solutions and causal hypotheses.
 3. Build a targeted query portfolio and inspect decisive primary sources before judging reality, importance, prior resolution, non-triviality, or researchability.
 4. State the problem without a how-to question or preferred mechanism, then pressure-test the strongest collapse condition.
@@ -42,12 +50,6 @@ Lead with evidence, an expert candidate formulation, and the strongest counterex
 - Preserve confirmed wording and evidence roles during revision unless the user reopens them.
 
 ## Completion
-
-For a full formulation, deliver these three answers in order, starting with the first synthesis you share for discussion. An explicit request for one part narrows the response to that part.
-
-1. **What the problem is.** Render two separately labeled paragraphs under Question 1, each with one abstract-opening sentence by default. In Chinese, put **背景：** before the sentence introducing the setting, actors and relevant operating conditions. After a blank line put **问题：** before the declarative sentence stating the unresolved difficulty and its consequence in that setting. Use equivalent labels for the requested language. For a detailed guide explicitly requested by the user, expand within those same two paragraphs. Place illustrations and evidence in the later answers.
-2. **Why it matters.** Explain who bears the cost, how it arises and what decision or outcome it changes. Ground the motivation in a measured result, a concrete case or a credible causal argument. Where a motivating experiment would clarify importance, propose the smallest informative comparison: workload, baseline, controlled change, metric and the observation that would weaken the motivation. Mark the design as proposed until measurements exist.
-3. **Why existing work still fails.** Investigate the relevant method families, nearest individual works and strongest counterexamples using the evidence guide. Present the findings in a comparison table. Give each row a named work and primary-source location, what the work achieves and how, the specific condition in our problem where a limitation matters, and its consequence with evidence status. Separate works whose mechanisms or limits differ. Summarize the residual gap and any material search blind spots below the table.
 
 If the user also asks for an agreed core idea, connect it after these answers. Defer team assignments until the requested stage.
 

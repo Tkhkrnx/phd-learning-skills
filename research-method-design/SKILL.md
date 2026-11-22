@@ -5,7 +5,7 @@ description: Design and compare methods for an established systems research prob
 
 # Research Method Design
 
-Derive a testable method from an established systems, architecture, or LLM inference/serving problem. The method may combine mechanisms, representations, measurement, analysis, models, or experiments; do not force every problem into a new-system template.
+Derive a testable method from an established systems, architecture, or LLM inference/serving problem. Recover what principle the user wants to borrow and which outcome comes first. Distinguish the research opportunity, the best known baseline and the project setting where the idea will be tested. The method may combine mechanisms, representations, measurement, analysis, models or experiments.
 
 ## Core workflow
 
@@ -16,7 +16,7 @@ Derive a testable method from an established systems, architecture, or LLM infer
 5. Compare the strongest simpler alternative and define evidence that would reject the proposed method.
 6. Synthesize compatible elements and choose the first discriminating experiment.
 
-When the user asks for options, walk the viable alternatives through the same concrete case. Explain what each would change, the challenge it addresses, its added cost and what evidence would favor it. Invite discussion of the trade-off that could change the choice. If only one candidate survives, explain how the strongest alternative was ruled out.
+When the user asks for research options, trace the current execution or analysis on one concrete case. Show the cost it incurs, which assumption each candidate relaxes, the exact step that changes, and how that could improve the user's target. Compare with the closest work and strongest measured configuration. Credit an existing configuration as a baseline unless the investigation establishes what the proposed method adds. Rank by the user's stated outcome and flag any available measurement that is only a proxy. Invite discussion of the trade-off that could change the choice. If only one candidate survives, explain how the strongest alternative was ruled out.
 
 For a measurement or data-analysis design, work one representative observation through the method in the first overview. Use the project's schema or sample when available. Show which records connect, the operation performed on them, and the decision the result supports. Identify any missing key or endpoint that changes the conclusion. Label illustrative inputs.
 

@@ -22,6 +22,16 @@ class FormulationDeliveryTests(unittest.TestCase):
                 first_answer = text.split(marker, 1)[1].split("\n2. ", 1)[0]
                 self.assertRegex(first_answer, r"\*\*背景：\*\*.*?\*\*问题：\*\*")
 
+    def test_literature_table_separates_method_category_and_papers_on_each_route(self):
+        header = "类别 | 相关工作文章 | 已解决的问题与优势 | 为什么仍不足以解决本文问题"
+        for relative in (
+            "research-problem-formulation/SKILL.md",
+            "research-problem-formulation/references/deep-workflow.md",
+            "shared/expert-skill-references/seven_question_research_outputs.md",
+        ):
+            with self.subTest(relative=relative):
+                self.assertIn(header, (ROOT / relative).read_text(encoding="utf-8"))
+
     def test_accepted_example_renders_two_distinct_paragraphs(self):
         text = (ROOT / "shared/tests/research_workflow_requirements_zh.md").read_text(encoding="utf-8")
         first_answer = text.split("1. **问题是什么？**", 1)[1].split("\n2. ", 1)[0]

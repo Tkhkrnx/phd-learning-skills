@@ -31,7 +31,7 @@ Repositories, docs, issues, benchmarks, and engineering articles establish imple
 
 For a graph-based analysis, identify what a node represents, which recorded relationship licenses an edge, and how timestamps and units compare. In an offloading study, for example, compare a transfer that overlaps another wait with one that delays a dependent operation. Attribute an effect at final delivery only with downstream evidence or a matched intervention. Use the example that discriminates the explanations in the current project.
 
-Inspect the target hardware, runtime, code path, state ownership, and control scope. State what can change per request, batch, epoch, deployment, or not at all. Reject a mechanism whose carrier cannot produce the claimed effective behavior.
+Separate the system in which the research opportunity arises from the platform, model and dataset required for project acceptance. Ground the proposed change in the former's real execution path. Use the latter to specify the first feasible experiment and how far its result generalizes. An implementation-specific limitation can constrain the research claim when the mechanism itself depends on it. Inspect state ownership and what can change per request, batch, epoch or deployment.
 
 ## 4. Alternatives and assumptions
 
